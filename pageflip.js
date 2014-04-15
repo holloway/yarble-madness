@@ -2,24 +2,45 @@
 	"use strict";
 
     var drag_threshold = 150,
-        index = 0,
-        $pages,
+        page_id_by_index = {},
+        drag_distance = {},
+        page_index_by_id = {},
         drag_start = {},
-        drag_distance = {};
+        index = 0,
+        $pages;
 
     var init = function(){
+        var hashstate;
         $pages = yarble.utils.$("body > div");
+        $pages.map(function(element, i){
+            var id = element.getAttribute("id");
+            page_index_by_id[id] = i;
+            page_id_by_index[i] = id;
+        });
         document.addEventListener('keydown',    key_down,    false);
         document.addEventListener('touchstart', touch_start, false);
         document.addEventListener('touchmove',  touch_move,  false);
         document.addEventListener('touchend',   touch_end,   false);
-        move_to_page(0);
+        hashstate = get_hash_state();
+        if(hashstate === undefined){
+            move_to_page(0);
+        } else {
+            move_to_page(page_index_by_id[hashstate[0]]);
+        }
     };
 
     document.addEventListener("DOMContentLoaded", init);
 
     var key_down = function(event){
         var arrow_key_was_used = false;
+
+        if(event && event.target) {
+            switch(event.target.nodeName.toLowerCase()){
+                case "input":
+                case "textarea":
+                    return;
+            }
+        }
 
         switch(event.keyCode){
             case 37:
@@ -74,12 +95,30 @@
         index = Math.max(Math.min(index, $pages.length - 1), 0);
         $pages[index].className = 'current';
         $pages.slice(0, index).map(function(element){
-            element.className = 'past';
+            element.className = 'before';
         });
         $pages.slice(index + 1).map(function(element){
-            element.className = 'future';
+            element.className = 'after';
         });
+        set_hash_state(page_id_by_index[index]);
+        window.yarble.utils.event.trigger("yarble:page-change:" + page_id_by_index[index]);
         return index;
+    };
+
+    var move_to_page_id_event = function(id){
+        console.log("move to", id);
+        move_to_page(page_index_by_id[id]);
+    };
+
+    yarble.utils.event.on("yarble:change-page-id", move_to_page_id_event);
+
+    window.set_hash_state = function(hashstate){
+        window.location.hash = hashstate;
+    };
+
+    window.get_hash_state = function(){
+        if(window.location.hash === undefined || window.location.hash.length === 0) return undefined;
+        return window.location.hash.replace(/^#/, '').split("/");
     };
 
 }());

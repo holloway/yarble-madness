@@ -7,14 +7,16 @@
         event: {
             bindings: {},
             on: function(name, callback){
-                var bindings = window.doctored.event.bindings;
+                var bindings = window.yarble.utils.event.bindings;
+
                 if(bindings[name] === undefined) bindings[name] = [];
                 bindings[name].push(callback);
             },
             off: function(name, callback){
-                var bindings = window.doctored.event.bindings,
+                var bindings = window.yarble.utils.event.bindings,
                     callback_string = callback.toString(),
                     i;
+
                 if(bindings[name] === undefined) return;
                 for(i = bindings[name].length; i > 0; i--){
                     if(callback_string == bindings[name][i].toString()){
@@ -23,11 +25,18 @@
                 }
             },
             trigger: function(name){
-                var bindings = window.doctored.event.bindings,
-                    i;
+                var bindings = window.yarble.utils.event.bindings,
+                    i,
+                    args = Array.prototype.slice.call(arguments).slice(1),
+                    callback = function(fn, args){
+                        return function(){
+                            return fn.apply(this, args);
+                        };
+                    };
+                    
                 if(bindings[name] === undefined) return;
                 for(i = 0; i < bindings[name].length; i++){
-                    setTimeout(bindings[name][i], 0); //go on async stack, don't execute immediately
+                    setTimeout( callback(bindings[name][i], args), 0); //go on async stack, don't execute immediately
                 }
             }
         },
@@ -41,9 +50,23 @@
             scope = scope || document;
             if(!selector) { console.log("Empty selector"); console.trace(); }
             if(selector.indexOf(" ") >= 0 || selector.indexOf("[") >= 0) return nl2a(scope.querySelectorAll(selector));
-            if(selector.substring(0,1) === "#") return nl2a(scope.getElementById(selector.substring(1)));
+            if(selector.substring(0,1) === "#") {
+                if(scope.getElementById === undefined) return nl2a(scope.querySelectorAll(selector)); //because only document has getElementById but all elements have querySelectorAll (I think)
+                return [scope.getElementById(selector.substring(1))];
+            }
             if(selector.substring(0,1) === ".") return nl2a(scope.getElementsByClassName(selector.substring(1)));
             return nl2a(scope.getElementsByTagName(selector));
+        },
+        remove_external_resources: function(html_string){
+            // if a DOM node (detached or not) has innerHTML set to an HTML string it will start downloading resources that we don't care about, so let's avoid that
+            html_string = html_string.replace(/<!--[\s\S]*?-->/g, '');
+            html_string = html_string.replace(/<script[\s\S]*?<\/script>/g, '');
+            html_string = html_string.replace(/<link[\s\S]*?>/g, '');
+            html_string = html_string.replace(/<img[\s\S]*?>/g, '');
+            html_string = html_string.replace(/<object[\s\S]*?<\/object>/g, '');
+            html_string = html_string.replace(/<embed[\s\S]*?<\/embed>/g, '');
+            html_string = html_string.replace(/<iframe[\s\S]*?>/g, '');
+            return html_string;
         }
     };
 }());

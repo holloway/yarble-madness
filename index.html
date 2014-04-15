@@ -10,29 +10,32 @@
 	<link type="text/css" rel="stylesheet" href="posts.css">
 </head>
 <body>
+	<div id="user">
+		<div id="login">
+			<h1>Yarble Madness</h1>
+			<p>A client for forums.somethingawful.com</p>
+			<form>
+				<input type="text"     name="username" placeholder="username">
+				<input type="password" name="password" placeholder="password">
+				<button>login</button>
+			</form>
+		</div>
+		<div id="options">
+			<button>logout</button>
+		</div>
+	</div>
 
-<div id="user">
-	<h1>forums.SomethingAwful.com</h1>
-	<input type="text"     placeholder="username">
-	<input type="password" placeholder="password">
-	<button>login</button>
-</div>
+	<div id="forums"></div>
+	<div id="threads"></div>
+	<div id="posts"></div>
 
-<div id="forums">
-	<p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p>v
-</div>
-<div id="threads">
-	<p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p>v
-</div>
-<div id="posts">
-	<p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p>v
-</div>
-
-<script src="utils.js"></script>
-<script src="pageflip.js"></script>
-<script src="forums.js"></script>
-<script src="threads.js"></script>
-<script src="posts.js"></script>
-<script src="index.js"></script>
+	<script src="utils.js"></script>
+	<script src="sa.js"></script>
+	<script src="user.js"></script>
+	<script src="forums.js"></script>
+	<script src="threads.js"></script>
+	<script src="posts.js"></script>
+	<script src="index.js"></script>
+	<script src="pageflip.js"></script>
 </body>
 </html>

@@ -7,11 +7,15 @@ html, body {
 }
 
 body {
-	background: #fff;
-	color: #000;
+	background: #999;
+	color: #333;
 }
 
-body > div.loading {
+body > div {
+	background: #fff;
+}
+
+body.loading {
 	background: url("loader.gif") no-repeat scroll center center;
 }
 
