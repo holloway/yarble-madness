@@ -31,14 +31,19 @@
                 }
             }
         },
+        nodelist_to_array: function(nodelist){ //node list to array
+            if(nodelist === null) return [];
+            return Array.prototype.slice.call(nodelist);
+        },
         $: function(selector, scope){
             // very simple node selector
+            var nl2a = window.yarble.utils.nodelist_to_array;
             scope = scope || document;
             if(!selector) { console.log("Empty selector"); console.trace(); }
-            if(selector.indexOf(" ") >= 0 || selector.indexOf("[") >= 0) return scope.querySelectorAll(selector);
-            if(selector.substring(0,1) === "#") return scope.getElementById(selector.substring(1));
-            if(selector.substring(0,1) === ".") return scope.getElementsByClassName(selector.substring(1));
-            return scope.getElementsByTagName(selector);
+            if(selector.indexOf(" ") >= 0 || selector.indexOf("[") >= 0) return nl2a(scope.querySelectorAll(selector));
+            if(selector.substring(0,1) === "#") return nl2a(scope.getElementById(selector.substring(1)));
+            if(selector.substring(0,1) === ".") return nl2a(scope.getElementsByClassName(selector.substring(1)));
+            return nl2a(scope.getElementsByTagName(selector));
         }
     };
 }());

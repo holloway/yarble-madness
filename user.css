@@ -1,19 +1,19 @@
-#login {
+#user {
 	background: #eee;
 }
 
-#login input,
-#login button
+#user input,
+#user button
 {
 	display: block;
 	width: 90%;
 	text-align:center;
 	margin:1% auto;
-	padding: 0.5em 0px;
+	padding: 1em 0px;
 	border: solid 1px #ddd;
 }
 
-#login button {
+#user button {
 	font-weight: bold;
 	border-radius: 0.5em;
 	background: #bbb;

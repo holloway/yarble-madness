@@ -11,31 +11,6 @@ body {
 	color: #000;
 }
 
-body > div {
-	width:   100%;
-	padding: 0px;
-	margin:  0px;
-	min-height: 100%;
-	position: absolute;
-}
-
-body > div:nth-child(1) {
-	left: 0px;
-}
-
-body > div:nth-child(2) {
-	left: 100%;
-}
-
-body > div:nth-child(3) {
-	left: 200%;
-}
-
-body > div:nth-child(4) {
-	left: 300%;
-}
-
-
 body > div.loading {
 	background: url("loader.gif") no-repeat scroll center center;
 }
@@ -43,4 +18,8 @@ body > div.loading {
 h1,h2,h3,h4,h5,h6 {
 	text-align:center;
 	font-weight:normal;
+}
+
+body, input, button {
+	font-size:large;
 }
