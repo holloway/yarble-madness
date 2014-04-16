@@ -91,7 +91,8 @@
         index = move_to_page(index);
     };
 
-    var move_to_page = function(index){
+    var move_to_page = function(index, hashstate){
+        if(hashstate === undefined) hashstate = page_id_by_index[index];
         if(!$pages.length) return index;
         index = Math.max(Math.min(index, $pages.length - 1), 0);
         $pages[index].className = 'current';
@@ -101,15 +102,25 @@
         $pages.slice(index + 1).map(function(element){
             element.className = 'after';
         });
-        set_hash_state(page_id_by_index[index]);
+        set_hash_state(hashstate);
         window.yarble.utils.event.trigger("yarble:page-change:" + page_id_by_index[index]);
         return index;
     };
 
-    var move_to_page_id_event = function(id){
-        console.log("move to", id);
-        index = move_to_page(page_index_by_id[id]);
+    var move_to_page_id_event = function(hashstate){
+        hashstate = hashstate.replace(/^#/, '');
+        var page_id = hashstate.split("/")[0];
+        index = move_to_page(page_index_by_id[page_id], hashstate);
     };
+
+    var hash_change = function(){
+        // NOTE: only responsible for changing between $pages. Not responsible for restoring any other hashstate.
+        var page_id = window.location.hash.replace(/^#/, '').split("/")[0];
+        if(page_id === page_id_by_index[index]) return;
+        index = move_to_page(page_index_by_id[page_id]);
+    };
+
+    window.addEventListener("hashchange", hash_change, false);
 
     yarble.utils.event.on("yarble:change-page-id", move_to_page_id_event);
 

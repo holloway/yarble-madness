@@ -2,10 +2,11 @@
 	"use strict";
 
     var CONSTANTS = {
-            forums_cache_key: "yarble:page:threads:html"
+            threads_cache_key: "yarble:page:threads:html"
         },
         $ = yarble.utils.$,
         $threads,
+        current = {},
         threads_template;
 
     var rebind_threads = function(threads){
@@ -15,8 +16,9 @@
             threads = JSON.parse(localStorage.getItem(CONSTANTS.threads_cache_key));
         }
         if(!threads) return;
+        current.forum_id = threads.forum_id;
         if(!threads_template){
-            threads_template_string = $("#threads-template")[0].innerText;
+            threads_template_string = $("#threads-template")[0].innerHTML;
             threads_template = Handlebars.compile(threads_template_string);
         }
         $threads.innerHTML = threads_template(threads);
@@ -46,8 +48,8 @@
             for(y = 0; y < $links.length; y++){
                 $link = $links[y];
                 if($link.classList.contains("announcement")) {
-                    thread_id = window.yarble.utils.get_param($link.getAttribute("href"), "threadid");
-                    thread = {thread_id: thread_id, type: "announcement", title: $link.innerText};
+                    forum_id = window.yarble.utils.get_param($link.getAttribute("href"), "forumid");
+                    thread = {announcement: true, forum_id: forum_id, type: "announcement", title: $link.innerText};
                     response.threads.push(thread);
                 } else if($link.classList.contains("thread_title")) {
                     thread_id = window.yarble.utils.get_param($link.getAttribute("href"), "threadid");
@@ -68,19 +70,27 @@
         localStorage.setItem(CONSTANTS.threads_cache_key, JSON.stringify(threads));
     });
 
-
     var init = function(event){
         $threads = $("#threads")[0];
         $threads.addEventListener("click", click_button, false);
         rebind_threads();
     };
 
-    var click_button = function(event){
-        if(event.target.nodeName.toLowerCase() !== "button") return;
+    document.addEventListener("DOMContentLoaded", init);
 
-        console.log(event);
+    var click_button = function(event){
+        var target = event.target;
+        if(target.nodeName.toLowerCase() !== "button") target = target.parentNode;
+        if(target.nodeName.toLowerCase() !== "button") return;
+
+        var thread_id = parseInt(target.getAttribute("data-thread-id"), 10);
+        sa.posts(current.forum_id, thread_id, 1, posts_response);
     };
 
-    document.addEventListener("DOMContentLoaded", init);
+    var posts_response = function(forum_id, thread_id, page_number){
+        window.yarble.utils.event.trigger("yarble:page-update:posts", forum_id, thread_id, page_number, this.responseText);
+        window.yarble.utils.event.trigger("yarble:change-page-id", "posts/" + forum_id + "/" + thread_id + "/" + page_number);
+    };
+
 	
 }());

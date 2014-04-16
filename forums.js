@@ -16,7 +16,7 @@
 		}
 		if(!forums) return;
 		if(!forums_template){
-			forums_template_string = $("#forums-template")[0].innerText;
+			forums_template_string = $("#forums-template")[0].innerHTML;
 			forums_template = Handlebars.compile(forums_template_string);
 		}
 		$forums.innerHTML = forums_template(forums);
@@ -79,13 +79,12 @@
 		if(target.nodeName.toLowerCase() !== "button") return;
 
 		var forum_id = parseInt(target.getAttribute("data-forum-id"), 10);
-		var request = sa.threads(forum_id, threads_response);
-		window.request = request;
+		var request = sa.threads(forum_id, 1, threads_response);
 	};
 
 	var threads_response = function(forum_id){
 		window.yarble.utils.event.trigger("yarble:page-update:threads", forum_id, this.responseText);
-		window.yarble.utils.event.trigger("yarble:change-page-id", "threads");
+		window.yarble.utils.event.trigger("yarble:change-page-id", "threads/" + forum_id);
 	};
 
 	window.yarble.utils.event.on("yarble:page-update:forums", function(html_string){

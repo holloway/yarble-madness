@@ -1,0 +1,21 @@
+#posts .post {
+	padding: 1em;
+	overflow:hidden;
+}
+
+#posts .post .user {
+	display: block;
+	text-align:left;
+	font-size:small;
+}
+
+#posts h4,
+#posts h4 a.quote_link {
+	text-align:left;
+	color: white;
+}
+
+#posts .editedby {
+	text-align:right;
+	font-size:x-small;
+}

@@ -1,0 +1,51 @@
+
+.forum_219,
+.forum_219 button {
+    background: black;
+    color: #9f9;
+    border-color: #696;
+}
+
+.forum_219 button .user {
+    color: #393;
+}
+
+.forum_219 .post {
+    border-top: solid 1px green;
+}
+
+.forum_219 blockquote {
+    border: solid 1px green;
+    padding: 1em;
+}
+
+
+.forum_26,
+.forum_26 button {
+    background: #fcf;
+    color: #303;
+    border-color: #969;
+}
+
+.forum_26 button .user {
+    color: #606;
+}
+
+
+.forum_268 {
+    padding-top:100px;
+    background-image: url("cat.gif");
+    background-repeat: no-repeat;
+}
+
+.forum_268,
+.forum_268 button {
+    background-color: #ccf;
+    color: #003;
+    border-color: #77c;
+}
+
+.forum_268 button .user {
+    color: #606;
+}
+

@@ -2,7 +2,7 @@
 	"use strict";
 
 	window.sa = {
-		http_base:   "http://forums.somethingawful.com/",
+		http_base:  "http://forums.somethingawful.com/",
 		https_base: "https://forums.somethingawful.com/",
 		login: function(username, password, callback){
 			cache.last_username = username;
@@ -14,17 +14,36 @@
 			);
 		},
 		logout: function(callback){
+			var ma = scraped.logout_ma || localStorage.getItem("yarble:logout:ma");
+			if(!ma) callback(false);
 			return get_request(
-				sa.http_base + scraped.logout_url,
+				sa.http_base + "account.php",
 				{action:"logout", ma: ma},
+				response_filters.logout(callback)
+			);
+		},
+		threads: function(forum_id, page_number, callback){
+			if(page_number === undefined) page_number = 1;
+			return get_request(
+				sa.http_base + 'forumdisplay.php',
+				{forumid: forum_id, pagenumber: page_number},
+				response_filters.threads(callback, forum_id)
+			);
+		},
+		announcement: function(forum_id, callback){
+			if(forum_id === undefined) forum_id = 1; //because forumid typically doesn't matter (but is required)
+			return get_request(
+				sa.http_base + 'announcement.php',
+				{forumid: forum_id},
 				callback
 			);
 		},
-		threads: function(forum_id, callback){
+		posts: function(forum_id, thread_id, page_number, callback){
+			if(page_number === undefined) page_number = 1;
 			return get_request(
-				sa.http_base + 'forumdisplay.php',
-				{forumid: forum_id},
-				response_filters.threads(callback, forum_id)
+				sa.http_base + 'showthread.php',
+				{threadid: thread_id, pagenumber: page_number},
+				response_filters.posts(callback, forum_id, thread_id, page_number)
 			);
 		}
 	};
@@ -97,8 +116,9 @@
 		$result = $("a", $div);
 		for(i = 0; i < $result.length; i++){
 			innerText = $result[i].innerText;
-			if(innerText.match(/wildest dreams come true/i)) {
-				scraped.logout_url = $result[i].getAttribute("href").substr(1);
+			if(innerText.match(/wildest dreams come true/i) || innerText.match(/log out/i)) {
+				scraped.logout_ma = window.yarble.utils.get_param($result[i].getAttribute("href"), "ma");
+				localStorage.setItem("yarble:logout:ma", scraped.logout_ma);
 			} else if(innerText === cache.last_username){ //FIXME figure out a smarter way of doing this
 				scraped.member_page_url = $result[i].getAttribute("href").substr(1);
 			}
@@ -152,7 +172,27 @@
 			return function(){
 				return fn.apply(this, [forum_id]);
 			};
+		},
+		posts: function(fn, forum_id, thread_id, page_number){
+			return function(){
+				return fn.apply(this, [forum_id, thread_id, page_number]);
+			};
+		},
+		logout: function(fn){
+			return function(){
+				var $div = document.createElement("div"),
+					$content,
+					success = false,
+					innerHTML;
+
+				$div.innerHTML = remove_external_resources(this.responseText);
+				$content = $("#content", $div);
+				if($content.length) {
+					innerHTML = $("#content", $div)[0].innerHTML;
+					success = !!innerHTML.match(/logged out/i) || !!innerHTML.match(/Not cookied/i);
+				}
+				return fn.apply(this, [success]);
+			};
 		}
 	};
-
 }());

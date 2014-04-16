@@ -6,6 +6,7 @@
 	<link type="text/css" rel="stylesheet" href="pageflip.css">
 	<link type="text/css" rel="stylesheet" href="user.css">
 	<link type="text/css" rel="stylesheet" href="forums.css">
+	<link type="text/css" rel="stylesheet" href="forum_themes.css">
 	<link type="text/css" rel="stylesheet" href="threads.css">
 	<link type="text/css" rel="stylesheet" href="posts.css">
 
@@ -49,16 +50,35 @@
 		<script id="threads-template" type="text/x-handlebars-template">
 			<div class="threads forum_{{forum_id}}">
 				{{#threads}}
-					<button data-thread-id="{{thread_id}}" class="thread type_{{type}}">
-						{{title}}
-						<span class="user">by {{user.name}}</span>
-					</button>
+					{{#announcement}}
+						<button data-forum-id="{{forum_id}}" class="thread type_{{type}}">
+							{{title}}
+							<span class="user">by {{user.name}}</span>
+						</button>
+					{{/announcement}}
+					{{^announcement}}
+						<button data-thread-id="{{thread_id}}" class="thread type_{{type}}">
+							{{title}}
+							<span class="user">by {{user.name}}</span>
+						</button>
+					{{/announcement}}
 				{{/threads}}
 			</div>
 		</script>
 
 	</div>
-	<div id="posts"></div>
+	<div id="posts">
+		<script id="posts-template" type="text/x-handlebars-template">
+			<div class="posts forum_{{forum_id}}">
+				{{#posts}}
+					<div class="post">
+						{{{body}}}
+						<span class="user" data-user-id="{{user.user_id}}">by {{user.name}}</span>
+					</div>
+				{{/posts}}
+			</div>
+		</script>
+	</div>
 
 	<script src="lib/fastclick.js"></script>
 	<script src="lib/handlebars.js"></script>
