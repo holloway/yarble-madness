@@ -25,7 +25,7 @@
         if(hashstate === undefined){
             move_to_page(0);
         } else {
-            move_to_page(page_index_by_id[hashstate[0]]);
+            index = move_to_page(page_index_by_id[hashstate[0]]);
         }
     };
 
@@ -75,8 +75,9 @@
     };
 
     var touch_end = function(event){
-        if(Math.abs(drag_distance.x) < drag_threshold ||
-           Math.abs(drag_distance.y) > drag_threshold) return;
+        if(Math.abs(drag_distance.x) < drag_threshold || Math.abs(drag_distance.y) > drag_threshold) {
+            return;
+        }
         if(drag_distance.x < 0) {
             index--;
         } else {
@@ -107,7 +108,7 @@
 
     var move_to_page_id_event = function(id){
         console.log("move to", id);
-        move_to_page(page_index_by_id[id]);
+        index = move_to_page(page_index_by_id[id]);
     };
 
     yarble.utils.event.on("yarble:change-page-id", move_to_page_id_event);

@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 
+    var ua = navigator.userAgent.toString();
+
 	window.yarble = window.yarble || {};
 
 	window.yarble.utils = {
@@ -61,12 +63,20 @@
             // if a DOM node (detached or not) has innerHTML set to an HTML string it will start downloading resources that we don't care about, so let's avoid that
             html_string = html_string.replace(/<!--[\s\S]*?-->/g, '');
             html_string = html_string.replace(/<script[\s\S]*?<\/script>/g, '');
+            html_string = html_string.replace(/<video[\s\S]*?<\/video>/g, '');
+            html_string = html_string.replace(/<audio[\s\S]*?<\/audio>/g, '');
             html_string = html_string.replace(/<link[\s\S]*?>/g, '');
             html_string = html_string.replace(/<img[\s\S]*?>/g, '');
             html_string = html_string.replace(/<object[\s\S]*?<\/object>/g, '');
             html_string = html_string.replace(/<embed[\s\S]*?<\/embed>/g, '');
             html_string = html_string.replace(/<iframe[\s\S]*?>/g, '');
             return html_string;
-        }
+        },
+        get_param: function(params_string, key){
+            var half = params_string.split(key + '=')[1];
+            return half ? decodeURIComponent(half.split('&')[0]) : null;
+        },
+        is_ios: ua.match(/(iPad|iPhone|iPod)/g) ? true : false,
+        is_android: ua.indexOf("Android") >= 0
     };
 }());

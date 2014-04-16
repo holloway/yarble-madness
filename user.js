@@ -45,6 +45,7 @@
 			window.yarble.utils.event.trigger("yarble:page-update:forums", this.responseText);
 			window.yarble.utils.event.trigger("yarble:change-page-id", "forums");
 		} else {
+			console.log("Can't login. If it's the correct username/password then a common error is that the browser has 3rd-party cookies disabled, so when it redirects from account.php to '/'' the cookies set in 'account.php' do not persist to '/' ");
 			alert("wrong username/password ya dingus");
 		}
 	};

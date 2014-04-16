@@ -8,6 +8,7 @@
 	<link type="text/css" rel="stylesheet" href="forums.css">
 	<link type="text/css" rel="stylesheet" href="threads.css">
 	<link type="text/css" rel="stylesheet" href="posts.css">
+
 </head>
 <body>
 	<div id="user">
@@ -25,10 +26,42 @@
 		</div>
 	</div>
 
-	<div id="forums"></div>
-	<div id="threads"></div>
+	<div id="forums">
+		<script id="forums-template" type="text/x-handlebars-template">
+			{{#sections}}
+				<fieldset data-forum-id="{{forum_id}}" class="section">
+					<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
+					{{#forums}}
+						<div class="forums">
+							<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+							
+							{{#subforums}}
+								<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+							{{/subforums}}
+						</div>
+					{{/forums}}
+				</fieldset>
+			{{/sections}}
+		</script>
+	</div>
+	<div id="threads">
+
+		<script id="threads-template" type="text/x-handlebars-template">
+			<div class="threads forum_{{forum_id}}">
+				{{#threads}}
+					<button data-thread-id="{{thread_id}}" class="thread type_{{type}}">
+						{{title}}
+						<span class="user">by {{user.name}}</span>
+					</button>
+				{{/threads}}
+			</div>
+		</script>
+
+	</div>
 	<div id="posts"></div>
 
+	<script src="lib/fastclick.js"></script>
+	<script src="lib/handlebars.js"></script>
 	<script src="utils.js"></script>
 	<script src="sa.js"></script>
 	<script src="user.js"></script>

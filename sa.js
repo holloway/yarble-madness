@@ -19,6 +19,13 @@
 				{action:"logout", ma: ma},
 				callback
 			);
+		},
+		threads: function(forum_id, callback){
+			return get_request(
+				sa.http_base + 'forumdisplay.php',
+				{forumid: forum_id},
+				response_filters.threads(callback, forum_id)
+			);
 		}
 	};
 
@@ -33,6 +40,7 @@
 		request.open('GET', url, async);
 		request.onreadystatechange = response(callback);
 		request.setRequestHeader('Referer', sa.https_base);
+		request.send();
 		return request;
 	};
 
@@ -49,13 +57,16 @@
 		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		request.onreadystatechange = response(callback);
 		request.setRequestHeader('Referer', sa.https_base);
-		if(body_params_string) request.send(body_params_string);
+		if(body_params_string) {
+			request.send(body_params_string);
+		} else {
+			request.send();
+		}
 		return request;
 	};
 
 	var search_for_error_message = function(html_string){
 		html_string = html_string.replace(/^[\s\S]*?<body[^>]*?/, '');
-		console.log(html_string);
 		return html_string;
 	};
 
@@ -66,7 +77,6 @@
 		}
 		return function(){
 			var args = arguments;
-
 			if(this.readyState !== 4) return;
 			if(this.status !== 200 && this.status !== 302) {
 				// What you want to do on failure
@@ -135,8 +145,12 @@
 					success;
 				$div.innerHTML = remove_external_resources(this.responseText);
 				success = ($("#notregistered", $div).length === 0);
-				// a common error is that the browser has 3rd party cookies disabled, so when it redirects from account.php to / the cookies set in account.php do not persist to /
 				return fn.apply(this, [success]);
+			};
+		},
+		threads: function(fn, forum_id){
+			return function(){
+				return fn.apply(this, [forum_id]);
 			};
 		}
 	};

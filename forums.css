@@ -1,3 +1,66 @@
 #forums {
     background: #eee;
+    text-align:left;
+}
+
+#forums fieldset:first-child {
+    margin-top: 0px;
+}
+
+#forums fieldset {
+    margin-top: 1em;
+    border: solid 1px #ccc;
+}
+
+#forums fieldset legend {
+    padding: 0px 0.6em;
+    font-size:small;
+}
+
+#forums button.category,
+#forums button.forum {
+    display: block;
+    width:100%;
+}
+
+#forums button {
+    padding: 0.5em 1em;
+    border: solid 1px #ddd;
+}
+
+#forums .forums:nth-child(2) {
+    margin-top: 0px;
+}
+
+#forums .forums {
+    text-align:center;
+    margin-top: 1em;
+}
+
+#forums button.forum:first-child {
+    margin-top: 0px;
+} 
+
+#forums button.forum {
+    margin-top:0.5em;
+    font-weight:bold;
+    margin-bottom: 0.5em;
+}
+
+#forums button.subforum {
+    font-size:smaller;
+    padding: 0.5em 1em;
+    margin-bottom: 0.5em;
+}
+
+#forums button .subtitle {
+    display:block;
+    clear:both;
+    font-size:small;
+    font-weight:normal;
+}
+
+#forums button.forum_219 {
+    background: black;
+    color: #9f9;
 }
