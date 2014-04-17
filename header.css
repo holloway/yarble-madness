@@ -1,0 +1,191 @@
+body > header {
+    position:fixed;
+    top: 0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    background: #000;
+    z-index:2;
+}
+
+body > header table.tile1 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    margin-left:0px;
+    border-spacing: 0px;
+    border-collapse: separate;
+    border: solid 1px #695b46;
+    background: #d2b68c;
+    -webkit-transform: skewX(30deg);
+       -moz-transform: skewX(30deg);
+        -ms-transform: skewX(30deg);
+         -o-transform: skewX(30deg);
+            transform: skewX(30deg);
+    -webkit-transform-origin: top left;
+       -moz-transform-origin: top left;
+        -ms-transform-origin: top left;
+         -o-transform-origin: top left;
+            transform-origin: top left;
+}
+
+    body > header table.tile1 td {
+        width:15px;
+        height:15px;
+        border: solid 1px #666666;
+        margin:0px;
+        padding: 0px;
+    }
+
+
+body > header table.tile2 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    border-spacing: 0px;
+    border-collapse: separate;
+    border: solid 1px #2d271e;
+    background: #87755a;
+    margin-top:-150px;
+    -webkit-transform: skewY(60deg);
+       -moz-transform: skewY(60deg);
+        -ms-transform: skewY(60deg);
+         -o-transform: skewY(60deg);
+            transform: skewY(60deg);
+    -webkit-transform-origin: top left;
+       -moz-transform-origin: top left;
+        -ms-transform-origin: top left;
+         -o-transform-origin: top left;
+            transform-origin: top left;
+}
+
+    body > header table.tile2 td {
+        width:8px;
+        height:370px;
+        border: solid 1px #666666;
+        margin:0px;
+        padding: 0px;
+    }
+
+body > header table.tile3 {
+    position:absolute;
+    left:100px;
+    top:320px;
+    border-spacing: 0px;
+    border-collapse: separate;
+    border: solid 1px #695b46;
+    background: #2d2d2d;
+    margin-top:-150px;
+}
+
+    body > header table.tile3 td {
+        width:15px;
+        height:150px;
+        border: solid 1px #666666;
+        margin:0px;
+        padding: 0px;
+    }
+
+body > header table.tile4 {
+    position:absolute;
+    left:70px;
+    top:270px;
+    margin-left:0px;
+    border-spacing: 0px;
+    border-collapse: separate;
+    border: solid 1px #695b46;
+    background: #d2b68c;
+    -webkit-transform: skewX(30deg);
+       -moz-transform: skewX(30deg);
+        -ms-transform: skewX(30deg);
+         -o-transform: skewX(30deg);
+            transform: skewX(30deg);
+    -webkit-transform-origin: top left;
+       -moz-transform-origin: top left;
+        -ms-transform-origin: top left;
+         -o-transform-origin: top left;
+            transform-origin: top left;
+}
+
+    body > header table.tile4 td {
+        width:16px;
+        height:15px;
+        border: solid 1px #666666;
+        margin:0px;
+        padding: 0px;
+    }
+
+body > header table.tile5 {
+    position:absolute;
+    left:110px;
+    top:488px;
+    border-spacing: 0px;
+    border-collapse: separate;
+    border: solid 1px #695b46;
+    background: #2d2d2d;
+    margin-top:-150px;
+}
+
+    body > header table.tile5 td {
+        width:16px;
+        height:75px;
+        border: solid 1px #666666;
+        margin:0px;
+        padding: 0px;
+    }
+
+
+body > header #marble {
+    position:absolute;
+    left:60px;
+    top:-20px;
+    width:20px;
+    height: 20px;
+    border-radius: 100%;
+    background: red;
+    z-index:300;
+    background: red;
+    background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #8f0222 10%, #6d0019 82%, #6d0019 82%);
+    background: -webkit-gradient(radial, 35% 35%, 0px, center center, 100%, color-stop(0%,#ffffff), color-stop(10%,#8f0222), color-stop(82%,#6d0019), color-stop(82%,#6d0019));
+    background: -webkit-radial-gradient( 35% 35%, ellipse cover, #ffffff 0%,#8f0222 10%,#6d0019 82%,#6d0019 82%);
+    background: -o-radial-gradient(center, ellipse cover, #ffffff 0%,#8f0222 10%,#6d0019 82%,#6d0019 82%);
+    background: -ms-radial-gradient(center, ellipse cover, #ffffff 0%,#8f0222 10%,#6d0019 82%,#6d0019 82%);
+    background: radial-gradient(ellipse at 35% 35%, #ffffff 0%,#8f0222 10%,#6d0019 82%,#6d0019 82%);
+}
+
+body > header #marble-shadow {
+    position: absolute;
+    left:60px;
+    top:30px; 
+    display: block;
+    content: " ";
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background: rgba(0,0,0,0.5);
+    -webkit-transform: skewX(30deg);
+       -moz-transform: skewX(30deg);
+        -ms-transform: skewX(30deg);
+         -o-transform: skewX(30deg);
+            transform: skewX(30deg);
+}
+
+body > header #marble.step1 {
+    left: 60px;
+    top: 20px;
+    -webkit-transition: all 3s linear;
+       -moz-transition: all 3s linear;
+        -ms-transition: all 3s linear;
+         -o-transition: all 3s linear;
+            transition: all 3s linear;
+}
+
+body > header #marble.step2 {
+    left: 60px;
+    top: 300px;
+    -webkit-transition: all 3s linear;
+       -moz-transition: all 3s linear;
+        -ms-transition: all 3s linear;
+         -o-transition: all 3s linear;
+            transition: all 3s linear;
+}
