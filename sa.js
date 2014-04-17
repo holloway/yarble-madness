@@ -98,8 +98,8 @@
 			var args = arguments;
 			if(this.readyState !== 4) return;
 			if(this.status !== 200 && this.status !== 302) {
-				// What you want to do on failure
-				alert(this.status + " : " + search_for_error_message(this.responseText));
+				console.log("Error response", this);
+				if(this.status !== 0) alert(this.status + " : " + search_for_error_message(this.responseText));
 			}
 			scrape_useful_stuff(this.responseText);
 			return fn.apply(this, args);

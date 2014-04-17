@@ -25,7 +25,7 @@
         if(hashstate === undefined){
             move_to_page(0);
         } else {
-            index = move_to_page(page_index_by_id[hashstate[0]]);
+            index = move_to_page(page_index_by_id[hashstate[0]] ? page_index_by_id[hashstate[0]] : 0);
         }
     };
 
@@ -41,15 +41,12 @@
                     return;
             }
         }
-
         switch(event.keyCode){
             case 37:
-            case 33:
                 index -= 1;
                 arrow_key_was_used  = true;
                 break;
             case 39:
-            case 34:
                 index += 1;
                 arrow_key_was_used  = true;
                 break;
@@ -115,9 +112,9 @@
 
     var hash_change = function(){
         // NOTE: only responsible for changing between $pages. Not responsible for restoring any other hashstate.
-        var page_id = window.location.hash.replace(/^#/, '').split("/")[0];
-        if(page_id === page_id_by_index[index]) return;
-        index = move_to_page(page_index_by_id[page_id]);
+        var hashstate = get_hash_state();
+        if(hashstate[0] === page_id_by_index[index]) return;
+        index = move_to_page(page_index_by_id[hashstate[0]] ? page_index_by_id[hashstate[0]] : 0);
     };
 
     window.addEventListener("hashchange", hash_change, false);

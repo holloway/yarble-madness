@@ -5,11 +5,21 @@ body > div {
 	min-height: 100%;
 	position:   absolute;
 	display:    none;
-	-webkit-transition: all 800ms ease-in; 
-	   -moz-transition: all 800ms ease-in; 
-	     -o-transition: all 800ms ease-in; 
-	        transition: all 800ms ease-in;
+	-webkit-transition: all 0.5s ease-in-out;
+	   -moz-transition: all 0.5s ease-in-out;
+	    -ms-transition: all 0.5s ease-in-out;
+	     -o-transition: all 0.5s ease-in-out;
+	        transition: all 0.5s ease-in-out;
 	-webkit-transform-style: preserve-3d;
+	   -moz-transform-style: preserve-3d;
+	    -ms-transform-style: preserve-3d;
+	     -o-transform-style: preserve-3d;
+	        transform-style: preserve-3d;
+	-webkit-backface-visibility:hidden;
+       -moz-backface-visibility:hidden;
+        -ms-backface-visibility:hidden;
+         -o-backface-visibility:hidden;
+            backface-visibility:hidden;
 }
 
 body > div.current {
@@ -19,14 +29,20 @@ body > div.current {
 body > div.before {
 	display: block;
 	opacity: 0;
-	-webkit-transform: translate3d(-100%, 0, 0)
-					   rotateY(-90deg);
+	-webkit-transform: translate3d(-100%, 0, 0) rotateY(-90deg);
+	   -moz-transform: translate3d(-100%, 0, 0) rotateY(-90deg);
+	    -ms-transform: translate3d(-100%, 0, 0) rotateY(-90deg);
+	     -o-transform: translate3d(-100%, 0, 0) rotateY(-90deg);
+            transform: translate3d(-100%, 0, 0) rotateY(-90deg);
 }
 
 body > div.after {
 	display: block;
 	opacity: 0;
-	-webkit-transform: translate3d(100%, 0, 0) 
-					   rotateY(90deg);
+	-webkit-transform: translate3d(100%, 0, 0) rotateY(90deg);
+	   -moz-transform: translate3d(100%, 0, 0) rotateY(90deg);
+	    -ms-transform: translate3d(100%, 0, 0) rotateY(90deg);
+	     -o-transform: translate3d(100%, 0, 0) rotateY(90deg);
+	        transform: translate3d(100%, 0, 0) rotateY(90deg);
 
 }
