@@ -3,6 +3,8 @@
 
 	if(!window.localStorage) return alert("Yarble Madness needs a browser with localStorage");
 
+	var is_touch_device = 'ontouchstart' in document.documentElement;
+
 	var	$ = yarble.utils.$,
 		init = function(){
 			var $forms = $("form"),
@@ -16,6 +18,8 @@
 				$form = $forms[i];
 				$form.addEventListener("submit", do_not_submit);
 			}
+
+			$("html")[0].classList.add(is_touch_device ? "touch" : "notouch");
 		};
 
 	document.addEventListener("DOMContentLoaded", init);

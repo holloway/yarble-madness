@@ -19,3 +19,8 @@
 	text-align:right;
 	font-size:x-small;
 }
+
+#posts .bbc-spoiler {
+	border: solid 1px red;
+	color: transparent;
+}

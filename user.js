@@ -2,6 +2,8 @@
 	"use strict";
 
 	var	$user,
+		$username,
+		$password,
 		$login,
 		$login_button,
 		$options,
@@ -9,11 +11,14 @@
 		user,
 		last_login_attempt_username,
 		CONSTANTS = {
-			user_storage_key: "yarble:user"
+			user_storage_key: "yarble:user",
+			first_time_key:   "yarble:first-time-user"
 		},
 		$ = yarble.utils.$,
 		init = function(){
 			$user = $("#user")[0];
+			$username = $("input[name=username]", $login)[0];
+			$password = $("input[name=password]", $login)[0];
 			$login = $("#login")[0];
 			$login_button = $("button", $login)[0];
 			$login_button.addEventListener("click", login, false);
@@ -23,7 +28,10 @@
 			$logout_button.addEventListener("click", logout, true);
 			if(!user) {
 				yarble.utils.event.trigger("yarble:change-page-id", "user");
+			} else {
+				yarble.utils.event.trigger("yarble:change-page-id", "forums");
 			}
+			
 		};
 
 	document.addEventListener("DOMContentLoaded", init);
@@ -36,35 +44,45 @@
     });
 
     var login = function(){
-		last_login_attempt_username = $("input[name=username]", $login)[0].value;
+		$("button", $login)[0].classList.add("loading");
+		last_login_attempt_username = $username.value;
 		sa.login(
 			last_login_attempt_username,
-			$("input[name=password]", $login)[0].value,
+			$password.value,
 			login_response
 		);
     };
 
     var login_response = function(success){
+		$("button", $login)[0].classList.remove("loading");
 		if(success) {
 			window.localStorage.setItem(CONSTANTS.user_storage_key, last_login_attempt_username);
 			window.yarble.utils.event.trigger("yarble:page-update:forums", this.responseText);
-			window.yarble.utils.event.trigger("yarble:change-page-id", "forums");
+			if(!window.localStorage.getItem(CONSTANTS.first_time_key)){
+				window.localStorage.setItem(CONSTANTS.first_time_key, false);
+				window.yarble.utils.event.trigger("yarble:change-page-id", "user");
+			} else {
+				window.yarble.utils.event.trigger("yarble:change-page-id", "forums");
+			}
 		} else {
 			console.log("Can't login. If it's the correct username/password then a common error is that the browser has 3rd-party cookies disabled, so when it redirects from account.php to '/'' the cookies set in 'account.php' do not persist to '/' ");
+			$password.value = "";
+			$username.focus();
 			alert("wrong username/password ya dingus");
 		}
 	};
 
 	var logout = function(){
+		window.localStorage.removeItem(CONSTANTS.user_storage_key);
 		sa.logout(logout_response);
 	};
 
 	var logout_response = function(success){
 		if(success){
 			user = undefined;
-			window.localStorage.removeItem(CONSTANTS.user_storage_key);
 			window.yarble.utils.event.trigger("yarble:page-change:user");
-			$("input[name=username]", $login)[0].value = "";
+			$username.value = "";
+			$password.value = "";
 			$("input[name=password]", $login)[0].value = "";
 		} else {
 			alert("Unable to logout. I don't know why. Weird.");

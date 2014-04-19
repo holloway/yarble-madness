@@ -1,3 +1,13 @@
+#user {
+	background: #eeeeee;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 #user #login,
 #user #options {
 	display: none;
@@ -5,21 +15,130 @@
 
 #user p {
 	text-align:center;
+	padding: 0px 1em 0px 1em;
 }
 
 #user input,
-#user button
+#user button,
+#user fieldset a
 {
 	display: block;
-	width: 90%;
 	text-align:center;
 	margin:1% auto;
 	padding: 1em 0px;
 	border: solid 1px #ddd;
+	border-radius: none;
 }
 
-#user button {
-	font-weight: bold;
-	border-radius: 0.5em;
+#user input:focus,
+#user button:focus {
+	background: #ffffcc;
+	border: solid 1px #dda;
+}
+
+#user button,
+#user fieldset a {
 	background: #bbb;
+	color: #333;
+}
+
+#user button .loading {
+	visibility:hidden;
+}
+
+#user button.loading .loading {
+	visibility: visible;
+}
+
+#user #options table {
+	margin: 0px auto;
+	border: 0px;
+}
+#user #options table td {
+	text-align:center;
+	vertical-align: top;
+	padding: 1em 0.2em;
+	border: solid 2px #666;
+	border-radius: 1em;
+	border-width: 1em 2px 1em 2px;
+}
+
+#user #options table small {
+	font-size:x-small;
+}
+
+#user #options table td.here {
+	background: #ffffcc;
+}
+
+#user #options fieldset {
+	border: none;
+	margin: 1em 2em; 
+}
+
+#user #options fieldset legend {
+	display:none;
+}
+
+#user fieldset button,
+#user fieldset a {
+	display: block;
+	text-decoration: none;
+	padding: 0.3em 1em;
+}
+
+#user .twocolumns .columntwo {
+	padding-top:10px;
+	background: #ddd;
+}
+
+#user .onoff {
+	display: inline-block;
+	border-radius: 10px;
+	
+	background: #999999;
+	font-size:small;
+}
+
+#user .onoff.off {
+	padding: 0.3em 0.4em 0.3em 0.4em;
+}
+
+#user .onoff.on {
+	padding: 0.3em 0.4em 0.3em 0.4em;
+}
+
+#user .onoff.off:after {
+	display: inline-block;
+	content: " ";
+	width: 10px;
+	height: 10px;
+	background: red;
+	position: relative;
+	margin-left:0.3em;
+	z-index:1000;
+	border-radius: 100%;
+}
+
+#user .onoff.on:before {
+	display: inline-block;
+	content: " ";
+	width: 10px;
+	height: 10px;
+	background: green;
+	position: relative;
+	margin-right:0.3em;
+	z-index:1000;
+	border-radius: 100%;
+}
+
+@media (min-width: 700px) {
+	#user .twocolumns .columnone .inner {
+		padding: 0px 1em;
+	}
+
+	#user .twocolumns .columntwo {
+		padding-top:100px;
+		min-height:100%;
+	}
 }

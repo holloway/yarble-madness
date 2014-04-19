@@ -98,8 +98,9 @@
 			var args = arguments;
 			if(this.readyState !== 4) return;
 			if(this.status !== 200 && this.status !== 302) {
-				console.log("Error response", this);
+				console.log("sa.js: Error response", this);
 				if(this.status !== 0) alert(this.status + " : " + search_for_error_message(this.responseText));
+				return;
 			}
 			scrape_useful_stuff(this.responseText);
 			return fn.apply(this, args);
@@ -163,8 +164,8 @@
 			return function(){
 				var $div = document.createElement("div"),
 					success;
-				$div.innerHTML = remove_external_resources(this.responseText);
-				success = ($("#notregistered", $div).length === 0);
+				
+				success = this.responseText.match(/Log Out/g);
 				return fn.apply(this, [success]);
 			};
 		},

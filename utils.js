@@ -77,6 +77,22 @@
             return half ? decodeURIComponent(half.split('&')[0]) : null;
         },
         is_ios: ua.match(/(iPad|iPhone|iPod)/g) ? true : false,
-        is_android: ua.indexOf("Android") >= 0
+        is_android: ua.indexOf("Android") >= 0,
+        transition_end_event: function(){
+            var element = document.createElement('fakeelement'),
+                transitions = {
+                'transition':       'transitionend',
+                'OTransition':      'otransitionEnd',
+                'MozTransition':    'transitionend',
+                'WebkitTransition': 'webkitTransitionEnd'
+                },
+                key;
+
+            for(key in transitions){
+                if(element.style[key] !== undefined){
+                    return transitions[key];
+                }
+            }
+        }(), //self executing in order to calculate the result once
     };
 }());

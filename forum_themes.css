@@ -14,21 +14,38 @@
     border-top: solid 1px green;
 }
 
+.forum_219 .post:nth-child(even) {
+    background: #010;
+}
+
 .forum_219 blockquote {
     border: solid 1px green;
     padding: 1em;
 }
 
-
 .forum_26,
 .forum_26 button {
     background: #fcf;
-    color: #303;
+    color: #808;
     border-color: #969;
 }
 
 .forum_26 button .user {
     color: #606;
+}
+
+.forum_219 a,
+#posts .forum_219 h4 .quote_link {
+    color: #cfc;
+}
+
+#threads .forum_219 button.type_announcement {
+    background: #363;
+    color: #cfc;
+}
+
+#threads .forum_219 button.type_announcement .user {
+    color: #9c9;
 }
 
 
@@ -43,6 +60,7 @@
     background-color: #ccf;
     color: #003;
     border-color: #77c;
+    text-shadow: 0px 0px 5px #fff, 0px 0px 5px #ccf, 0px 0px 5px #ccf;
 }
 
 .forum_268 button .user {

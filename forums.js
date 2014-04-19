@@ -13,12 +13,17 @@
 
 		if(forums === undefined) {
 			forums = JSON.parse(localStorage.getItem(CONSTANTS.forums_cache_key));
+		} else {
+			forums = JSON.parse(JSON.stringify(forums)); // we'll clone it http://stackoverflow.com/a/5344074 so that our modifications (such as copying into .column1 and .column2) don't accidentally leak back to the localStorage copy or any other version
 		}
 		if(!forums) return;
 		if(!forums_template){
 			forums_template_string = $("#forums-template")[0].innerHTML;
 			forums_template = Handlebars.compile(forums_template_string);
 		}
+		var half_sections = Math.floor(forums.sections.length / 2);
+		forums.column1 = {sections: forums.sections.slice(0, half_sections)};
+		forums.column2 = {sections: forums.sections.slice(half_sections)};
 		$forums.innerHTML = forums_template(forums);
 	};
 

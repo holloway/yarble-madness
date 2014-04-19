@@ -13,81 +13,96 @@
 
 </head>
 <body>
-	<header>
-
-
-		<table class="tile2">
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		</table>
-
-		<table class="tile3">
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		</table>
-
-		<table class="tile1">
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		</table>
-
-		<table class="tile4">
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		</table>
-
-		<table class="tile5">
-			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		</table>
-
-		<div id="marble-shadow"></div>
-		<div id="marble"></div>
-
-
-	</header>
+	
 	<div id="user">
 		<div id="login">
-			<h1>Yarble Madness</h1>
-			<p>A client for forums.somethingawful.com</p>
+			<h1><img src="logo-blue-small.png" alt="Yarble Madness"></h1>
+			<p>Stairs, house, etc.</p>
 			<form>
 				<input type="text"     name="username" placeholder="username">
 				<input type="password" name="password" placeholder="password">
-				<button>login</button>
+				<button>login <img src="loader.gif" class="loading" alt="Please wait, loading..."></button>
+				<p class="smallprint">an unofficial client for forums.SomethingAwful.com</p>
 			</form>
 		</div>
 		<div id="options">
-			<button>logout</button>
+			<div class="twocolumns">
+				<div class="columnone">
+					<h1><img src="logo-blue-small.png" alt="Yarble Madness"></h1>
+					<div class="inner">
+						<p>in this app <b>you <span class="touch"> swipe </span> <span class="notouch"> use the arrow keys</span></b> to move through these 4 screens</p>
+						<table border="1" class="device">
+							<tr>
+								<td class="here">User<br><small>you are here</small></td>
+								<td>Forums</td>
+								<td>Forum</td>
+								<td>Thread</td>
+							</tr>
+						</table>
+						<p>So do it - <span class="touch"> swipe more than about 100 pixels to confirm a valid swipe.</span>
+									  <span class="notouch"> use the arrow keys.</span>
+							do it you dork</p>
+						<p>go that way &rarr;</p>
+						<p>&larr; don't go that way might be grues</p>
+					</div>
+				</div>
+				<div class="columntwo">
+					<fieldset>
+						<legend>Options</legend>
+						<button>logout</button>
+						<button>only download images/video when on WiFi? <span id="wifidownload" class="onoff off">off</span></button>
+						<a href="https://www.youtube.com/watch?v=ancwTUkXyKk">windy city heat</a>
+					</fieldset>
+				</div>
+			</div>
 		</div>
 	</div>
 
 	<div id="forums">
+		there's nothing here yet go back that way &larr;
 		<script id="forums-template" type="text/x-handlebars-template">
-			{{#sections}}
-				<fieldset data-forum-id="{{forum_id}}" class="section">
-					<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
-					{{#forums}}
-						<div class="forums">
-							<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
-							
-							{{#subforums}}
-								<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
-							{{/subforums}}
-						</div>
-					{{/forums}}
-				</fieldset>
-			{{/sections}}
+			<p class="logo"><img src="logo-very-small.png"></p>
+			<div class="twocolumns">
+				<div class="columnone">
+					{{#column1.sections}}
+						<fieldset data-forum-id="{{forum_id}}" class="section">
+							<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
+							{{#forums}}
+								<div class="forums">
+									<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+									<div class="subforums">
+										{{#subforums}}
+											<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+										{{/subforums}}
+									</div>
+								</div>
+							{{/forums}}
+						</fieldset>
+					{{/column1.sections}}
+				</div>
+				<div class="columntwo">
+					{{#column2.sections}}
+						<fieldset data-forum-id="{{forum_id}}" class="section">
+							<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
+							{{#forums}}
+								<div class="forums">
+									<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+									<div class="subforums">
+										{{#subforums}}
+											<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+										{{/subforums}}
+									</div>
+								</div>
+							{{/forums}}
+						</fieldset>
+					{{/column2.sections}}
+				</div>
+			</div>
 		</script>
 	</div>
 	<div id="threads">
-
+		nothing is here yet
+		<p>seriously fuck off mate STRAYA &larr;
 		<script id="threads-template" type="text/x-handlebars-template">
 			<div class="threads forum_{{forum_id}}">
 				{{#threads}}
@@ -100,15 +115,18 @@
 					{{^announcement}}
 						<button data-thread-id="{{thread_id}}" class="thread type_{{type}}">
 							{{title}}
-							<span class="user">by {{user.name}}</span>
+							<span class="user">{{user.name}}</span>
 						</button>
 					{{/announcement}}
 				{{/threads}}
+				<hr>
+				psa: global warming is real. you and your offspring are fucked. welcome to augmented reality 2.0
 			</div>
 		</script>
 
 	</div>
 	<div id="posts">
+		langoliers etc. you shouldn't even be here &larr;
 		<script id="posts-template" type="text/x-handlebars-template">
 			<div class="posts forum_{{forum_id}}">
 				{{#posts}}
@@ -117,9 +135,46 @@
 						<span class="user" data-user-id="{{user.user_id}}">by {{user.name}}</span>
 					</div>
 				{{/posts}}
+				<hr>
+				ps. thanks to somethingawful forums for all this GREAT CONTENT which <i>I</i> the app am ingesting yum yum yum
+				<p>welcome to the social
 			</div>
 		</script>
 	</div>
+
+	<header>
+		<table class="tile tile2">
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</table>
+		<table class="tile tile3">
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</table>
+		<table class="tile tile1">
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</table>
+		<table class="tile tile4">
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</table>
+		<table class="tile tile5">
+			<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</table>
+		<div id="marble_shadow"></div>
+		<div id="marble"></div>
+		<div class="yarble-logo"></div>
+
+	</header>
 
 	<script src="lib/fastclick.js"></script>
 	<script src="lib/handlebars.js"></script>
