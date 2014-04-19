@@ -32,7 +32,7 @@
 			code = li.div.p;
 			url = li.img.src;
 			filename = crypto.createHash('sha1').update(code).digest("hex") + ".gif";
-			smilies[code] = filename;
+			smilies[code] = {filename: filename, title: li.img.title};
 			request(
 				{method: 'GET', url: url, encoding: null}, // 'encoding:null' means that body will be returned as binary, not text
 				http_response(code, filename)
