@@ -18,6 +18,15 @@
 	padding: 0px 1em 0px 1em;
 }
 
+#user #login input,
+#user #login button {
+	width: 90%;
+}
+
+#user #login .smallprint {
+	font-size:small;
+}
+
 #user input,
 #user button,
 #user fieldset a
@@ -29,6 +38,12 @@
 	border: solid 1px #ddd;
 	border-radius: none;
 }
+
+#user #options a,
+#user #options button {
+	width: 100%;
+}
+
 
 #user input:focus,
 #user button:focus {
@@ -84,7 +99,6 @@
 #user fieldset a {
 	display: block;
 	text-decoration: none;
-	padding: 0.3em 1em;
 }
 
 #user .twocolumns .columntwo {

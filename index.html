@@ -50,7 +50,7 @@
 					<fieldset>
 						<legend>Options</legend>
 						<button>logout</button>
-						<button>only download images/video when on WiFi? <span id="wifidownload" class="onoff off">off</span></button>
+						<button>only download images/etc when on WiFi? <span id="wifidownload" class="onoff off">off</span></button>
 						<a href="https://www.youtube.com/watch?v=ancwTUkXyKk">windy city heat</a>
 					</fieldset>
 				</div>
@@ -61,18 +61,18 @@
 	<div id="forums">
 		there's nothing here yet go back that way &larr;
 		<script id="forums-template" type="text/x-handlebars-template">
-			<p class="logo"><img src="logo-very-small.png"></p>
 			<div class="twocolumns">
 				<div class="columnone">
+					<p class="logo"><img src="logo-very-small.png"></p>
 					{{#column1.sections}}
 						<fieldset data-forum-id="{{forum_id}}" class="section">
 							<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
 							{{#forums}}
 								<div class="forums">
-									<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+									<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}"><div class="forum_title"> {{title}}</div> <div class="subtitle">{{subtitle}}</div></button>
 									<div class="subforums">
 										{{#subforums}}
-											<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+											<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <div class="subtitle">{{subtitle}}</div></button>
 										{{/subforums}}
 									</div>
 								</div>
@@ -81,15 +81,16 @@
 					{{/column1.sections}}
 				</div>
 				<div class="columntwo">
+					<p class="logo"><img src="logo-very-small.png"></p>
 					{{#column2.sections}}
 						<fieldset data-forum-id="{{forum_id}}" class="section">
 							<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
 							{{#forums}}
 								<div class="forums">
-									<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+									<button data-forum-id="{{forum_id}}" class="forum forum_{{forum_id}}"><div class="forum_title"> {{title}}</div> <div class="subtitle">{{subtitle}}</div></button>
 									<div class="subforums">
 										{{#subforums}}
-											<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <span class="subtitle">{{subtitle}}</span></button>
+											<button data-forum-id="{{forum_id}}" class="subforum forum_{{forum_id}}">{{title}} <div class="subtitle">{{subtitle}}</div></button>
 										{{/subforums}}
 									</div>
 								</div>
@@ -101,7 +102,7 @@
 		</script>
 	</div>
 	<div id="threads">
-		nothing is here yet
+		nothing is here yet go back and pick a forum
 		<p>seriously fuck off mate STRAYA &larr;
 		<script id="threads-template" type="text/x-handlebars-template">
 			<div class="threads forum_{{forum_id}}">

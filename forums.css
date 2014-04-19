@@ -10,36 +10,45 @@
 
 #forums .logo {
     text-align:right;
-    padding-right: 1em;
     margin-bottom: -30px;
 }
 
-#forums fieldset {
-    margin-top: 0.3em;
+#forums fieldset.section {
+    display: block;
+    padding: 0px;
+    margin: 0.3em 0px 0px 0px;
     border: none;
 }
 
 #forums fieldset legend {
-    padding: 1em 0.6em 0px 1.7em;
+    padding: 1em 0em 5px 3em;
     font-size:small;
 }
 
-#forums button.category,
 #forums button.forum {
-    display: block;
-    width:100%;
+    width: 95%;
+    padding: 0.5em 0px 0.5em 0%;
+    margin:0.5em 0px 0.4em 1em;
     text-align:left;
-}
-
-#forums .subforums {
-    margin-left:50px;
-}
-
-#forums button {
-    padding: 0.5em 1em;
+    display:block;
     border: solid 1px #ddd;
     border-bottom: solid 1px #ccc;
 }
+
+    #forums button.forum .forum_title {
+        padding-left:0.8em;
+        display:block;
+    }
+
+    #forums button .subtitle {
+        margin-left:3%;
+        font-size:small;
+        width:95%;
+    }
+
+    #forums .subforums {
+        margin-left:34px;
+    }
 
 #forums .forums:nth-child(2) {
     margin-top: 0px;
@@ -53,39 +62,64 @@
     margin-top: 0px;
 } 
 
-#forums button.forum {
-    margin-top:0.5em;
-    margin-bottom: 0.4em;
-}
-
 #forums button.subforum {
     font-size:small;
     padding: 0.5em 1em;
-    margin-bottom: 0.5em;
+    margin: 0px 0.2em 0.5em 0px;
+    border: solid 1px #ddd;
+    border-bottom: solid 1px #ccc;
 }
 
-#forums button .subtitle {
-    display:block;
-    clear:both;
-    font-size:small;
+#forums .twocolumns .columnone .logo {
+    display: block;
+    padding-right: 0.7em;
+}
+
+#forums .twocolumns .columntwo .logo {
+    display: none;
 }
 
 @media (min-width: 700px) {
-    #forums button.forum {
-        padding-left: 30px;
-    }
 
     #forums .subforums {
-        margin-left:60px;
+        margin-left:30px;
+        margin-right: 50px;
+    }
+
+    #forums button.forum {
+        margin-left:3%;
+        padding-left: 5%;
+        width:92%;
+    }
+
+    #forums button.forum .forum_title {
+        padding-left:0px;
+    }
+
+    #forums button.forum .subtitle {
+        width:98%;
+        height: 1.1em;
+        overflow: hidden;
+        margin-left:0%;
+        text-overflow:ellipsis;
     }
 
     #forums fieldset legend {
-        padding-left: 2.5em;
+        padding-left: 3em;
         font-size:small;
     }
 
+    #forums .twocolumns .columnone {
+        padding-top:16px;
+    }
+
+    #forums .twocolumns .columntwo .logo {
+        display: block;
+        padding-right: 1.8em;
+    }
+
+    #forums .twocolumns .columnone .logo {
+        display: none;
+    }
+
 }
-
-
-
-

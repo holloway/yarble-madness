@@ -16,7 +16,8 @@ html, body {
 	margin: 0px;
 	min-height: 100%;
 	height: 100%;
-	font-family: 'Raleway Thin', Raleway, sans-serif;
+	font-family: 'Raleway Thin', Raleway, serif;
+	font-weight: 100;
 }
 
 body {
