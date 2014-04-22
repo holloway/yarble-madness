@@ -29,12 +29,11 @@
 
 #user input,
 #user button,
-#user fieldset a
-{
+#user fieldset a {
 	display: block;
 	text-align:center;
 	margin:1% auto;
-	padding: 1em 0px;
+	padding: 0.5em 0px;
 	border: solid 1px #ddd;
 	border-radius: none;
 }
@@ -106,43 +105,25 @@
 	background: #ddd;
 }
 
-#user .onoff {
+#user .onoff:after {
 	display: inline-block;
-	border-radius: 10px;
-	background: #999999;
 	font-size:small;
-}
-
-#user .onoff.off {
-	padding: 0.3em 0.4em 0.3em 0.4em;
-}
-
-#user .onoff.on {
-	padding: 0.3em 0.4em 0.3em 0.4em;
+	padding: 0.3em 0.6em;
+	color: white;
+	float:right;
+	margin-right:1em;
 }
 
 #user .onoff.off:after {
-	display: inline-block;
-	content: " ";
-	width: 10px;
-	height: 10px;
-	background: red;
-	position: relative;
-	margin-left:0.3em;
-	z-index:1000;
-	border-radius: 100%;
+	content: "off";
+	background: #600;
+	color: #faa;
 }
 
-#user .onoff.on:before {
-	display: inline-block;
-	content: " ";
-	width: 10px;
-	height: 10px;
-	background: green;
-	position: relative;
-	margin-right:0.3em;
-	z-index:1000;
-	border-radius: 100%;
+#user .onoff.on:after {
+	content: "on";
+	background: #060;
+	color: #afa;
 }
 
 @media (min-width: 700px) {

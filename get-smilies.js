@@ -16,12 +16,15 @@
 			url,
 			i,
 			filename,
+			fs_error = function(err){
+				if(err) throw err;
+			},
 			http_response = function(code, filename){
 				return function(error, response, body) {
-					filename = "smilies/" + filename;
+					filename = "./images/smilies/" + filename;
 					console.log("Writing ", code, " to ", filename);
 					if (!error && response.statusCode == 200) {
-						fs.writeFile(filename, body);
+						fs.writeFile(filename, body, fs_error);
 					}
 				};
 			};
@@ -38,6 +41,6 @@
 				http_response(code, filename)
 			);
 		}
-		fs.writeFile("smilies.json", JSON.stringify(smilies));
+		fs.writeFile("smilies-cache.js", "var smiles_cache=" + JSON.stringify(smilies) + ";");
 	});
 }());

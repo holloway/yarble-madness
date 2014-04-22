@@ -6,6 +6,8 @@
         drag_distance = {},
         page_index_by_id = {},
         drag_start = {},
+        CONSTANTS = {pageflip_hashstate: 'yarble:pageflip:hashstate'},
+        pages_hashstate = {},
         index = 0,
         $pages;
 
@@ -17,6 +19,12 @@
             page_index_by_id[id] = i;
             page_id_by_index[i] = id;
         });
+        pages_hashstate = localStorage.getItem(CONSTANTS.pageflip_hashstate);
+        if(pages_hashstate){
+            pages_hashstate = JSON.parse(pages_hashstate);
+        } else {
+            pages_hashstate = {};
+        }
         document.addEventListener('keydown',    key_down,    false);
         document.addEventListener('touchstart', touch_start, false);
         document.addEventListener('touchmove',  touch_move,  false);
@@ -29,7 +37,12 @@
         }
     };
 
+    var beforeunload = function(){
+        localStorage.setItem(CONSTANTS.pageflip_hashstate, JSON.stringify(pages_hashstate));
+    };
+
     document.addEventListener("DOMContentLoaded", init);
+    window.addEventListener("beforeunload", beforeunload);
 
     var key_down = function(event){
         var arrow_key_was_used = false;
@@ -88,8 +101,13 @@
         index = move_to_page(index);
     };
 
-    var move_to_page = function(index, hashstate){
-        if(hashstate === undefined) hashstate = page_id_by_index[index];
+    var move_to_page = function(index, hashstate, update_url_hashstate){
+        if(update_url_hashstate === undefined) {
+            update_url_hashstate = true;
+        }
+        if(hashstate === undefined) {
+            hashstate = pages_hashstate[page_id_by_index[index]] ? pages_hashstate[page_id_by_index[index]] : page_id_by_index[index];
+        }
         if(!$pages.length) return index;
         index = Math.max(Math.min(index, $pages.length - 1), 0);
         $pages[index].className = 'current';
@@ -99,7 +117,12 @@
         $pages.slice(index + 1).map(function(element){
             element.className = 'after';
         });
-        set_hash_state(hashstate);
+
+        console.log("hashstate", hashstate);
+        if(update_url_hashstate){
+            set_hash_state(hashstate);
+        }
+        pages_hashstate[page_id_by_index[index]] = hashstate;
         window.yarble.utils.event.trigger("yarble:page-change:" + page_id_by_index[index]);
         return index;
     };
@@ -113,8 +136,11 @@
     var hash_change = function(){
         // NOTE: only responsible for changing between $pages. Not responsible for restoring any other hashstate.
         var hashstate = get_hash_state();
-        if(hashstate[0] === page_id_by_index[index]) return;
-        index = move_to_page(page_index_by_id[hashstate[0]] ? page_index_by_id[hashstate[0]] : 0);
+        if(hashstate[0] === page_id_by_index[index]) {
+            pages_hashstate[hashstate[0]] = hashstate.join("/");
+            return;
+        }
+        index = move_to_page(page_index_by_id[hashstate[0]] ? page_index_by_id[hashstate[0]] : 0, hashstate.join("/"), false);
     };
 
     window.addEventListener("hashchange", hash_change, false);
@@ -125,9 +151,12 @@
         window.location.hash = hashstate;
     };
 
-    window.get_hash_state = function(){
+    window.get_hash_state = function(flattened){
+        var hashstate;
         if(window.location.hash === undefined || window.location.hash.length === 0) return undefined;
-        return window.location.hash.replace(/^#/, '').split("/");
+        hashstate = window.location.hash.replace(/^#/, '');
+        if(flattened) return hashstate;
+        return hashstate.split("/");
     };
 
 }());

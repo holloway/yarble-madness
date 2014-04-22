@@ -16,19 +16,19 @@
 	
 	<div id="user">
 		<div id="login">
-			<h1><img src="logo-blue-small.png" alt="Yarble Madness"></h1>
+			<h1><img src="images/logo-blue-small.png" alt="Yarble Madness"></h1>
 			<p>Stairs, house, etc.</p>
 			<form>
 				<input type="text"     name="username" placeholder="username">
 				<input type="password" name="password" placeholder="password">
-				<button>login <img src="loader.gif" class="loading" alt="Please wait, loading..."></button>
+				<button>login <img src="images/loader.gif" class="loading" alt="Please wait, loading..."></button>
 				<p class="smallprint">an unofficial client for forums.SomethingAwful.com</p>
 			</form>
 		</div>
 		<div id="options">
 			<div class="twocolumns">
 				<div class="columnone">
-					<h1><img src="logo-blue-small.png" alt="Yarble Madness"></h1>
+					<h1><img src="images/logo-blue-small.png" alt="Yarble Madness"></h1>
 					<div class="inner">
 						<p>in this app <b>you <span class="touch"> swipe </span> <span class="notouch"> use the arrow keys</span></b> to move through these 4 screens</p>
 						<table border="1" class="device">
@@ -39,7 +39,7 @@
 								<td>Thread</td>
 							</tr>
 						</table>
-						<p>So do it - <span class="touch"> swipe more than about 100 pixels to confirm a valid swipe.</span>
+						<p>so <span class="touch"> swipe more than about 100 pixels to confirm a valid swipe.</span>
 									  <span class="notouch"> use the arrow keys.</span>
 							do it you dork</p>
 						<p>go that way &rarr;</p>
@@ -50,7 +50,8 @@
 					<fieldset>
 						<legend>Options</legend>
 						<button>logout</button>
-						<button>only download images/etc when on WiFi? <span id="wifidownload" class="onoff off">off</span></button>
+						<button class="onoff off" id="mobiledownload">don't download images on 3g/4g</button>
+						<button class="onoff off" id="beprofessionalperry">be professional</button>
 						<a href="https://www.youtube.com/watch?v=ancwTUkXyKk">windy city heat</a>
 					</fieldset>
 				</div>
@@ -63,7 +64,7 @@
 		<script id="forums-template" type="text/x-handlebars-template">
 			<div class="twocolumns">
 				<div class="columnone">
-					<p class="logo"><img src="logo-very-small.png"></p>
+					<p class="logo"><img src="images/logo-very-small.png"></p>
 					{{#column1.sections}}
 						<fieldset data-forum-id="{{forum_id}}" class="section">
 							<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
@@ -81,7 +82,7 @@
 					{{/column1.sections}}
 				</div>
 				<div class="columntwo">
-					<p class="logo"><img src="logo-very-small.png"></p>
+					<p class="logo"><img src="images/logo-very-small.png"></p>
 					{{#column2.sections}}
 						<fieldset data-forum-id="{{forum_id}}" class="section">
 							<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
@@ -105,29 +106,37 @@
 		nothing is here yet go back and pick a forum
 		<p>seriously fuck off mate STRAYA &larr;
 		<script id="threads-template" type="text/x-handlebars-template">
-			<div class="threads forum_{{forum_id}}">
-				{{#threads}}
-					{{#announcement}}
-						<button data-forum-id="{{forum_id}}" class="thread type_{{type}}">
-							{{title}}
-							<span class="user">by {{user.name}}</span>
-						</button>
-					{{/announcement}}
-					{{^announcement}}
-						<button data-thread-id="{{thread_id}}" class="thread type_{{type}}">
-							{{title}}
-							<span class="user">{{user.name}}</span>
-						</button>
-					{{/announcement}}
-				{{/threads}}
-				<hr>
-				psa: global warming is real. you and your offspring are fucked. welcome to augmented reality 2.0
-			</div>
+			{{^error}}
+				<div class="threads forum_{{forum_id}}">
+					{{#threads}}
+						{{#announcement}}
+							<button data-forum-id="{{forum_id}}" class="thread type_{{type}}">
+								{{title}}
+								<span class="user">by {{user.name}}</span>
+							</button>
+						{{/announcement}}
+						{{^announcement}}
+							<button data-thread-id="{{thread_id}}" class="thread type_{{type}}">
+								{{title}}
+								<span class="user">{{user.name}}</span>
+							</button>
+						{{/announcement}}
+					{{/threads}}
+					<hr>
+					psa: global warming is real. you and your offspring are fucked. welcome to augmented reality 2.0
+				</div>
+			{{/error}}
+			{{#error}}
+				<div class="threads">
+					error: {{../error_message}}
+				</div>
+			{{/error}}
 		</script>
 
 	</div>
 	<div id="posts">
-		langoliers etc. you shouldn't even be here &larr;
+		you shouldn't be here yet. go back and pick a forum and thread.
+		<p>seriously fuck off the langoliers will be here soon &larr;
 		<script id="posts-template" type="text/x-handlebars-template">
 			<div class="posts forum_{{forum_id}}">
 				{{#posts}}
@@ -137,8 +146,7 @@
 					</div>
 				{{/posts}}
 				<hr>
-				ps. thanks to somethingawful forums for all this GREAT CONTENT which <i>I</i> the app am ingesting yum yum yum
-				<p>welcome to the social
+				
 			</div>
 		</script>
 	</div>
@@ -179,9 +187,10 @@
 
 	<script src="lib/fastclick.js"></script>
 	<script src="lib/handlebars.js"></script>
+	<script src="smilies-cache.js"></script>
 	<script src="utils.js"></script>
 	<script src="header.js"></script>
-	<script src="sa.js"></script>
+	<script src="sa.lib.js"></script>
 	<script src="user.js"></script>
 	<script src="forums.js"></script>
 	<script src="threads.js"></script>

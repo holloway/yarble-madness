@@ -272,14 +272,14 @@ body > header .yarble-logo {
     margin: 20px auto;
     width: 320px;
     height:154px;
-    background: url("logo.png") no-repeat;
+    background: url("images/logo.png") no-repeat;
 } 
 
 @media (min-width: 700px) {
     body > header .yarble-logo {
         width:640px;
         height:308px;
-        background: url("logo-big.png") no-repeat;
+        background: url("images/logo-big.png") no-repeat;
     }
 }
 

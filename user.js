@@ -57,7 +57,7 @@
 		$("button", $login)[0].classList.remove("loading");
 		if(success) {
 			window.localStorage.setItem(CONSTANTS.user_storage_key, last_login_attempt_username);
-			window.yarble.utils.event.trigger("yarble:page-update:forums", this.responseText);
+			window.yarble.utils.event.trigger("yarble:page-update:forums", sa.response_parse.forums(this.responseText));
 			if(!window.localStorage.getItem(CONSTANTS.first_time_key)){
 				window.localStorage.setItem(CONSTANTS.first_time_key, false);
 				window.yarble.utils.event.trigger("yarble:change-page-id", "user");

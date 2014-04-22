@@ -25,56 +25,28 @@
         $posts.innerHTML = posts_template(posts);
     };
 
-	var parse_posts_html = function(forum_id, thread_id, page_number, html_string){
-		var $div = document.createElement("div"),
-			$posts_container,
-			$posts,
-			$post,
-			response = {
-				forum_id: forum_id,
-				thread_id: thread_id,
-				page_number:page_number,
-				posts:[]},
-			i,
-			post;
-
-		html_string = html_string.replace(/<!--[\s\S]*?-->/g, '');
-		html_string = html_string.replace(/^[\s\S]*?<div id="thread"/g, '<div id="thread"');
-		html_string = html_string.replace(/<div class="threadbar bottom">[\s\S]*$/, '');
-		html_string = html_string.replace(/<ul class="postbuttons">[\s\S]*?<\/ul>/g, '');
-		html_string = html_string.replace(/<dd class="title">[\s\S]*?<\/dd>/g, '');
-		
-		$div.innerHTML = html_string; // we can't run yarble.utils.remove_external_resources on this because we actually want the external resources (posts containing images, for example), and at least this will start the browser downloading them
-
-		$posts_container = $("#thread", $div)[0];
-
-		$posts = $("table", $posts_container);
-
-		for(i = 0; i < $posts.length; i++){
-			$post = $posts[i];
-			post = {
-				body: $(".postbody", $post)[0].innerHTML,
-				postdate: $(".postdate", $post)[0].innerHTML.replace(/<a[\s\S]*?<\/a>/g, ''),
-				user: {
-					name: $(".author", $post)[0].innerHTML,
-					user_id: window.yarble.utils.get_param($(".user_jump", $post)[0].getAttribute("href"), "userid"),
-					registered: $(".registered", $post)[0].innerHTML,
-				},
-			};
-			response.posts.push(post);
-		}
-		console.log(response);
-		return response;
-	};
-
-	window.yarble.utils.event.on("yarble:page-update:posts", function(forum_id, thread_id, page_number, html_string){
-        var posts = parse_posts_html(forum_id, thread_id, page_number, html_string);
-        rebind_posts(posts);
-        localStorage.setItem(CONSTANTS.posts_cache_key, JSON.stringify(posts));
+	window.yarble.utils.event.on("yarble:page-update:posts", function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
+		console.log("posts", response, forum_id, thread_id, page_number, used_local_smilies, disabled_images);
+        rebind_posts(response);
+        localStorage.setItem(CONSTANTS.posts_cache_key, JSON.stringify(response));
     });
 
-	var click_button = function(){
+	var click_button = function(event){
+		if(event.target){
+			if(event.target.nodeName.toLowerCase() === "button" && event.target.classList.contains("disabled-image")){
+				var src = event.target.getAttribute("data-image-src");
+				replace_all_occurences_of_image($("." + event.target.getAttribute("data-image-id")), src);
+			}
+		}
+	};
 
+	var replace_all_occurences_of_image = function($images, src){
+		for(var i = 0; i < $images.length; i++){
+			var $image = $images[i];
+			var $img = document.createElement("img");
+			$img.setAttribute("src", src);
+			$image.parentNode.replaceChild($img, $image);
+		}
 	};
 
 	var init = function(){

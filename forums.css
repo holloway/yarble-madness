@@ -21,7 +21,7 @@
 }
 
 #forums fieldset legend {
-    padding: 1em 0em 5px 3em;
+    padding: 1em 0em 5px 40px;
     font-size:small;
 }
 
@@ -36,18 +36,18 @@
 }
 
     #forums button.forum .forum_title {
-        padding-left:0.8em;
+        padding-left:20px;
         display:block;
     }
 
     #forums button .subtitle {
-        margin-left:3%;
+        margin-left:20px;
         font-size:small;
         width:95%;
     }
 
     #forums .subforums {
-        margin-left:34px;
+        margin-left:40px;
     }
 
 #forums .forums:nth-child(2) {
@@ -82,14 +82,14 @@
 @media (min-width: 700px) {
 
     #forums .subforums {
-        margin-left:30px;
-        margin-right: 50px;
+        margin-left:70px;
+        margin-right:50px;
     }
 
     #forums button.forum {
-        margin-left:3%;
-        padding-left: 5%;
-        width:92%;
+        margin-left:25px;
+        padding-left:20px;
+        width:90%;
     }
 
     #forums button.forum .forum_title {
@@ -105,7 +105,7 @@
     }
 
     #forums fieldset legend {
-        padding-left: 3em;
+        padding-left: 50px;
         font-size:small;
     }
 
@@ -115,7 +115,7 @@
 
     #forums .twocolumns .columntwo .logo {
         display: block;
-        padding-right: 1.8em;
+        padding-right: 27px;
     }
 
     #forums .twocolumns .columnone .logo {
