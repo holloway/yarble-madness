@@ -1,6 +1,7 @@
 #posts .post {
 	padding: 1em;
 	overflow:hidden;
+	border-bottom: solid 1px #ddd;
 }
 
 #posts .post .user {
@@ -9,18 +10,117 @@
 	font-size:small;
 }
 
+#posts h4 {
+	padding: 0px;
+	margin: 0px 0px 0.5em 0px;
+}
+
 #posts h4,
 #posts h4 a.quote_link {
 	text-align:left;
-	color: white;
+	color: #000;
+	font-size:small;
+	text-decoration:none;
 }
 
 #posts .editedby {
-	text-align:right;
+	margin-top:1em;
+	text-align:left;
 	font-size:x-small;
+}
+
+#posts .bbc-block {
+	margin-left: 2em;
+	padding: 1em;
+	background: #eeeeee;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+#posts .bbc-block blockquote {
+	margin: 0px;
+	padding: 0px;
 }
 
 #posts .bbc-spoiler {
 	border: solid 1px red;
 	color: transparent;
+	display: inline-block;
+	background: url("images/spoiler.png");
+	min-width: 230px;
+	min-height: 50px;
 }
+	#posts .bbc-spoiler * {
+		display: none;
+	}
+
+	#posts .bbc-spoiler.on {
+		background: none;
+		color: black;
+	}
+
+	#posts .bbc-spoiler.on * {
+		display: inline-block;
+	}
+
+	#posts .bbc-spoiler img,
+	#posts .bbc-spoiler button {
+		border: solid 1px red;
+	}
+
+#posts .video-player {
+	display: inline-block;
+	text-align:center;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-color: #000;
+}
+
+#posts img.timg {
+	width: 120px;
+}
+
+#posts .pages {
+	margin: 0px;
+	padding: 0px;
+	height:3em;
+	overflow:hidden;
+	border-bottom: solid 1px #999999;
+}
+
+	#posts .pages li {
+		display: inline-block;
+		width: 4em;
+		height: 3em;
+		border: solid 1px #ccc;
+		text-align:center;
+	}
+
+	#posts .pages li.same_page {
+		background: #ddd;
+	}
+
+	#posts .pages li a {
+		display: inline-block;
+		width: 4em;
+		height: 2em;
+		text-align:center;
+		text-decoration:none;
+		padding-top:1em;
+		color: #333;
+	}
+
+	#posts .pages li.goto-next-page,
+	#posts .pages li.goto-last-page {
+		float:right;
+	}
+
+	#posts .pages li.goto-next-page,
+	#posts .pages li.goto-previous-page {
+		width: 6em;
+	}
+
+	#posts .pages li.goto-previous-page,
+	#posts .pages li.goto-first-page {
+		float:left;
+	}

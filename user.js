@@ -34,6 +34,8 @@
 			
 		};
 
+	window.yarble.disable_images = !!window.localStorage.getItem("yarble:disable-images");
+
 	document.addEventListener("DOMContentLoaded", init);
 
     window.yarble.utils.event.on("yarble:page-change:user", function(){

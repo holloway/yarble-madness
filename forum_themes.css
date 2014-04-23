@@ -10,18 +10,22 @@
     color: #393;
 }
 
+#posts .forum_219 .post,
 .forum_219 .post {
-    border-top: solid 1px green;
+    border-bottom: solid 1px green;
 }
 
 .forum_219 .post:nth-child(even) {
     background: #010;
 }
 
-.forum_219 blockquote {
+#posts .forum_219 .bbc-block,
+.forum_219 .bbc-block {
     border: solid 1px green;
-    padding: 1em;
+    background: #121;
 }
+
+
 
 .forum_26,
 .forum_26 button {
@@ -48,6 +52,14 @@
     color: #9c9;
 }
 
+#posts .forum_219 .pages li.same_page,
+#threads .forum_219 .pages li.same_page {
+    background: #696;
+}
+
+#posts .forum_219 .bbc-spoiler.on {
+    color: #cfc;
+}
 
 .forum_268 {
     padding-top:100px;

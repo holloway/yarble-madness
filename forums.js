@@ -16,7 +16,6 @@
 		} else {
 			forums = JSON.parse(JSON.stringify(forums)); // we'll clone it http://stackoverflow.com/a/5344074 so that our modifications (such as copying into .column1 and .column2) don't accidentally leak back to the localStorage copy or any other version
 		}
-		if(!forums) return;
 		if(!forums_template){
 			forums_template_string = $("#forums-template")[0].innerHTML;
 			forums_template = Handlebars.compile(forums_template_string);
@@ -38,7 +37,7 @@
 
 	var threads_response = function(response, forum_id, page_number){
 		window.yarble.utils.event.trigger("yarble:page-update:threads", response);
-		window.yarble.utils.event.trigger("yarble:change-page-id", "threads/" + forum_id);
+		window.yarble.utils.event.trigger("yarble:change-page-id", "threads/" + forum_id + "/1");
 	};
 
 	window.yarble.utils.event.on("yarble:page-update:forums", function(forums){

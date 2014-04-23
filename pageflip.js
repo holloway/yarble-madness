@@ -117,12 +117,12 @@
         $pages.slice(index + 1).map(function(element){
             element.className = 'after';
         });
-
-        console.log("hashstate", hashstate);
         if(update_url_hashstate){
             set_hash_state(hashstate);
         }
-        pages_hashstate[page_id_by_index[index]] = hashstate;
+        if(hashstate){
+            pages_hashstate[page_id_by_index[index]] = hashstate;
+        }
         window.yarble.utils.event.trigger("yarble:page-change:" + page_id_by_index[index]);
         return index;
     };
@@ -134,6 +134,7 @@
     };
 
     var hash_change = function(){
+        window.scrollTo(0, 0); // any change should scroll
         // NOTE: only responsible for changing between $pages. Not responsible for restoring any other hashstate.
         var hashstate = get_hash_state();
         if(hashstate[0] === page_id_by_index[index]) {

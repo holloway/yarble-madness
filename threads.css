@@ -18,3 +18,34 @@
     color: #666;
     font-size: smaller;
 }
+
+#threads .pages {
+	margin: 0px;
+	padding: 0px;
+	height:3em;
+	overflow:hidden;
+	margin-bottom: 1em;
+	border-bottom: solid 1px #999999;
+}
+
+	#threads .pages li {
+		display: inline-block;
+		width: 4em;
+		height: 3em;
+		border: solid 1px #ccc;
+		text-align:center;
+	}
+
+	#threads .pages li.same_page {
+		background: #ddd;
+	}
+
+	#threads .pages li a {
+		display: inline-block;
+		width: 4em;
+		height: 2em;
+		text-align:center;
+		text-decoration:none;
+		padding-top:1em;
+		color: #333;
+	}

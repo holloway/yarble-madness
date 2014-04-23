@@ -42,7 +42,7 @@
 		posts: function(forum_id, thread_id, page_number, use_local_smilies, disable_images, callback){
 			if(page_number === undefined) page_number = 1;
 			if(use_local_smilies === undefined) use_local_smilies = true;
-			if(disable_images === undefined) disable_images = false;
+			if(disable_images === undefined) disable_images = false; // NOTE: disable_images also applies to youtube/vimeo/etc videos
 			return request.get(
 				http_base + 'showthread.php',
 				{threadid: thread_id, pagenumber: page_number},
@@ -268,6 +268,7 @@
 				response = {threads: [], error: false},
 				forum_id,
 				$new_body,
+				$page_widget,
 				$page_change_widget;
 
 			html_string = html_string.replace(/<body/g, '<new-body'); //because <body> would be filtered when setting innerHTML (because you can't have two in a page?), but a made-up tag like <new-body> won't be
@@ -284,7 +285,12 @@
 				response.page_number = parseInt($page_change_widget[0].innerText, 10);
 			} else {
 				response.page_number = 1;
-				console.log("unable to parse page number", $div.innerHTML);
+			}
+			$page_widget = $(".pages select", $div);
+			if($page_widget.length){
+				response.last_page_number = parseInt($page_widget[0].options[$page_widget[0].length - 1].value, 10);
+			} else {
+				response.last_page_number = 1;
 			}
 
 			$table = $("#forum", $div)[0];
@@ -318,35 +324,106 @@
 				$image,
 				$new_body,
 				attribute,
-				image_id,
+				attributes,
+				content_id,
 				$page_change_widget,
 				$page_widget,
 				$lastseen,
 				response = {posts:[]},
 				i,
-				post;
+				post,
+				process_image = function(match, force_disable_images){
+					var attributes_string = match.substr(match.indexOf(" "));
+					attributes_string = attributes_string.substr(0, attributes_string.indexOf(">"));
+					attributes = parse_attributes_string(attributes_string);
+					if(attributes.src && attributes.src.substr(0, "attachment.php".length) === "attachment.php"){
+						attributes.src = http_base + attributes.src;
+						match = '<img src="' + attributes.src + '">';
+					}
+					if(use_local_smilies){
+						attribute = attributes.title;
+						// note: smiles_cache (a global) is found in smilies-cache.js and that file is dynamically built from the nodejs script get-smilies.js
+						if(smiles_cache && smiles_cache[attribute] && attributes.src.match(/somethingawful\.com/)){
+							return '<img src="images/smilies/' + smiles_cache[attribute].filename + '" title="' + escape_html(attribute) + '" class="smiley">';
+						}
+					}
+					if(disable_images || force_disable_images === true) {
+						console.log(attributes_string, attributes);
+						attribute = attributes.src;
+						if(attributes.class && attributes.class.match(/smiley/)) return match;
+						content_id = generated_id_from_url(attribute);
+						return '<button data-image-src="' + escape_html(attribute) + '" data-image-id="disabled-image-' + escape_html(content_id) + '" class="disabled-image disabled-image-' + escape_html(content_id) + '">Load image ' + escape_html(attribute) + '</button>';
+					}
+					return match;
+				},
+				check_for_nsfw = function(html_string_of_a_post){
+					if(!html_string_of_a_post.match(/:nws:/)) return html_string_of_a_post;
+					html_string_of_a_post = html_string_of_a_post.replace(/<a[\s\S]*?<\/a>/gi, function(){
+						return function(match){
+							var attributes_string = match.substr(match.indexOf(" "));
+							attributes_string = attributes_string.substr(0, attributes_string.indexOf(">"));
+							attributes = parse_attributes_string(attributes_string);
+							if(attributes.href){
+								var extension = attributes.href.substr(attributes.href.lastIndexOf(".")).toLowerCase();
+								switch(extension){
+									case ".png":
+									case ".gif":
+									case ".jpg":
+									case ".jpeg":
+									case ".jpe":
+									case ".bmp": // WHY?!!?!!! YOU FUCKER
+										var content_id = generated_id_from_url(attributes.href);
+										var inner = match.substr(match.indexOf(">") + 1);
+										inner = inner.substr(0, inner.length - "</a>".length);
+										return '<button data-image-src="' + escape_html(attributes.href) + '" data-image-id="disabled-image-' + escape_html(content_id) + '" class="disabled-image disabled-image-' + escape_html(content_id) + '">' + inner + '</button>';
+								}
+							}
+							return match;
+						};
+					}());
+					html_string_of_a_post = html_string_of_a_post.replace(/<img[^>]*?>/gi, function(){
+						return function(match){
+							return process_image(match, true);
+						};
+					}());
+					return html_string_of_a_post;
+				};
 
 			html_string = html_string.replace(/<!--[\s\S]*?-->/g, '');
 			html_string = html_string.replace(/<body/g, '<new-body'); //because <body> would be filtered when setting innerHTML (because you can't have two in a page?), but a made-up tag like <new-body> won't be
 			html_string = html_string.replace(/<div class="threadbar bottom">[\s\S]*$/, '');
 			html_string = html_string.replace(/<ul class="postbuttons">[\s\S]*?<\/ul>/g, '');
 			html_string = html_string.replace(/<dd class="title">[\s\S]*?<\/dd>/g, '');
+			html_string = html_string.replace(/<img[^>]*?>/gi, process_image);
+			html_string = html_string.replace(/<td class="postbody">[\s\S]*?<\/td>/g, check_for_nsfw);
 
-			html_string = html_string.replace(/<img[^>]*?>/gi, function(match){
-				$div.innerHTML = match;
-				$image = $("img", $div)[0];
-				if(use_local_smilies){
-					attribute = $image.getAttribute("title");
-					if(smiles_cache[attribute] && $image.getAttribute("src").match(/somethingawful\.com/)){
-						return '<img src="images/smilies/' + smiles_cache[attribute].filename + '" title="' + escape_html(attribute) + '">';
-					}
+			html_string = html_string.replace(/<iframe[\s\S]*?\/iframe>/g, function(match){
+				var attributes_string = match.substr(match.indexOf(" "));
+				attributes_string = attributes_string.substr(0, attributes_string.indexOf(">"));
+				attributes = parse_attributes_string(match);
+				var video_url;
+				var styles_string = "";
+				var thumbnail_url = "";
+				var width, height;
+				if(attributes.src.match(/youtube\.com/) || attributes.src.match(/youtube-nocookie\.com/)) {
+					content_id = attributes.src.substr(attributes.src.indexOf("/embed/") + "/embed/".length);
+					content_id = content_id.substr(0, content_id.indexOf('?'));
+					thumbnail_url = 'http://img.youtube.com/vi/' + escape_html(content_id) + '/0.jpg';
+					styles_string = 'background-image: url(\'' + thumbnail_url + '\')';
+					width = 640;
+					height = 360;
+					video_url = 'https://www.youtube.com/watch?v=' + escape_html(content_id);
+				} else if(attributes.src.match(/vimeo\.com/)){
+					content_id = attributes.src.substr(attributes.src.indexOf("/video/") + "/video/".length);
+					width = 500;
+					height = 281;
 				}
-				if(disable_images) {
-					attribute = $image.getAttribute("src");
-					image_id = escape_html(attribute.replace(/[&<>'"\\\/: \.]/g, '_'));
-					return '<button data-image-src="' + escape_html(attribute) + '" data-image-id="disabled-image-' + image_id + '" class="disabled-image disabled-image-' + image_id + '">Load image ' + escape_html(attribute) + '</button>';
+				content_id = generated_id_from_url(attributes.src);
+				if(disable_images){ //also applies to videos
+					return '<button data-video-src="' + escape_html(video_url) + '" data-thumbnail-url="' + thumbnail_url + '" data-width="' + width + '" data-height="' + height + '" data-video-id="disabled-video-' + escape_html(content_id) + '" class="disabled-video disabled-video-' + escape_html(content_id) + '">Load video thumbnail ' + escape_html(video_url) + '</button>';
+				} else {
+					return '<a class="video-player" href="' + video_url + '" style="width:' + width + "px; height:" + height + "px; " + escape_html(styles_string) + '"><img src="images/video.png"></a>';
 				}
-				return match;
 			});
 
 			$div.innerHTML = html_string; // we can't run yarble.utils.remove_external_resources on this because we actually want the external resources (posts containing images, for example), and at least this will start the browser downloading them
@@ -360,10 +437,12 @@
 				response.page_number = 1;
 				console.log("unable to parse page number", $div.innerHTML);
 			}
-			$page_widget = $("a[title='Last page']", $div);
+
+			$page_widget = $(".pages select", $div);
 			if($page_widget.length){
-				response.last_page_number = get_param($page_widget[0].getAttribute("href"), "pagenumber");
-				console.log("last page", response.last_page_number)
+				response.last_page_number = parseInt($page_widget[0].options[$page_widget[0].length - 1].value, 10);
+			} else {
+				response.last_page_number = 1;
 			}
 			$posts_container = $("#thread", $div)[0];
 
@@ -416,7 +495,6 @@
     };
 
     var escape_html = function(){
-        // Note is a closure
         var _escape_chars = {
                 "&": "&amp;",
                 "<": "&lt;",
@@ -432,6 +510,29 @@
             return str.replace(/[&<>"']/g, _escape);
         };
     }();
+
+    var parse_attributes_string = function(attributes_string){
+        // although it would be easier to use the browsers DOM
+        // to parse the attributes string (e.g. in a detached element)
+        // that would make it potentially exploitable
+        // eg a string of "<a onload='alert(\'deal with it\')'/>"
+        // so we're doing string parsing even though it's a bit weird
+        var attributes_regex = /([\-A\-Z:a-zA-Z0-9_]+)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g, // originally via but tweaked to support xmlns http://ejohn.org/files/htmlparser.js
+            attributes = {};
+
+        attributes_string.replace(attributes_regex, function(match, name){
+            var value = arguments[2] ? arguments[2] :
+                            arguments[3] ? arguments[3] :
+                                arguments[4] ? arguments[4] : name;
+
+            attributes[name] = value;
+        });
+        return attributes;
+    };
+
+    var generated_id_from_url = function(url){
+		return escape_html(url.replace(/[^a-zA-Z0-9]/g, '_')); //not as unique as a hash, probably has collisions, but in practice a collision would be rare and more importantly would only have minor side-effects (loading more images than you want when on 3g/4g) so it's good enough[tm]
+	};
 
 	var cache = {};
 

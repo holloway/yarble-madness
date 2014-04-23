@@ -6,19 +6,28 @@
         },
         $ = yarble.utils.$,
         $threads,
-        current = {},
+        current,
         threads,
-        threads_template;
+        threads_template,
+        allow_reloads_after_seconds = 10;
 
     var rebind_threads = function(threads){
         var threads_template_string;
 
         if(threads === undefined) {
             threads = JSON.parse(localStorage.getItem(CONSTANTS.threads_cache_key));
+        } else {
+            threads = JSON.parse(JSON.stringify(threads)); // we'll clone it http://stackoverflow.com/a/5344074 so that our modifications (such as copying into .column1 and .column2) don't accidentally leak back to the localStorage copy or any other version
         }
         if(!threads) return;
+        current = {};
         current.forum_id = threads.forum_id;
         current.page_number = threads.page_number;
+        current.when = Date.now();
+        threads.pages = [];
+        for(var i = 1; i < threads.last_page_number; i++){
+            threads.pages.push({forum_id:threads.forum_id, page_number:i, same_page: !!(threads.page_number === i)});
+        }
         if(!threads_template){
             threads_template_string = $("#threads-template")[0].innerHTML;
             threads_template = Handlebars.compile(threads_template_string);
@@ -27,7 +36,6 @@
     };
 
     var threads_response = function(threads){
-        console.log("threads", threads);
         rebind_threads(threads);
         localStorage.setItem(CONSTANTS.threads_cache_key, JSON.stringify(threads));
     };
@@ -65,12 +73,8 @@
         if(hashstate.length > 2) {
             hashstate_page_number = hashstate[2];
         }
-
-        if(!current || current.forum_id !== hashstate_forum_id || current.page_number !== hashstate_page_number) {
-            console.log("reload threads")
+        if(!current || current.forum_id !== hashstate_forum_id || current.page_number !== hashstate_page_number || current.when > Date.now() - (allow_reloads_after_seconds * 1000)) {
             sa.threads(hashstate_forum_id, hashstate_page_number, threads_response);
-        } else {
-            console.log("don't reload threads");
         }
     };
 

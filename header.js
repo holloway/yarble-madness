@@ -1,4 +1,7 @@
 (function(){
+	// does the animation title screen
+	// TODO: implement 'professional' mode
+	
 	"use strict";
 
 	var $header,
@@ -10,6 +13,7 @@
 		init = function(){
 			$header = $("body > header")[0];
 			$header.addEventListener("click", discard_header);
+			if(!yarble.utils.transition_end_event) return discard_header();
 			$marble = $("#marble")[0];
 			$marble_shadow = $("#marble_shadow")[0];
 			$marble.addEventListener(yarble.utils.transition_end_event, next_marble_animation_step, false);
