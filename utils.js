@@ -73,6 +73,8 @@
             return html_string;
         },
         get_param: function(params_string, key){
+            var hash_index = params_string.indexOf("#");
+            if(hash_index !== -1) params_string = params_string.substr(0, hash_index);
             var half = params_string.split(key + '=')[1];
             return half ? decodeURIComponent(half.split('&')[0]) : null;
         },

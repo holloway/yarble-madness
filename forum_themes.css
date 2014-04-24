@@ -39,6 +39,7 @@
 }
 
 .forum_219 a,
+#posts .forum_219 h4,
 #posts .forum_219 h4 .quote_link {
     color: #cfc;
 }

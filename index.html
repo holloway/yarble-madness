@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Yarble Madness</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<link type="text/css" rel="stylesheet" href="screen.css">
 	<link type="text/css" rel="stylesheet" href="header.css">
 	<link type="text/css" rel="stylesheet" href="pageflip.css">
@@ -159,7 +160,7 @@
 					{{#pages}}{{^same_page}}<li class="different_page"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{#same_page}}<li class="same_page"><a href="#threads/{{../forum_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{/pages}}
 				</ul>
 				{{#posts}}
-					<div class="post">
+					<div class="post" id="post{{id}}">
 						{{{body}}}
 						<span class="user" data-user-id="{{user.user_id}}">by {{user.name}}</span>
 					</div>

@@ -48,6 +48,13 @@
 				{threadid: thread_id, pagenumber: page_number},
 				response_filters.posts(callback, forum_id, thread_id, page_number, use_local_smilies, disable_images)
 			);
+		},
+		gotopost: function(post_id, callback){
+			return request.get(
+				http_base + 'showthread.php',
+				{goto: "post", postid: post_id},
+				response_filters.gotopost(callback, post_id)
+			);
 		}
 	};
 
@@ -82,6 +89,19 @@
 			} else {
 				req.send();
 			}
+			return req;
+		},
+		head: function(url, url_params, callback, async){
+			if(async === undefined) async = true;
+			var params_string = request.serialize_params(url_params);
+			if(params_string){
+				if(url.indexOf("?") === -1) url += "?";
+				url += params_string;
+			}
+			var req = new window.XMLHttpRequest();
+			req.open('HEAD', url, async);
+			req.onreadystatechange = response(callback);
+			req.send();
 			return req;
 		},
 		serialize_params: function(params, escape_nonstandard_characters_too){
@@ -163,6 +183,12 @@
 					success = !!innerHTML.match(/logged out/i) || !!innerHTML.match(/Not cookied/i);
 				}
 				return fn.apply(this, [success]);
+			};
+		},
+		gotopost: function(fn, post_id){
+			return function(){
+				var response = sa.response_parse.gotopost(this.responseText);
+				return fn.apply(this, [response.forum_id, response.thread_id, post_id, response.page_number]);
 			};
 		},
 		scrape_useful_stuff: function(html_string){
@@ -348,7 +374,6 @@
 						}
 					}
 					if(disable_images || force_disable_images === true) {
-						console.log(attributes_string, attributes);
 						attribute = attributes.src;
 						if(attributes.class && attributes.class.match(/smiley/)) return match;
 						content_id = generated_id_from_url(attribute);
@@ -375,6 +400,7 @@
 										var content_id = generated_id_from_url(attributes.href);
 										var inner = match.substr(match.indexOf(">") + 1);
 										inner = inner.substr(0, inner.length - "</a>".length);
+										// yes I know that guessing filetype by URL is a stupid idea but 1) it works most of the time, and 2) it's not a security risk, and 3) it's a useful feature, so 4) who the fuck cares
 										return '<button data-image-src="' + escape_html(attributes.href) + '" data-image-id="disabled-image-' + escape_html(content_id) + '" class="disabled-image disabled-image-' + escape_html(content_id) + '">' + inner + '</button>';
 								}
 							}
@@ -388,6 +414,10 @@
 					}());
 					return html_string_of_a_post;
 				};
+
+			// READ THIS FIRST
+			// i know parsing html as a string is stupid, but we need to parse it without attaching to the DOM (to prevent loading :nws: images for example)
+			// most things are done in a DOM but some stuff needs to be done before that
 
 			html_string = html_string.replace(/<!--[\s\S]*?-->/g, '');
 			html_string = html_string.replace(/<body/g, '<new-body'); //because <body> would be filtered when setting innerHTML (because you can't have two in a page?), but a made-up tag like <new-body> won't be
@@ -404,26 +434,33 @@
 				var video_url;
 				var styles_string = "";
 				var thumbnail_url = "";
+				var video_id;
 				var width, height;
 				if(attributes.src.match(/youtube\.com/) || attributes.src.match(/youtube-nocookie\.com/)) {
-					content_id = attributes.src.substr(attributes.src.indexOf("/embed/") + "/embed/".length);
-					content_id = content_id.substr(0, content_id.indexOf('?'));
-					thumbnail_url = 'http://img.youtube.com/vi/' + escape_html(content_id) + '/0.jpg';
+					video_id = attributes.src.substr(attributes.src.indexOf("/embed/") + "/embed/".length);
+					video_id = video_id.substr(0, video_id.indexOf('?'));
+					thumbnail_url = 'http://img.youtube.com/vi/' + escape_html(video_id) + '/0.jpg';
 					styles_string = 'background-image: url(\'' + thumbnail_url + '\')';
-					width = 640;
+					width = 480;
 					height = 360;
-					video_url = 'https://www.youtube.com/watch?v=' + escape_html(content_id);
-				} else if(attributes.src.match(/vimeo\.com/)){
-					content_id = attributes.src.substr(attributes.src.indexOf("/video/") + "/video/".length);
-					width = 500;
-					height = 281;
+					video_url = 'https://www.youtube.com/watch?v=' + escape_html(video_id);
 				}
 				content_id = generated_id_from_url(attributes.src);
-				if(disable_images){ //also applies to videos
-					return '<button data-video-src="' + escape_html(video_url) + '" data-thumbnail-url="' + thumbnail_url + '" data-width="' + width + '" data-height="' + height + '" data-video-id="disabled-video-' + escape_html(content_id) + '" class="disabled-video disabled-video-' + escape_html(content_id) + '">Load video thumbnail ' + escape_html(video_url) + '</button>';
-				} else {
-					return '<a class="video-player" href="' + video_url + '" style="width:' + width + "px; height:" + height + "px; " + escape_html(styles_string) + '"><img src="images/video.png"></a>';
+				if(width) { //if it was able to find a video
+					if(disable_images){ //also applies to videos
+						return '<button data-video-src="' + escape_html(video_url) + '" data-thumbnail-url="' + thumbnail_url + '" data-width="' + width + '" data-height="' + height + '" data-video-id="disabled-video-' + escape_html(content_id) + '" class="disabled-video disabled-video-' + escape_html(content_id) + '">Load video thumbnail ' + escape_html(video_url) + '</button>';
+					} else {
+						return '<a class="video-player" target="_blank" href="' + video_url + '" style="width:' + width + "px; height:" + height + "px; " + escape_html(styles_string) + '"><img src="images/video.png" class="video_play_button"></a>';
+					}
 				}
+				return ""; // we don't want iframes that we don't recognise in the page
+			});
+
+			html_string = html_string.replace(/<object[\s\S]*?\/object>/g, function(match){
+				if(!match.match(/vimeo\.com/)) return ""; // we don't want objects that we don't recognise in the page
+				var video_id = match.substr(match.indexOf("clip_id=") + "clip_id=".length);
+				video_id = video_id.substr(0, video_id.indexOf("&")).replace(/[^0-9]/g, '');
+				return '<a class="video-player" target="_blank" href="http://vimeo.com/' + video_id + '"><img src="images/video.png" class="video_play_button"></a>';
 			});
 
 			$div.innerHTML = html_string; // we can't run yarble.utils.remove_external_resources on this because we actually want the external resources (posts containing images, for example), and at least this will start the browser downloading them
@@ -435,7 +472,6 @@
 				response.page_number = parseInt($page_change_widget[0].innerText, 10);
 			} else {
 				response.page_number = 1;
-				console.log("unable to parse page number", $div.innerHTML);
 			}
 
 			$page_widget = $(".pages select", $div);
@@ -450,7 +486,11 @@
 
 			for(i = 0; i < $posts.length; i++){
 				$post = $posts[i];
+				if(! $(".postbody", $post)[0]){
+					console.log("no body?", $post.innerHTML, $post.parentNode);
+				}
 				post = {
+					id: $post.getAttribute("id").replace(/^post/, ''),
 					body: $(".postbody", $post)[0].innerHTML,
 					postdate: $(".postdate", $post)[0].innerHTML.replace(/<a[\s\S]*?<\/a>/g, ''),
 					user: {
@@ -464,6 +504,26 @@
 					response.lastseen = parseInt($(".count b", $lastseen[0]), 10);
 				}
 				response.posts.push(post);
+			}
+			return response;
+		},
+		gotopost: function(html_string){
+			var $div = document.createElement("div"),
+				$body,
+				response = {},
+				$page_change_widget;
+			
+			html_string = html_string.replace(/<body/g, '<new-body'); //because <body> won't parse but a <new-body ...> will
+			$div.innerHTML = html_string;
+			$body = $("new-body", $div)[0];
+			response.forum_id = $body.getAttribute("data-forum");
+			response.thread_id = $body.getAttribute("data-thread");
+			$page_change_widget = $("div.pages option[selected=selected]", $div);
+			if($page_change_widget.length > 0) {
+				response.page_number = parseInt($page_change_widget[0].innerText, 10);
+			} else {
+				response.page_number = 1;
+				console.log("unable to parse page number", $div.innerHTML);
 			}
 			return response;
 		}

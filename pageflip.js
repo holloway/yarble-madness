@@ -134,7 +134,6 @@
     };
 
     var hash_change = function(){
-        window.scrollTo(0, 0); // any change should scroll
         // NOTE: only responsible for changing between $pages. Not responsible for restoring any other hashstate.
         var hashstate = get_hash_state();
         if(hashstate[0] === page_id_by_index[index]) {

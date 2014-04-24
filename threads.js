@@ -33,6 +33,7 @@
             threads_template = Handlebars.compile(threads_template_string);
         }
         $threads.innerHTML = threads_template(threads);
+        window.scrollTo(0, 0); // any change should scrollTo
     };
 
     var threads_response = function(threads){

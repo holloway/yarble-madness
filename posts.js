@@ -8,11 +8,14 @@
         $posts,
         current,
         posts_template,
-        allow_reloads_after_seconds = 10;
+        screen_width_buffer_pixels = 50,
+        allow_reloads_after_seconds = 10,
+        allow_resize_after_seconds = 1;
 
 	var rebind_posts = function(posts){
         var posts_template_string,
-			i;
+			i,
+			$imgs;
 
         if(posts === undefined) {
 			posts = JSON.parse(localStorage.getItem(CONSTANTS.posts_cache_key));
@@ -39,9 +42,18 @@
         for(i = 1; i <= posts.last_page_number; i++){
 			posts.pages.push({forum_id:posts.forum_id, thread_id:posts.thread_id, page_number:i, same_page: !!(posts.page_number === i)});
         }
-        console.log("what", posts)
-
         $posts.innerHTML = posts_template(posts);
+        $imgs = $("img", $posts);
+        resize_images_if_necessary($imgs);
+		for(i = 0; i < $imgs.length; i++){
+			$imgs[i].addEventListener("load", resize_image_if_necessary);
+		}
+		var hashstate = window.get_hash_state();
+        if(hashstate.length === 5) { //then there's a postid in the url that we should scroll to
+			scroll_to_post(hashstate[4]);
+        } else {
+			window.scrollTo(0, 0); // any change should scroll to top
+        }
     };
 
     var posts_response = function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
@@ -50,7 +62,65 @@
         localStorage.setItem(CONSTANTS.posts_cache_key, JSON.stringify(response));
     };
 
+    var scroll_to_post = function(post_id) { // assumed to be in the current page
+		var $post = $("#post" + post_id, $posts);
+		if($post.length === 1) {
+			var from_top = window.scrollY + parseInt($post[0].getBoundingClientRect().top, 10);
+			if(!isNaN(from_top)) {
+				window.scrollTo(0, from_top);
+			} else {
+				window.scrollTo(0, 0);
+			}
+		} else {
+			window.scrollTo(0, 0);
+		}
+	};
+
 	window.yarble.utils.event.on("yarble:page-update:posts", posts_response);
+
+	var resize_images_if_necessary = function($imgs){
+		if(current.last_resize + (allow_resize_after_seconds * 1000) > Date.now()) return;
+		
+		var	$img,
+			screen_width = window.innerWidth - screen_width_buffer_pixels;
+
+		if(!$imgs) $imgs = $("img", $posts);
+		for(var i = 0; i < $imgs.length; i++){
+			$img = $imgs[i];
+			if($img.classList.contains("video_play_button")) continue;
+			$img.style.width = "auto";
+			if($img.offsetWidth > screen_width){
+				if($img.classList.contains("timg") || $img.classList.contains("timg-stretched")) {
+					$img.classList.add("timg-stretched");
+					$img.classList.remove("img");
+					$img.classList.remove("timg");
+					$img.classList.remove("img-stretched");
+				} else {
+					$img.classList.add("img-stretched");
+					$img.classList.remove("img");
+					$img.classList.remove("timg");
+					$img.classList.remove("timg-stretched");
+				}
+			} else {
+				if($img.classList.contains("timg") || $img.classList.contains("timg-stretched")) {
+					$img.classList.add("timg");
+					$img.classList.remove("img");
+					$img.classList.remove("timg-stretched");
+					$img.classList.remove("img-stretched");
+				} else {
+					$img.classList.add("img");
+					$img.classList.remove("img-stretched");
+					$img.classList.remove("timg");
+					$img.classList.remove("timg-stretched");
+				}
+			}
+			$img.style.width = "";
+		}
+	};
+
+	var resize_image_if_necessary = function(){
+		resize_images_if_necessary([event.target]);
+	};
 
 	var click_button = function(event){
 		if(!event.target) return;
@@ -60,14 +130,41 @@
 		} else if(event.target.nodeName.toLowerCase() === "button" && event.target.classList.contains("disabled-video")){
 			replace_all_occurences_of_video($("." + event.target.getAttribute("data-video-id")));
 			event.preventDefault();
-		} else if(event.target.nodeName.toLowerCase() === "img" && event.target.classList.contains("timg")){
-			event.target.classList.remove("timg");
-			event.target.classList.add("timg-expanded");
-		} else if(event.target.nodeName.toLowerCase() === "img" && event.target.classList.contains("timg-expanded")){
-			event.target.classList.remove("timg-expanded");
-			event.target.classList.add("timg");
+		} else if(event.target.nodeName.toLowerCase() === "img"){
+			if(event.target.classList.contains("timg")){
+				event.target.classList.remove("timg");
+				event.target.classList.add("img");
+			} else if(event.target.classList.contains("img")){
+				event.target.classList.remove("img");
+				event.target.classList.add("timg");
+			} else if(event.target.classList.contains("img-stretched")){
+				event.target.classList.remove("img-stretched");
+				event.target.classList.add("timg-stretched");
+			} else if(event.target.classList.contains("timg-stretched")){
+				event.target.classList.remove("timg-stretched");
+				event.target.classList.add("img-stretched");
+			}
 		} else if(event.target.classList.contains("bbc-spoiler") && !event.target.classList.contains("on")){
 			event.target.classList.add("on");
+			resize_images_if_necessary($("img", event.target));
+		} else if(event.target.nodeName.toLowerCase() === "a" && event.target.classList.contains("quote_link")){
+			var href = event.target.getAttribute("href");
+			var post_id = yarble.utils.get_param(href, "postid");
+			var $post = $("#post" + post_id, $posts);
+			if($post.length === 1) {
+				scroll_to_post(post_id);
+			} else {
+				sa.gotopost(post_id, gotopost_response);
+			}
+			event.preventDefault();
+		}
+	};
+
+	var gotopost_response = function(forum_id, thread_id, post_id, page_number){
+		if(current.forum_id === forum_id && current.thread_id === thread_id && current.page_number === page_number) {
+			scroll_to_post(post_id);
+		} else {
+			window.set_hash_state("posts/" + forum_id + "/" + thread_id + "/" + page_number + "/" + post_id);
 		}
 	};
 
@@ -75,6 +172,7 @@
 		for(var i = 0; i < $images.length; i++){
 			var $image = $images[i];
 			var $replacement_image = document.createElement("img");
+			$replacement_image.addEventListener("load", resize_image_if_necessary);
 			$replacement_image.setAttribute("src", $image.getAttribute("data-image-src")); //although each image should have the same @data-image-src attribute we don't cache the lookup incase they are different due to hash collisions
 			$image.parentNode.replaceChild($replacement_image, $image);
 		}
@@ -93,6 +191,7 @@
 			$link_to_video.style.height = $video.getAttribute("data-height") + "px";
 			var $video_placeholder = document.createElement("img");
 			$video_placeholder.setAttribute("src", "images/video.png");
+			$video_placeholder.classList.add("video_play_button");
 			$link_to_video.appendChild($video_placeholder);
 			$video.parentNode.replaceChild($link_to_video, $video);
 		}
@@ -105,6 +204,9 @@
 	};
 
     document.addEventListener("DOMContentLoaded", init);
+
+    window.addEventListener("resize", resize_images_if_necessary);
+    window.addEventListener("orientationchange", resize_images_if_necessary);
 
     var hash_change = function(){
         var hashstate = window.get_hash_state();
