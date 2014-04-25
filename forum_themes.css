@@ -1,4 +1,49 @@
 
+
+
+.forum_26,
+.forum_26 button {
+    background: #fcf;
+    color: #808;
+    border-color: #969;
+}
+
+.forum_26 button .user {
+    color: #606;
+}
+
+/* DOWN IN THE 219 yoSPOs */
+
+.forum_219 a,
+#posts .forum_219 h4,
+#posts .forum_219 h4 .quote_link {
+    color: #cfc;
+}
+
+#threads .forum_219 button.type_announcement {
+    background: #363;
+    color: #cfc;
+}
+
+#threads .forum_219 button.type_announcement .user {
+    color: #9c9;
+}
+
+#posts .forum_219 .pages li.same_page,
+#threads .forum_219 .pages li.same_page {
+    background: #696;
+}
+
+#posts .forum_219 .bbc-spoiler.on {
+    color: #cfc;
+}
+
+#posts .forum_219 .pages,
+#posts .forum_219 .pages select,
+#posts .forum_219 .pages select option  {
+    color: black;
+}
+
 .forum_219,
 .forum_219 button {
     background: black;
@@ -26,46 +71,17 @@
 }
 
 
-
-.forum_26,
-.forum_26 button {
-    background: #fcf;
-    color: #808;
-    border-color: #969;
-}
-
-.forum_26 button .user {
-    color: #606;
-}
-
-.forum_219 a,
-#posts .forum_219 h4,
-#posts .forum_219 h4 .quote_link {
-    color: #cfc;
-}
-
-#threads .forum_219 button.type_announcement {
-    background: #363;
-    color: #cfc;
-}
-
-#threads .forum_219 button.type_announcement .user {
-    color: #9c9;
-}
-
-#posts .forum_219 .pages li.same_page,
-#threads .forum_219 .pages li.same_page {
-    background: #696;
-}
-
-#posts .forum_219 .bbc-spoiler.on {
-    color: #cfc;
-}
+/* BYOB */
 
 .forum_268 {
-    padding-top:100px;
     background-image: url("images/cat.gif");
+    background-position: 20px 30px;
     background-repeat: no-repeat;
+}
+
+.forum.forum_268 {
+    background-position: 0px 0px;
+    text-shadow: 0px 0px 5px #fff, 0px 0px 5px #ccf, 0px 0px 5px #ccf;
 }
 
 .forum_268,
@@ -73,10 +89,24 @@
     background-color: #ccf;
     color: #003;
     border-color: #77c;
-    text-shadow: 0px 0px 5px #fff, 0px 0px 5px #ccf, 0px 0px 5px #ccf;
+    
+}
+
+#posts .forum_268 .bbc-block,
+.forum_268 .bbc-block {
+    background: #dde;
+    border: solid 1px #bbe;
 }
 
 .forum_268 button .user {
     color: #606;
+}
+
+#posts .forum_268 .post {
+    border-bottom: solid 1px #99c;
+}
+
+#posts .forum_268 .post:nth-child(2) {
+    padding-top:150px;
 }
 

@@ -26,13 +26,20 @@
         current.when = Date.now();
         threads.pages = [];
         for(var i = 1; i < threads.last_page_number; i++){
-            threads.pages.push({forum_id:threads.forum_id, page_number:i, same_page: !!(threads.page_number === i)});
+            threads.pages.push({forum_id:threads.forum_id, page_number:i, same_page: !!(threads.page_number === i), same_page_option_selection: !!(threads.page_number === i) ? 'selected="selected"' : ""});
         }
+        threads.previous_page_number = threads.page_number - 1;
+        threads.next_page_number = threads.page_number + 1;
+        threads.last_page_number = threads.last_page_number;
+        if(threads.previous_page_number < 1) threads.previous_page_number = 1;
+        if(threads.next_page_number > threads.last_page_number) threads.next_page_number = threads.last_page_number;
+
         if(!threads_template){
             threads_template_string = $("#threads-template")[0].innerHTML;
             threads_template = Handlebars.compile(threads_template_string);
         }
         $threads.innerHTML = threads_template(threads);
+        adjust_page_selection_width();
         window.scrollTo(0, 0); // any change should scrollTo
     };
 
@@ -41,11 +48,16 @@
         localStorage.setItem(CONSTANTS.threads_cache_key, JSON.stringify(threads));
     };
 
+    var select_change = function(event){
+        window.set_hash_state(event.target.value);
+    };
+
     window.yarble.utils.event.on("yarble:page-update:threads", threads_response);
 
     var init = function(event){
         $threads = $("#threads")[0];
         $threads.addEventListener("click", click_button, false);
+        $threads.addEventListener("change", select_change, false);
         rebind_threads();
     };
 
@@ -79,6 +91,23 @@
         }
     };
 
+    var adjust_page_selection_width = function(event){
+        var i;
+        var $top_pages = $(".pages", $threads)[0]; //because there are two in a page, one at the top, one at the bottom
+        var remaining_width = $top_pages.offsetWidth;
+        var $not_selects = $(".not-select", $top_pages);
+        for(i = 0; i < $not_selects.length; i++){
+            remaining_width -= $not_selects[i].offsetWidth;
+        }
+        remaining_width -= 4;
+        var $selects = $(".pages select", $threads);
+        for(i = 0; i < $selects.length; i++){
+            $selects[i].style.width = remaining_width + "px";
+        }
+    };
+
+    window.addEventListener("resize", adjust_page_selection_width);
+    window.addEventListener("orientationchange", adjust_page_selection_width);
     window.addEventListener("hashchange", hash_change, false);
 
 }());

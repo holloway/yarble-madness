@@ -1,12 +1,18 @@
 #threads {
     background: #eee;
+    font-size:xx-small;
 }
 
 #threads button {
-    display: block;
+	font-size:small;
     width:100%;
-    margin: 0.3em 0px;
-    padding: 0.5em 0px;
+    margin: 0px;
+    padding: 0.5em;
+    text-align:left;
+    border-top: none;
+    border-right: none;
+    border-left: solid 1px #aaaaaa;
+    border-bottom: solid 1px #aaaaaa;
 }
 
 #threads button.type_announcement {
@@ -19,21 +25,64 @@
     font-size: smaller;
 }
 
+#threads .flex {
+	clear:both;
+	display: -webkit-flex;
+      -webkit-flex-direction: row;
+      display: flex;
+      flex-direction: row;
+}
+
+#threads .flex > button.lastpost,
+#threads .flex > button.newpost {
+ 	padding: 0.5em 0px;
+   
+   text-align:center;
+	vertical-align:top;
+}
+
+#threads .flex > button.lastpost {
+	flex: 0 0 50px;
+}
+
+#threads .flex > button.newpost {
+	flex: 0 0 50px;
+}
+
 #threads .pages {
 	margin: 0px;
 	padding: 0px;
 	height:3em;
+	width:100%;
 	overflow:hidden;
-	margin-bottom: 1em;
+	list-style: none;
+	background: #eeeeee;
 	border-bottom: solid 1px #999999;
 }
 
 	#threads .pages li {
-		display: inline-block;
-		width: 4em;
+		float:left;
 		height: 3em;
 		border: solid 1px #ccc;
+		margin: 0px;
 		text-align:center;
+	}
+
+	#threads .pages select {
+		font-size:inherit;
+		height: 3em;
+		text-align:center;
+		margin:0px;
+		border: none;
+		color: inherit;
+		font-family: inherit;
+	}
+
+	#threads .pages select option {
+		text-align:center;
+		font-size:inherit;
+		color: inherit;
+		font-family: inherit;
 	}
 
 	#threads .pages li.same_page {
@@ -42,10 +91,34 @@
 
 	#threads .pages li a {
 		display: inline-block;
-		width: 4em;
 		height: 2em;
 		text-align:center;
 		text-decoration:none;
-		padding-top:1em;
+		padding: 1em 1.5em 0px 1.5em;
 		color: #333;
 	}
+
+	#threads .pages li.goto-next-page,
+	#threads .pages li.goto-last-page {
+		float:right;
+	}
+
+	#threads .pages li.goto-previous-page,
+	#threads .pages li.goto-first-page {
+		float:left;
+	}
+
+
+@media (min-width: 700px) {
+
+	#threads .pages.top-pages {
+		position:fixed;
+		top:0px;
+		width:100%;
+	}
+
+	#threads .threads {
+		padding-top:3em;
+	}
+
+}

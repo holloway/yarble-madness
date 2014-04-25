@@ -334,6 +334,8 @@
 						thread_id = get_param($link.getAttribute("href"), "threadid");
 						thread = {thread_id: thread_id, type: "thread", title: $link.innerText};
 						response.threads.push(thread);
+					} else if($link.classList.contains("count")) {
+						thread.lastseen = $link.innerText.replace(/\s/g, '');
 					} else if($link.parentNode.classList.contains("author")) {
 						user_id = get_param($link.getAttribute("href"), "userid");
 						thread.user = {user_id: user_id, name: $link.innerText};
@@ -441,16 +443,14 @@
 					video_id = video_id.substr(0, video_id.indexOf('?'));
 					thumbnail_url = 'http://img.youtube.com/vi/' + escape_html(video_id) + '/0.jpg';
 					styles_string = 'background-image: url(\'' + thumbnail_url + '\')';
-					width = 480;
-					height = 360;
 					video_url = 'https://www.youtube.com/watch?v=' + escape_html(video_id);
 				}
 				content_id = generated_id_from_url(attributes.src);
-				if(width) { //if it was able to find a video
+				if(video_url) { //if it was able to find a video
 					if(disable_images){ //also applies to videos
-						return '<button data-video-src="' + escape_html(video_url) + '" data-thumbnail-url="' + thumbnail_url + '" data-width="' + width + '" data-height="' + height + '" data-video-id="disabled-video-' + escape_html(content_id) + '" class="disabled-video disabled-video-' + escape_html(content_id) + '">Load video thumbnail ' + escape_html(video_url) + '</button>';
+						return '<button data-video-src="' + escape_html(video_url) + '" data-thumbnail-url="' + thumbnail_url + '" data-video-id="disabled-video-' + escape_html(content_id) + '" class="disabled-video disabled-video-' + escape_html(content_id) + '">Load video thumbnail ' + escape_html(video_url) + '</button>';
 					} else {
-						return '<a class="video-player" target="_blank" href="' + video_url + '" style="width:' + width + "px; height:" + height + "px; " + escape_html(styles_string) + '"><img src="images/video.png" class="video_play_button"></a>';
+						return '<a class="video-player" target="_blank" href="' + video_url + '" style="' + escape_html(styles_string) + '"><img src="images/video.png" class="video_play_button"></a>';
 					}
 				}
 				return ""; // we don't want iframes that we don't recognise in the page

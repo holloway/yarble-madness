@@ -110,30 +110,56 @@
 		<script id="threads-template" type="text/x-handlebars-template">
 			{{^error}}
 				<div class="threads forum_{{forum_id}}">
-					<ul class="pages"> 
-						<!-- all on one line because we're using display:inline-block which is sensitive to whitespace between li's -->
-						{{#pages}}{{^same_page}}<li class="different_page"><a href="#threads/{{../forum_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{#same_page}}<li class="same_page"><a href="#threads/{{../forum_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{/pages}}
+					<ul class="pages top-pages">
+						<li class="goto-first-page not-select"><a href="#threads/{{../forum_id}}/1">&laquo;1</a></li>
+						<li class="goto-previous-page not-select"><a href="#threads/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+						<li class="goto-last-page not-select"><a href="#threads/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
+						<li class="goto-next-page not-select"><a href="#threads/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
+						<li>
+							<select>
+								{{#pages}}
+									<option value="#threads/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
+								{{/pages}}
+							</select>
+						</li>
 					</ul>
 					{{#threads}}
 						{{#announcement}}
 							<button data-forum-id="{{forum_id}}" class="thread type_{{type}}">
 								{{title}}
-								<span class="user">by {{user.name}}</span>
+								<span class="user"> by {{user.name}}</span>
 							</button>
 						{{/announcement}}
 						{{^announcement}}
-							<button data-thread-id="{{thread_id}}" class="thread type_{{type}}">
-								{{title}}
-								<span class="user">{{user.name}}</span>
-							</button>
+							<div class="flex">
+								<button data-thread-id="{{thread_id}}" class="firstpost thread type_{{type}}">
+									{{title}}
+									<span class="user"> by {{user.name}}</span>
+								</button>
+								{{#lastseen}}
+									<button data-thread-id="{{thread_id}}" data-goto="newpost" class="newpost">
+										&rsaquo; {{../lastseen}}
+									</button>
+								{{/lastseen}}
+								<button data-thread-id="{{thread_id}}" data-goto="lastpost" class="lastpost">
+									&raquo;
+								</button>
+							</div>
 						{{/announcement}}
 					{{/threads}}
-					<ul class="pages"> 
-						<!-- all on one line because we're using display:inline-block which is sensitive to whitespace between li's -->
-						{{#pages}}{{^same_page}}<li class="different_page"><a href="#threads/{{../forum_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{#same_page}}<li class="same_page"><a href="#threads/{{../forum_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{/pages}}
+					<ul class="pages">
+						<li class="goto-first-page not-select"><a href="#threads/{{../forum_id}}/1">&laquo;1</a></li>
+						<li class="goto-previous-page not-select"><a href="#threads/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+						<li class="goto-last-page not-select"><a href="#threads/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
+						<li class="goto-next-page not-select"><a href="#threads/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
+						<li>
+							<select>
+								{{#pages}}
+									<option value="#threads/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
+								{{/pages}}
+							</select>
+						</li>
 					</ul>
-					<hr>
-					psa: global warming is real. you are doomed DOOMED welcome to augmented reality 2.0
 				</div>
 			{{/error}}
 			{{#error}}
@@ -145,19 +171,22 @@
 	</div>
 
 	<div id="posts">
-		you shouldn't be here yet. go back and pick a forum and thread.
-		<p>seriously fuck off the langoliers will be here soon &larr;
+		you shouldn't be here yet. go back &larr; and pick a forum and thread.
+		<p>seriously fuck off the langoliers will be here soon
 		<script id="posts-template" type="text/x-handlebars-template">
 			<div class="posts forum_{{forum_id}}">
-				<ul class="pages">
-					{{#page_number_is_bigger_than_1}}
-						<li class="goto-first-page"><a href="#posts/{{../forum_id}}/{{../thread_id}}/1">&laquo;</a></li>
-						<li class="goto-previous-page"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
-					{{/page_number_is_bigger_than_1}}
-					<li class="goto-last-page"><a href="#posts/{{forum_id}}/{{thread_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
-					<li class="goto-next-page"><a href="#posts/{{forum_id}}/{{thread_id}}/{{next_page_number}}">&rsaquo;</a></li>
-					<!-- all on one line because we're using display:inline-block which is sensitive to whitespace between li's -->
-					{{#pages}}{{^same_page}}<li class="different_page"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{#same_page}}<li class="same_page"><a href="#threads/{{../forum_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{/pages}}
+				<ul class="pages top-pages">
+					<li class="goto-first-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/1">&laquo;1</a></li>
+					<li class="goto-previous-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+					<li class="goto-last-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
+					<li class="goto-next-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
+					<li>
+						<select>
+							{{#pages}}
+								<option value="#posts/{{forum_id}}/{{thread_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
+							{{/pages}}
+						</select>
+					</li>
 				</ul>
 				{{#posts}}
 					<div class="post" id="post{{id}}">
@@ -166,15 +195,18 @@
 					</div>
 				{{/posts}}
 				<ul class="pages">
-					{{#page_number_is_bigger_than_1}}
-						<li class="goto-first-page"><a href="#posts/{{../forum_id}}/{{../thread_id}}/1">&laquo;</a></li>
-						<li class="goto-previous-page"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
-					{{/page_number_is_bigger_than_1}}
-					<li class="goto-last-page"><a href="#posts/{{forum_id}}/{{thread_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
-					<li class="goto-next-page"><a href="#posts/{{forum_id}}/{{thread_id}}/{{next_page_number}}">&rsaquo;</a></li>
-					<!-- all on one line because we're using display:inline-block which is sensitive to whitespace between li's -->
-					{{#pages}}{{^same_page}}<li class="different_page"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{#same_page}}<li class="same_page"><a href="#threads/{{../forum_id}}/{{../page_number}}">{{../page_number}}</a></li>{{/same_page}}{{/pages}}
-				</ul>			
+					<li class="goto-first-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/1">&laquo;1</a></li>
+					<li class="goto-previous-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+					<li class="goto-last-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
+					<li class="goto-next-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
+					<li>
+						<select>
+							{{#pages}}
+								<option value="#posts/{{forum_id}}/{{thread_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
+							{{/pages}}
+						</select>
+					</li>
+				</ul>
 			</div>
 		</script>
 	</div>

@@ -40,9 +40,10 @@
         
         posts.pages = [];
         for(i = 1; i <= posts.last_page_number; i++){
-			posts.pages.push({forum_id:posts.forum_id, thread_id:posts.thread_id, page_number:i, same_page: !!(posts.page_number === i)});
+			posts.pages.push({forum_id:posts.forum_id, thread_id:posts.thread_id, page_number:i, same_page: !!(posts.page_number === i), same_page_option_selection: !!(posts.page_number === i) ? 'selected="selected"' : ""});
         }
         $posts.innerHTML = posts_template(posts);
+        //post processing
         $imgs = $("img", $posts);
         resize_images_if_necessary($imgs);
 		for(i = 0; i < $imgs.length; i++){
@@ -54,11 +55,11 @@
         } else {
 			window.scrollTo(0, 0); // any change should scroll to top
         }
+        adjust_page_selection_width();
     };
 
     var posts_response = function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
         rebind_posts(response);
-		// yes this will cache the previous settings
         localStorage.setItem(CONSTANTS.posts_cache_key, JSON.stringify(response));
     };
 
@@ -80,39 +81,16 @@
 
 	var resize_images_if_necessary = function($imgs){
 		if(current.last_resize + (allow_resize_after_seconds * 1000) > Date.now()) return;
-		
 		var	$img,
 			screen_width = window.innerWidth - screen_width_buffer_pixels;
-
 		if(!$imgs) $imgs = $("img", $posts);
 		for(var i = 0; i < $imgs.length; i++){
 			$img = $imgs[i];
-			if($img.classList.contains("video_play_button")) continue;
+			if($img.classList.contains("width-set")) continue;
 			$img.style.width = "auto";
-			if($img.offsetWidth > screen_width){
-				if($img.classList.contains("timg") || $img.classList.contains("timg-stretched")) {
-					$img.classList.add("timg-stretched");
-					$img.classList.remove("img");
-					$img.classList.remove("timg");
-					$img.classList.remove("img-stretched");
-				} else {
-					$img.classList.add("img-stretched");
-					$img.classList.remove("img");
-					$img.classList.remove("timg");
-					$img.classList.remove("timg-stretched");
-				}
-			} else {
-				if($img.classList.contains("timg") || $img.classList.contains("timg-stretched")) {
-					$img.classList.add("timg");
-					$img.classList.remove("img");
-					$img.classList.remove("timg-stretched");
-					$img.classList.remove("img-stretched");
-				} else {
-					$img.classList.add("img");
-					$img.classList.remove("img-stretched");
-					$img.classList.remove("timg");
-					$img.classList.remove("timg-stretched");
-				}
+			if($img.offsetWidth > 0){ //then it's been loaded
+				$img.style.maxWidth = $img.offsetWidth + "px";
+				$img.classList.add("width-set");
 			}
 			$img.style.width = "";
 		}
@@ -137,12 +115,6 @@
 			} else if(event.target.classList.contains("img")){
 				event.target.classList.remove("img");
 				event.target.classList.add("timg");
-			} else if(event.target.classList.contains("img-stretched")){
-				event.target.classList.remove("img-stretched");
-				event.target.classList.add("timg-stretched");
-			} else if(event.target.classList.contains("timg-stretched")){
-				event.target.classList.remove("timg-stretched");
-				event.target.classList.add("img-stretched");
 			}
 		} else if(event.target.classList.contains("bbc-spoiler") && !event.target.classList.contains("on")){
 			event.target.classList.add("on");
@@ -187,8 +159,6 @@
 			if($video.getAttribute("data-thumbnail-url").length){
 				$link_to_video.setAttribute("style", "background-image: url('" + $video.getAttribute("data-thumbnail-url") + "')");
 			}
-			$link_to_video.style.width = $video.getAttribute("data-width") + "px";
-			$link_to_video.style.height = $video.getAttribute("data-height") + "px";
 			var $video_placeholder = document.createElement("img");
 			$video_placeholder.setAttribute("src", "images/video.png");
 			$video_placeholder.classList.add("video_play_button");
@@ -197,9 +167,14 @@
 		}
 	};
 
+	var select_change = function(event){
+		window.set_hash_state(event.target.value);
+	};
+
 	var init = function(){
 		$posts = $("#posts")[0];
         $posts.addEventListener("click", click_button, false);
+        $posts.addEventListener("change", select_change, false);
         rebind_posts();
 	};
 
@@ -207,6 +182,24 @@
 
     window.addEventListener("resize", resize_images_if_necessary);
     window.addEventListener("orientationchange", resize_images_if_necessary);
+
+    var adjust_page_selection_width = function(event){
+		var i;
+		var $top_pages = $(".pages", $posts)[0]; //because there are two in a page, one at the top, one at the bottom
+		var remaining_width = $top_pages.offsetWidth;
+		var $not_selects = $(".not-select", $top_pages);
+		for(i = 0; i < $not_selects.length; i++){
+			remaining_width -= $not_selects[i].offsetWidth;
+		}
+		remaining_width -= 4;
+		var $selects = $(".pages select", $posts);
+		for(i = 0; i < $selects.length; i++){
+			$selects[i].style.width = remaining_width + "px";
+		}
+    };
+
+    window.addEventListener("resize", adjust_page_selection_width);
+    window.addEventListener("orientationchange", adjust_page_selection_width);
 
     var hash_change = function(){
         var hashstate = window.get_hash_state();
