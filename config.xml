@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "com.phonegap.example"
+        versionCode = "666" 
+        version     = "6.6.6" >
+
+    <name>Yarble Madness</name>
+
+    <description>
+        An unofficial client for forums.SomethingAwful.com 
+    </description>
+
+    <author href="https://holloway.co.nz" email="saforums@holloway.co.nz">
+        Matthew Holloway (author of app, not the forums, obv)
+    </author>
+
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+    <gap:platform name="winphone" />
+
+    <gap:plugin name="org.apache.cordova.network-information" version="0.2.7" />
+
+    <access origin="https://somethingawful.com/" subdomains="true" />
+    <access origin="http://somethingawful.com/" subdomains="true" />
+    <access origin="https://vimeo.com/" subdomains="true" />
+    <access origin="http://vimeo.com/" subdomains="true" />
+    <access origin="https://vine.co" subdomains="true" />
+    <access origin="http://vine.co" subdomains="true" />
+</widget>
