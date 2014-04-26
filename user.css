@@ -1,5 +1,5 @@
 #user {
-	background: #eeeeee;
+	background: #fff;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -46,7 +46,7 @@
 
 #user input:focus,
 #user button:focus {
-	background: #ffffcc;
+	background: #ffc;
 	border: solid 1px #dda;
 }
 
@@ -82,7 +82,7 @@
 }
 
 #user #options table td.here {
-	background: #ffffcc;
+	background: #ffc;
 }
 
 #user #options fieldset {
@@ -102,7 +102,7 @@
 
 #user .twocolumns .columntwo {
 	padding-top:10px;
-	background: #ddd;
+	background: #eee;
 }
 
 #user .onoff:after {

@@ -38,20 +38,37 @@
     color: #cfc;
 }
 
-#posts .forum_219 .pages,
-#posts .forum_219 .pages select,
-#posts .forum_219 .pages select option  {
-    color: black;
+#posts .forum_219 h2 {
+    border-bottom: solid 1px #cfc;
+    padding-bottom: 0.5em;
 }
 
-.forum_219,
-.forum_219 button {
+
+#threads .forum_219 .pages,
+#threads .forum_219 .pages a,
+#threads .forum_219 .pages select,
+#threads .forum_219 .pages select option,
+#posts .forum_219 .pages,
+#posts .forum_219 .pages a,
+#posts .forum_219 .pages select,
+#posts .forum_219 .pages select option  {
+    color: #cfc;
+    background: #030;
+}
+
+#forums button.forum_219,
+#threads .forum_219,
+#threads .forum_219 button,
+#posts .forum_219,
+#posts .forum_219 button {
     background: black;
     color: #9f9;
     border-color: #696;
 }
 
-.forum_219 button .user {
+
+
+#threads .forum_219 button .user {
     color: #393;
 }
 

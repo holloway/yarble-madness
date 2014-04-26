@@ -55,6 +55,20 @@
 				{goto: "post", postid: post_id},
 				response_filters.gotopost(callback, post_id)
 			);
+		},
+		newpost: function(thread_id, callback){
+			return request.get(
+				http_base + 'showthread.php',
+				{goto: "newpost", threadid: thread_id},
+				response_filters.newpost(callback, thread_id)
+			);
+		},
+		lastpost: function(thread_id, callback){
+			return request.get(
+				http_base + 'showthread.php',
+				{goto: "lastpost", threadid: thread_id},
+				response_filters.lastpost(callback, thread_id)
+			);
 		}
 	};
 
@@ -189,6 +203,18 @@
 			return function(){
 				var response = sa.response_parse.gotopost(this.responseText);
 				return fn.apply(this, [response.forum_id, response.thread_id, post_id, response.page_number]);
+			};
+		},
+		newpost: function(fn, thread_id){
+			return function(){
+				var response = sa.response_parse.newpost(this.responseText);
+				return fn.apply(this, [response.forum_id, response.thread_id, response.new_page_number]);
+			};
+		},
+		lastpost: function(fn, thread_id){
+			return function(){
+				var response = sa.response_parse.lastpost(this.responseText);
+				return fn.apply(this, [response.forum_id, response.thread_id, response.last_page_number]);
 			};
 		},
 		scrape_useful_stuff: function(html_string){
@@ -544,6 +570,44 @@
 			} else {
 				response.page_number = 1;
 				console.log("unable to parse page number", $div.innerHTML);
+			}
+			return response;
+		},
+		newpost: function(html_string){
+			var $div = document.createElement("div"),
+				$body,
+				response = {},
+				$page_widget;
+			
+			html_string = html_string.replace(/<body/g, '<new-body'); //because <body> won't parse but a <new-body ...> will
+			$div.innerHTML = html_string;
+			$body = $("new-body", $div)[0];
+			response.forum_id = $body.getAttribute("data-forum");
+			response.thread_id = $body.getAttribute("data-thread");
+			$page_widget = $("div.pages option[selected=selected]", $div);
+			if($page_widget.length){
+				response.new_page_number = parseInt($page_widget[0].innerText, 10);
+			} else {
+				response.new_page_number = 1;
+			}
+			return response;
+		},
+		lastpost: function(html_string){
+			var $div = document.createElement("div"),
+				$body,
+				response = {},
+				$page_widget;
+			
+			html_string = html_string.replace(/<body/g, '<new-body'); //because <body> won't parse but a <new-body ...> will
+			$div.innerHTML = html_string;
+			$body = $("new-body", $div)[0];
+			response.forum_id = $body.getAttribute("data-forum");
+			response.thread_id = $body.getAttribute("data-thread");
+			$page_widget = $(".pages select", $div);
+			if($page_widget.length){
+				response.last_page_number = parseInt($page_widget[0].options[$page_widget[0].length - 1].value, 10);
+			} else {
+				response.last_page_number = 1;
 			}
 			return response;
 		}

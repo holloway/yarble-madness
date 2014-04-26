@@ -25,7 +25,7 @@
         current.page_number = threads.page_number;
         current.when = Date.now();
         threads.pages = [];
-        for(var i = 1; i < threads.last_page_number; i++){
+        for(var i = 1; i <= threads.last_page_number; i++){
             threads.pages.push({forum_id:threads.forum_id, page_number:i, same_page: !!(threads.page_number === i), same_page_option_selection: !!(threads.page_number === i) ? 'selected="selected"' : ""});
         }
         threads.previous_page_number = threads.page_number - 1;
@@ -64,17 +64,36 @@
     document.addEventListener("DOMContentLoaded", init);
 
     var click_button = function(event){
-        var target = event.target;
+        var target = event.target,
+            thread_id;
         if(target.nodeName.toLowerCase() !== "button") target = target.parentNode;
         if(target.nodeName.toLowerCase() !== "button") return;
 
-        var thread_id = target.getAttribute("data-thread-id");
-        sa.posts(current.forum_id, thread_id, 1, true, true, posts_response);
+        if(target.classList.contains("firstpost")){
+            thread_id = target.getAttribute("data-thread-id");
+            sa.posts(current.forum_id, thread_id, 1, true, true, posts_response);
+        } else if(target.classList.contains("newpost")) {
+            thread_id = target.getAttribute("data-thread-id");
+            sa.newpost(thread_id, newpost_response);
+        } else if(target.classList.contains("lastpost")) {
+            thread_id = target.getAttribute("data-thread-id");
+            sa.lastpost(thread_id, lastpost_response);
+        }
     };
 
     var posts_response = function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
         window.yarble.utils.event.trigger("yarble:page-update:posts", response, forum_id, thread_id, page_number, used_local_smilies, disabled_images);
         window.yarble.utils.event.trigger("yarble:change-page-id", "posts/" + forum_id + "/" + thread_id + "/" + page_number);
+    };
+
+    var lastpost_response = function(forum_id, thread_id, last_page_number){
+        //TODO: replace this with a preload approach like posts_response
+        window.set_hash_state("posts/" + forum_id + "/" + thread_id + "/" + last_page_number);
+    };
+
+    var newpost_response = function(forum_id, thread_id, new_page_number){
+        //TODO: replace this with a preload approach like posts_response
+        window.set_hash_state("posts/" + forum_id + "/" + thread_id + "/" + new_page_number);
     };
 
     var hash_change = function(){

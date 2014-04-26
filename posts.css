@@ -93,6 +93,21 @@
 	width: 100%;
 }
 
+
+a img {
+	border: solid 1px blue;
+}
+
+a.video-player img {
+	border: none;
+}
+
+#posts h2 {
+	padding: 0.3em 5px 0.4em 5px;
+	margin: 0px;
+	border-bottom: solid 1px #999999;
+}
+
 #posts .pages {
 	margin: 0px;
 	padding: 0px;

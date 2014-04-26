@@ -90,7 +90,7 @@
 			$img = $imgs[i];
 			if($img.classList.contains("width-set")) continue;
 			$img.style.width = "auto";
-			if($img.offsetWidth > 0){ //then it's been loaded
+			if($img.offsetWidth > 6){ //then it's been loaded...6px because offsetWidth can include borders which means the image could still not be loaded but register a width of greater-than zero. So 6px is just an arbitrary choice bigger than someone might choose for a border (e.g. 3px each horizontal side)
 				$img.style.maxWidth = $img.offsetWidth + "px";
 				$img.classList.add("width-set");
 			}
