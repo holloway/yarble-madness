@@ -43,7 +43,6 @@
     padding-bottom: 0.5em;
 }
 
-
 #threads .forum_219 .pages,
 #threads .forum_219 .pages a,
 #threads .forum_219 .pages select,
@@ -56,6 +55,7 @@
     background: #030;
 }
 
+#threads .forum_219 .flex span.posticon,
 #forums button.forum_219,
 #threads .forum_219,
 #threads .forum_219 button,

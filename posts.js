@@ -147,6 +147,7 @@
 			var $image = $images[i];
 			var $replacement_image = document.createElement("img");
 			$replacement_image.addEventListener("load", resize_image_if_necessary);
+			$replacement_image.classList.add("img");
 			$replacement_image.setAttribute("src", $image.getAttribute("data-image-src")); //although each image should have the same @data-image-src attribute we don't cache the lookup incase they are different due to hash collisions
 			$image.parentNode.replaceChild($replacement_image, $image);
 		}

@@ -12,8 +12,10 @@
 		last_login_attempt_username,
 		CONSTANTS = {
 			user_storage_key: "yarble:user",
-			first_time_key:   "yarble:first-time-user"
+			first_time_key:   "yarble:first-time-user",
+			download_on_mobile: "yarble:download-when-on-3g4g"
 		},
+		$do_mobile_download,
 		$ = yarble.utils.$,
 		init = function(){
 			$user = $("#user")[0];
@@ -31,10 +33,28 @@
 			} else {
 				yarble.utils.event.trigger("yarble:change-page-id", "forums");
 			}
-			
+			$do_mobile_download = $("#mobiledownload")[0];
+			$do_mobile_download.addEventListener("click", toggle_mobile_download, true);
+			update_mobile_download();
 		};
 
-	window.yarble.disable_images = !!window.localStorage.getItem("yarble:disable-images");
+	var toggle_mobile_download = function(event){
+		window.yarble.disable_images = !window.yarble.disable_images;
+		window.localStorage.setItem(CONSTANTS.download_on_mobile, window.yarble.disable_images);
+		update_mobile_download();
+	};
+
+	var update_mobile_download = function(){
+		if(window.yarble.disable_images){
+			$do_mobile_download.classList.add("on");
+			$do_mobile_download.classList.remove("off");
+		} else {
+			$do_mobile_download.classList.add("off");
+			$do_mobile_download.classList.remove("on");
+		}
+	};
+
+	window.yarble.disable_images = !!JSON.parse(window.localStorage.getItem(CONSTANTS.download_on_mobile));
 
 	document.addEventListener("DOMContentLoaded", init);
 

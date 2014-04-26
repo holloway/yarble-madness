@@ -35,8 +35,6 @@
             if(thread.posticon && posticons_cache[thread.posticon]) {
                 thread.has_posticon_url = true;
                 thread.posticon_url = "images/posticons/" + posticons_cache[thread.posticon].filename;
-            } else {
-                console.log(thread);
             }
         }
         threads.previous_page_number = threads.page_number - 1;

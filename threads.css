@@ -13,9 +13,23 @@
     padding: 0.5em;
     text-align:left;
     border-top: none;
-    border-right: none;
-    border-left: solid 1px #aaaaaa;
+    border-left: none;
+    border-right: solid 1px #aaaaaa;
     border-bottom: solid 1px #aaaaaa;
+}
+
+#threads .flex > span.posticon {
+	border: none;
+    border-bottom: solid 1px #aaaaaa;
+    background: #dddddd;
+}
+
+#threads button {
+	border-top: none;
+    border-left: none;
+    border-right: solid 1px #aaaaaa;
+    border-bottom: solid 1px #aaaaaa;
+    background: #eeeeee;
 }
 
 #threads button.type_announcement {
