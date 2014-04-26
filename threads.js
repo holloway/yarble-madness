@@ -12,7 +12,9 @@
         allow_reloads_after_seconds = 10;
 
     var rebind_threads = function(threads){
-        var threads_template_string;
+        var threads_template_string,
+            thread,
+            i;
 
         if(threads === undefined) {
             threads = JSON.parse(localStorage.getItem(CONSTANTS.threads_cache_key));
@@ -25,8 +27,17 @@
         current.page_number = threads.page_number;
         current.when = Date.now();
         threads.pages = [];
-        for(var i = 1; i <= threads.last_page_number; i++){
+        for(i = 1; i <= threads.last_page_number; i++){ //starting at 1 because page counts start from 1 (obv)
             threads.pages.push({forum_id:threads.forum_id, page_number:i, same_page: !!(threads.page_number === i), same_page_option_selection: !!(threads.page_number === i) ? 'selected="selected"' : ""});
+        }
+        for(i = 0; i < threads.threads.length; i++){
+            thread = threads.threads[i];
+            if(thread.posticon && posticons_cache[thread.posticon]) {
+                thread.has_posticon_url = true;
+                thread.posticon_url = "images/posticons/" + posticons_cache[thread.posticon].filename;
+            } else {
+                console.log(thread);
+            }
         }
         threads.previous_page_number = threads.page_number - 1;
         threads.next_page_number = threads.page_number + 1;

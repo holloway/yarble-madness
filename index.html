@@ -132,6 +132,11 @@
 						{{/announcement}}
 						{{^announcement}}
 							<div class="flex">
+								<span class="posticon">
+									{{#has_posticon_url}}
+										<img src="{{posticon_url}}" alt="#{{posticon}}">
+									{{/has_posticon_url}}
+								</span>
 								<button data-thread-id="{{thread_id}}" class="firstpost thread type_{{type}}">
 									{{title}}
 									<span class="user"> by {{user.name}}</span>
@@ -248,6 +253,7 @@
 	<script src="lib/fastclick.js"></script>
 	<script src="lib/handlebars.js"></script>
 	<script src="smilies-cache.js"></script>
+	<script src="posticons-cache.js"></script>
 	<script src="utils.js"></script>
 	<script src="header.js"></script>
 	<script src="sa.lib.js"></script>

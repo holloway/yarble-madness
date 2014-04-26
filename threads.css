@@ -5,6 +5,7 @@
 #threads .type_announcement {
 }
 
+#threads .flex > span.posticon, 
 #threads button {
 	font-size:inherit;
     width:100%;
@@ -30,17 +31,21 @@
 #threads .flex {
 	clear:both;
 	display: -webkit-flex;
-      -webkit-flex-direction: row;
-      display: flex;
-      flex-direction: row;
+    -webkit-flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
+#threads .flex > span.posticon,
 #threads .flex > button.lastpost,
 #threads .flex > button.newpost {
  	padding: 0.5em 0px;
-   
-   text-align:center;
+    text-align:center;
 	vertical-align:top;
+}
+
+#threads .flex > span.posticon {
+	flex: 0 0 70px;
 }
 
 #threads .flex > button.lastpost {

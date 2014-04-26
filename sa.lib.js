@@ -369,6 +369,8 @@
 					} else if($link.parentNode.classList.contains("author")) {
 						user_id = get_param($link.getAttribute("href"), "userid");
 						thread.user = {user_id: user_id, name: $link.innerText};
+					} else if($link.parentNode.classList.contains("icon")){
+						thread.posticon = user_id = get_param($link.getAttribute("href"), "posticon");
 					}
 				}
 				if(thread.type){
