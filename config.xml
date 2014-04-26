@@ -21,10 +21,4 @@
 
     <gap:plugin name="org.apache.cordova.network-information" version="0.2.7" />
 
-    <access origin="https://somethingawful.com/" subdomains="true" />
-    <access origin="http://somethingawful.com/" subdomains="true" />
-    <access origin="https://vimeo.com/" subdomains="true" />
-    <access origin="http://vimeo.com/" subdomains="true" />
-    <access origin="https://vine.co" subdomains="true" />
-    <access origin="http://vine.co" subdomains="true" />
 </widget>

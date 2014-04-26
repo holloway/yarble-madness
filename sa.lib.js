@@ -7,6 +7,7 @@
 	window.sa = {
 		login: function(username, password, callback){
 			cache.last_username = username;
+			console.log("Logging in as username", username, ". password: (omitted)")
 			return request.post(
 				https_base + "account.php",
 				undefined,
@@ -150,6 +151,7 @@
 		}
 		return function(){
 			var args = arguments;
+			console.log("network response", this);
 			if(this.readyState !== 4) return;
 			if(this.status !== 200 && this.status !== 302) {
 				console.log("sa.js: Error response", this, this.responseText);
