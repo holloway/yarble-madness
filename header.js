@@ -57,5 +57,5 @@
 			step = undefined;
 		};
 
-	document.addEventListener("DOMContentLoaded", init);
+	document.addEventListener(init_event_id, init);
 }());

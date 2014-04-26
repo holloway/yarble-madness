@@ -61,16 +61,18 @@
         window.set_hash_state(event.target.value);
     };
 
-    window.yarble.utils.event.on("yarble:page-update:threads", threads_response);
-
     var init = function(event){
+        window.yarble.utils.event.on("yarble:page-update:threads", threads_response);
+        window.addEventListener("resize", adjust_page_selection_width);
+        window.addEventListener("orientationchange", adjust_page_selection_width);
+        window.addEventListener("hashchange", hash_change, false);
         $threads = $("#threads")[0];
         $threads.addEventListener("click", click_button, false);
         $threads.addEventListener("change", select_change, false);
         rebind_threads();
     };
 
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener(init_event_id, init);
 
     var click_button = function(event){
         var target = event.target,
@@ -134,8 +136,6 @@
         }
     };
 
-    window.addEventListener("resize", adjust_page_selection_width);
-    window.addEventListener("orientationchange", adjust_page_selection_width);
-    window.addEventListener("hashchange", hash_change, false);
+    
 
 }());

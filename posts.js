@@ -52,7 +52,7 @@
 			$imgs[i].addEventListener("load", resize_image_if_necessary);
 		}
 		var hashstate = window.get_hash_state();
-        if(hashstate.length === 5) { //then there's a postid in the url that we should scroll to
+        if(hashstate && hashstate.length === 5) { //then there's a postid in the url that we should scroll to
 			scroll_to_post(hashstate[4]);
         } else {
 			window.scrollTo(0, 0); // any change should scroll to top
@@ -175,6 +175,9 @@
 	};
 
 	var init = function(){
+		window.addEventListener("resize", resize_images_if_necessary);
+		window.addEventListener("orientationchange", resize_images_if_necessary);
+		window.addEventListener("hashchange", hash_change, false);
 		$posts = $("#posts")[0];
 		$title = $("title")[0];
         $posts.addEventListener("click", click_button, false);
@@ -182,11 +185,8 @@
         rebind_posts();
 	};
 
-    document.addEventListener("DOMContentLoaded", init);
-
-    window.addEventListener("resize", resize_images_if_necessary);
-    window.addEventListener("orientationchange", resize_images_if_necessary);
-
+    document.addEventListener(init_event_id, init);
+   
     var adjust_page_selection_width = function(event){
 		var i;
 		var $top_pages = $(".pages", $posts)[0]; //because there are two in a page, one at the top, one at the bottom
@@ -202,9 +202,6 @@
 		}
     };
 
-    window.addEventListener("resize", adjust_page_selection_width);
-    window.addEventListener("orientationchange", adjust_page_selection_width);
-
     var hash_change = function(){
         var hashstate = window.get_hash_state();
         if(hashstate.length < 2) return;
@@ -219,7 +216,5 @@
             sa.posts(hashstate_forum_id, hashstate_thread_id, hashstate_page_number, true, window.yarble.disable_images, posts_response);
         }
     };
-	
-    window.addEventListener("hashchange", hash_change, false);
 
 }());

@@ -1,4 +1,5 @@
 (function(){
+	// NOTE: this is a command-line Node.js script for caching the posticons.
 	"use strict";
 
 	var request = require('request'),
@@ -28,7 +29,7 @@
 		post_icons[i] = {id: i, got:false};
 	}
 
-	posticons_cache[0] = {filename:"b6589fc6ab0dc82cf12099d1c2d40ab994e8410c.gif"}; // for some reason it's not downloading this one. looks like an off-by-one error. so i've got two options 1) find this bug, 2) download the image, insert it, hardcode the reference...of those two options i choose life
+	posticons_cache[0] = {filename:"b6589fc6ab0dc82cf12099d1c2d40ab994e8410c.gif"}; // for some reason it's not downloading this one. the 0 makes it look like an obvious off-by-one error. so i've got two options 1) find this bug, 2) download the image, insert it, hardcode the reference...of those two options i choose life
 
 	for(var forum_id_index = 0; forum_id_index < forum_ids.length; forum_id_index++){
 		var forum_id = forum_ids[forum_id_index];

@@ -1,4 +1,5 @@
 (function(){
+	// NOTE: this is a command-line Node.js script for caching the smilies.
 	"use strict";
 
 	var request = require('request'),

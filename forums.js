@@ -51,5 +51,5 @@
 		rebind_forums();
 	};
 
-	document.addEventListener("DOMContentLoaded", init);
+	document.addEventListener(init_event_id, init);
 }());

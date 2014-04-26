@@ -15,6 +15,7 @@
 			first_time_key:   "yarble:first-time-user",
 			download_on_mobile: "yarble:download-when-on-3g4g"
 		},
+		disable_images_on_3g4g_button_state = false,
 		$do_mobile_download,
 		$ = yarble.utils.$,
 		init = function(){
@@ -35,17 +36,30 @@
 			}
 			$do_mobile_download = $("#mobiledownload")[0];
 			$do_mobile_download.addEventListener("click", toggle_mobile_download, true);
+			disable_images_on_3g4g_button_state = window.localStorage.getItem(CONSTANTS.download_on_mobile) ? !!JSON.parse(window.localStorage.getItem(CONSTANTS.download_on_mobile)) : false;
+			
 			update_mobile_download();
 		};
 
 	var toggle_mobile_download = function(event){
-		window.yarble.disable_images = !window.yarble.disable_images;
-		window.localStorage.setItem(CONSTANTS.download_on_mobile, window.yarble.disable_images);
+		disable_images_on_3g4g_button_state = !disable_images_on_3g4g_button_state;
 		update_mobile_download();
 	};
 
 	var update_mobile_download = function(){
-		if(window.yarble.disable_images){
+		var yarble = window.yarble || {};
+		window.yarble = yarble;
+		yarble.disable_images = false;
+		if(disable_images_on_3g4g_button_state){
+			if(navigator.connection && navigator.connection.type){ // potentially phonegap app
+				var states = {};
+				alert(navigator.connection.type);
+				alert(Connection);
+			}
+		}
+		window.localStorage.setItem(CONSTANTS.download_on_mobile, disable_images_on_3g4g_button_state);
+		
+		if(disable_images_on_3g4g_button_state){
 			$do_mobile_download.classList.add("on");
 			$do_mobile_download.classList.remove("off");
 		} else {
@@ -53,10 +67,8 @@
 			$do_mobile_download.classList.remove("on");
 		}
 	};
-
-	window.yarble.disable_images = !!JSON.parse(window.localStorage.getItem(CONSTANTS.download_on_mobile));
-
-	document.addEventListener("DOMContentLoaded", init);
+	
+	document.addEventListener(init_event_id, init);
 
     window.yarble.utils.event.on("yarble:page-change:user", function(){
 		if(!$user) init();

@@ -1,12 +1,12 @@
 (function(){
 	"use strict";
 
-	if(!window.localStorage) return alert("Yarble Madness needs a browser with localStorage");
-
-	var is_touch_device = 'ontouchstart' in document.documentElement;
-
+	
+	
 	var	$ = yarble.utils.$,
 		init = function(){
+			if(!window.localStorage) return alert("Yarble Madness needs a browser with localStorage");
+			var is_touch_device = 'ontouchstart' in document.documentElement;
 			var $forms = $("form"),
 				$form,
 				i,
@@ -22,6 +22,6 @@
 			$("html")[0].classList.add(is_touch_device ? "touch" : "notouch");
 		};
 
-	document.addEventListener("DOMContentLoaded", init);
+	document.addEventListener(init_event_id, init);
 
 }());

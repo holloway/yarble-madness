@@ -12,6 +12,9 @@
         $pages;
 
     var init = function(){
+        window.addEventListener("hashchange", hash_change, false);
+        yarble.utils.event.on("yarble:change-page-id", move_to_page_id_event);
+        window.addEventListener("beforeunload", beforeunload);
         var hashstate;
         $pages = yarble.utils.$("body > div");
         $pages.map(function(element, i){
@@ -41,8 +44,7 @@
         localStorage.setItem(CONSTANTS.pageflip_hashstate, JSON.stringify(pages_hashstate));
     };
 
-    document.addEventListener("DOMContentLoaded", init);
-    window.addEventListener("beforeunload", beforeunload);
+    document.addEventListener(init_event_id, init);
 
     var key_down = function(event){
         var arrow_key_was_used = false;
@@ -143,10 +145,7 @@
         index = move_to_page(page_index_by_id[hashstate[0]] ? page_index_by_id[hashstate[0]] : 0, hashstate.join("/"), false);
     };
 
-    window.addEventListener("hashchange", hash_change, false);
-
-    yarble.utils.event.on("yarble:change-page-id", move_to_page_id_event);
-
+    
     window.set_hash_state = function(hashstate){
         window.location.hash = hashstate;
     };
