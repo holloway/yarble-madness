@@ -324,22 +324,29 @@
 			for(i = 0; i < $rows.length; i++){
 				$row = $rows[i];
 				$links = $("a", $row);
+				thread = {};
 				for(y = 0; y < $links.length; y++){
 					$link = $links[y];
 					if($link.classList.contains("announcement")) {
 						forum_id = get_param($link.getAttribute("href"), "forumid");
-						thread = {announcement: true, forum_id: forum_id, type: "announcement", title: $link.innerText};
-						response.threads.push(thread);
+						thread.announcement = true;
+						thread.forum_id = forum_id;
+						thread.type = "announcement";
+						thread.title = $link.innerText;
 					} else if($link.classList.contains("thread_title")) {
 						thread_id = get_param($link.getAttribute("href"), "threadid");
-						thread = {thread_id: thread_id, type: "thread", title: $link.innerText};
-						response.threads.push(thread);
+						thread.thread_id = thread_id;
+						thread.type = "thread";
+						thread.title = $link.innerText;
 					} else if($link.classList.contains("count")) {
 						thread.lastseen = $link.innerText.replace(/\s/g, '');
 					} else if($link.parentNode.classList.contains("author")) {
 						user_id = get_param($link.getAttribute("href"), "userid");
 						thread.user = {user_id: user_id, name: $link.innerText};
 					}
+				}
+				if(thread.type){
+					response.threads.push(thread);
 				}
 			}
 			return response;
@@ -354,6 +361,7 @@
 				attribute,
 				attributes,
 				content_id,
+				$title,
 				$page_change_widget,
 				$page_widget,
 				$lastseen,
@@ -484,20 +492,32 @@
 
 			$posts = $("table", $posts_container);
 
+			$title = $("#content .breadcrumbs .bclast", $div);
+
+			if($title.length) {
+				response.title = $title[0].innerText;
+			}
+
 			for(i = 0; i < $posts.length; i++){
 				$post = $posts[i];
 				if(! $(".postbody", $post)[0]){
 					console.log("no body?", $post.innerHTML, $post.parentNode);
 				}
+				var post_id = $post.getAttribute("id");
+				if(post_id) {
+					post_id = parseInt(post_id.replace(/^post/, ''), 10);
+				} else {
+					post_id = undefined;
+				}
 				post = {
-					id: $post.getAttribute("id").replace(/^post/, ''),
+					id: post_id,
 					body: $(".postbody", $post)[0].innerHTML,
 					postdate: $(".postdate", $post)[0].innerHTML.replace(/<a[\s\S]*?<\/a>/g, ''),
 					user: {
 						name: $(".author", $post)[0].innerHTML,
 						user_id: get_param($(".user_jump", $post)[0].getAttribute("href"), "userid"),
 						registered: $(".registered", $post)[0].innerHTML,
-					},
+					}
 				};
 				$lastseen = $(".lastseen", $post);
 				if($lastseen) {

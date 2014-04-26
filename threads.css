@@ -42,11 +42,11 @@
 }
 
 #threads .flex > button.lastpost {
-	flex: 0 0 50px;
+	flex: 0 0 3em;
 }
 
 #threads .flex > button.newpost {
-	flex: 0 0 50px;
+	flex: 0 0 5em;
 }
 
 #threads .pages {

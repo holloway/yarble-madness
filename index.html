@@ -176,8 +176,8 @@
 		<script id="posts-template" type="text/x-handlebars-template">
 			<div class="posts forum_{{forum_id}}">
 				<ul class="pages top-pages">
-					<li class="goto-first-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/1">&laquo;1</a></li>
-					<li class="goto-previous-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+					<li class="goto-first-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/1">&laquo;1</a></li>
+					<li class="goto-previous-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
 					<li class="goto-last-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
 					<li class="goto-next-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
 					<li>
@@ -188,6 +188,7 @@
 						</select>
 					</li>
 				</ul>
+				<h2>{{title}}</h2>
 				{{#posts}}
 					<div class="post" id="post{{id}}">
 						{{{body}}}
@@ -195,8 +196,8 @@
 					</div>
 				{{/posts}}
 				<ul class="pages">
-					<li class="goto-first-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/1">&laquo;1</a></li>
-					<li class="goto-previous-page not-select"><a href="#posts/{{../forum_id}}/{{../thread_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+					<li class="goto-first-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/1">&laquo;1</a></li>
+					<li class="goto-previous-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
 					<li class="goto-last-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
 					<li class="goto-next-page not-select"><a href="#posts/{{forum_id}}/{{thread_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
 					<li>

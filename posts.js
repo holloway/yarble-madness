@@ -6,6 +6,7 @@
         },
         $ = yarble.utils.$,
         $posts,
+        $title,
         current,
         posts_template,
         screen_width_buffer_pixels = 50,
@@ -23,6 +24,7 @@
 			posts = JSON.parse(JSON.stringify(posts)); // we'll clone it http://stackoverflow.com/a/5344074 so that our modifications (such as copying into .column1 and .column2) don't accidentally leak back to the localStorage copy or any other version
         }
         if(!posts) return;
+        $title.innerText = posts.title;
         current = {};
         current.forum_id = posts.forum_id;
         current.thread_id = posts.thread_id;
@@ -173,6 +175,7 @@
 
 	var init = function(){
 		$posts = $("#posts")[0];
+		$title = $("title")[0];
         $posts.addEventListener("click", click_button, false);
         $posts.addEventListener("change", select_change, false);
         rebind_posts();
