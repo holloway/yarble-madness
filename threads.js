@@ -82,7 +82,7 @@
 
         if(target.classList.contains("firstpost")){
             thread_id = target.getAttribute("data-thread-id");
-            sa.posts(current.forum_id, thread_id, 1, true, true, posts_response);
+            sa.posts(current.forum_id, thread_id, 1, true, window.yarble.disable_images, posts_response);
         } else if(target.classList.contains("newpost")) {
             thread_id = target.getAttribute("data-thread-id");
             sa.newpost(thread_id, newpost_response);

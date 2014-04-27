@@ -28,13 +28,13 @@
 
 	includeInThisContext(__dirname + "/posticons-cache.js");
 
-	// 132,90,218,152,31,210,247,151,133,182,150   1,48,155,214,26,154,268,51,44,259,145,93,234,191,267]; // , 192,158,162,211,200,46,22,170,202,219,122 // 181,248,175,177,179,244,242,161,167,91,236,124 // 104,130,144,27,215,255,153,61,77,85,43,241,188
+	// 132,90,218,152,31,210,247,151,133,182,150   1,48,155,214,26,154,268,51,44,259,145,93,234,191,267]; // , 192,158,162,211,200,46,22,170,202,219,122 // 181,248,175,177,179,244,242,161,167,91,236,124 // 104,130,144,27,215,255,153,61,77,85,43,241,188 49,21,264,115,176,229,25
 
-	var forum_ids = [49,21,264,115,176,229,25]; // , 
-	var post_icons = new Array(1000);
+	var forum_ids = [154]; // , 
+	var post_icons = new Array(1);
 
 	for(var i = 0; i < post_icons.length; i++){
-		post_icons[i] = {id: i, got:false};
+		post_icons[i] = {id: 469, got:false};
 	}
 
 	for(var forum_id_index = 0; forum_id_index < forum_ids.length; forum_id_index++){
@@ -45,8 +45,10 @@
 			if(post_icon.got !== false || post_icon.got === true) continue;
 			console.log("attempting to get ", forum_id, post_icon.id)
 			var query = "select * from data.html.cssselect where url='http://forums.somethingawful.com/forumdisplay.php?forumid=" + forum_id + "&posticon=" + post_icon.id + "' and css='.icon a' ";
+			console.log(query)
 			yql.exec(query, function(response) {
 				var query = response.query;
+				console.log("response", response)
 				
 				if(query.count === 0) return;
 				if(!query.results || !query.results.results || !query.results.results.a) return;

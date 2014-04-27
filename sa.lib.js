@@ -7,7 +7,6 @@
 	window.sa = {
 		login: function(username, password, callback){
 			cache.last_username = username;
-			console.log("Logging in as username", username, ". password: (omitted)")
 			return request.post(
 				https_base + "account.php",
 				undefined,
@@ -151,7 +150,6 @@
 		}
 		return function(){
 			var args = arguments;
-			console.log("network response", this);
 			if(this.readyState !== 4) return;
 			if(this.status !== 200 && this.status !== 302) {
 				console.log("sa.js: Error response", this, this.responseText);
@@ -539,6 +537,12 @@
 				} else {
 					post_id = undefined;
 				}
+				var registered = $(".registered", $post);
+				if(registered.length){
+					registered = registered[0].innerHTML;
+				} else {
+					registered = undefined;
+				}
 				post = {
 					id: post_id,
 					body: $(".postbody", $post)[0].innerHTML,
@@ -546,7 +550,7 @@
 					user: {
 						name: $(".author", $post)[0].innerHTML,
 						user_id: get_param($(".user_jump", $post)[0].getAttribute("href"), "userid"),
-						registered: $(".registered", $post)[0].innerHTML,
+						registered: registered,
 					}
 				};
 				$lastseen = $(".lastseen", $post);
