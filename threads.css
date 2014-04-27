@@ -60,14 +60,17 @@
 
 #threads .flex > span.posticon {
 	flex: 0 0 70px;
+	-webkit-flex: 0 0 70px;
 }
 
 #threads .flex > button.lastpost {
 	flex: 0 0 3em;
+	-webkit-flex: 0 0 3em;
 }
 
 #threads .flex > button.newpost {
 	flex: 0 0 5em;
+	-webkit-flex: 0 0 5em;
 }
 
 #threads .pages {
