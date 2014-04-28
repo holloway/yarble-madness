@@ -18,8 +18,8 @@
 			var ma = cache.logout_ma || localStorage.getItem("yarble:logout:ma");
 			if(!ma) callback(false);
 			return request.get(
-				http_base + "account.php",
-				{action:"logout", ma: ma},
+				http_base + 'account.php',
+				{action:'logout', ma: ma},
 				response_filters.logout(callback)
 			);
 		},
@@ -396,7 +396,19 @@
 				response = {posts:[]},
 				i,
 				post,
-				process_image = function(match, force_disable_images){
+				user_title_images = function(img_html_string){
+					var attributes_string = img_html_string.substr(img_html_string.indexOf(" "));
+					attributes_string = attributes_string.substr(0, attributes_string.indexOf(">"));
+					var attributes = parse_attributes_string(attributes_string);
+					var smiley = attributes.title;
+					// note: smiles_cache (a global variable) is found in smilies-cache.js and that file is dynamically built from the nodejs script get-smilies.js
+					if(window.smiles_cache && window.smiles_cache[smiley] && attributes.src.match(/somethingawful\.com/)){
+						return '<img src="images/smilies/' + window.smiles_cache[smiley].filename + '" title="' + escape_html(smiley) + " " + escape_html(window.smiles_cache[smiley].title) + '" class="smiley">';
+					}
+					return '<img src="' + attributes.src + '" style="width:62.5px;" class="user-title">'; //width is just a default...will be overridden in JavaScript
+				},
+				process_image = function(match, force_disable_images, force_enable_images){
+					if (force_enable_images === undefined) force_enable_images = false;
 					var attributes_string = match.substr(match.indexOf(" "));
 					attributes_string = attributes_string.substr(0, attributes_string.indexOf(">"));
 					attributes = parse_attributes_string(attributes_string);
@@ -405,13 +417,13 @@
 						match = '<img src="' + attributes.src + '">';
 					}
 					if(use_local_smilies){
-						attribute = attributes.title;
-						// note: smiles_cache (a global) is found in smilies-cache.js and that file is dynamically built from the nodejs script get-smilies.js
-						if(smiles_cache && smiles_cache[attribute] && attributes.src.match(/somethingawful\.com/)){
-							return '<img src="images/smilies/' + smiles_cache[attribute].filename + '" title="' + escape_html(attribute) + '" class="smiley">';
+						var smiley = attributes.title;
+						// note: smiles_cache (a global variable) is found in smilies-cache.js and that file is dynamically built from the nodejs script get-smilies.js
+						if(window.smiles_cache && window.smiles_cache[smiley] && attributes.src.match(/somethingawful\.com/)){
+							return '<img src="images/smilies/' + window.smiles_cache[smiley].filename + '" title="' + escape_html(smiley) + '" class="smiley">';
 						}
 					}
-					if(disable_images || force_disable_images === true) {
+					if(!force_enable_images && disable_images || force_enable_images && force_disable_images === true) {
 						attribute = attributes.src;
 						if(attributes.class && attributes.class.match(/smiley/)) return match;
 						content_id = generated_id_from_url(attribute);
@@ -454,14 +466,17 @@
 				};
 
 			// READ THIS FIRST
-			// i know parsing html as a string is stupid, but we need to parse it without attaching to the DOM (to prevent loading :nws: images for example)
+			// i know parsing html as a string is stupid, but we need to parse it
+			// without attaching to the DOM (to prevent loading :nws: images for example)
 			// most things are done in a DOM but some stuff needs to be done before that
 
 			html_string = html_string.replace(/<!--[\s\S]*?-->/g, '');
 			html_string = html_string.replace(/<body/g, '<new-body'); //because <body> would be filtered when setting innerHTML (because you can't have two in a page?), but a made-up tag like <new-body> won't be
 			html_string = html_string.replace(/<div class="threadbar bottom">[\s\S]*$/, '');
 			html_string = html_string.replace(/<ul class="postbuttons">[\s\S]*?<\/ul>/g, '');
-			html_string = html_string.replace(/<dd class="title">[\s\S]*?<\/dd>/g, '');
+			html_string = html_string.replace(/<script[\s\S]*?<\/script>/g, '');
+			html_string = html_string.replace(/<script[\s\S]*?>/g, '');
+			html_string = html_string.replace(/<dd class="title">([\s\S]*?)<\/dd>/g, '<dd class="title"><!-- $1 --></dd>');
 			html_string = html_string.replace(/<img[^>]*?>/gi, process_image);
 			html_string = html_string.replace(/<td class="postbody">[\s\S]*?<\/td>/g, check_for_nsfw);
 
@@ -493,7 +508,7 @@
 			});
 
 			html_string = html_string.replace(/<object[\s\S]*?\/object>/g, function(match){
-				if(!match.match(/vimeo\.com/)) return ""; // we don't want objects that we don't recognise in the page
+				if(!match.match(/vimeo\.com/)) return ""; // then erase, because we don't want objects that we don't recognise in the page
 				var video_id = match.substr(match.indexOf("clip_id=") + "clip_id=".length);
 				video_id = video_id.substr(0, video_id.indexOf("&")).replace(/[^0-9]/g, '');
 				return '<a class="video-player" target="_blank" href="http://vimeo.com/' + video_id + '"><img src="images/video.png" class="video_play_button"></a>';
@@ -537,11 +552,19 @@
 				} else {
 					post_id = undefined;
 				}
+
 				var registered = $(".registered", $post);
 				if(registered.length){
 					registered = registered[0].innerHTML;
 				} else {
 					registered = undefined;
+				}
+				var user_title = $("dd.title", $post);
+				if(user_title.length){
+					user_title = user_title[0].innerHTML.replace(/^<!--/, '').replace(/-->$/, '').replace(/<br>[\s]*?<br class="pb">/, '');
+					user_title = user_title.replace(/<br \/>[\s]*?<br \/>/g, '<br>');
+					console.log("user_title", user_title);
+					user_title = user_title.replace(/<img[^>]*?>/gi, user_title_images);
 				}
 				post = {
 					id: post_id,
@@ -551,6 +574,7 @@
 						name: $(".author", $post)[0].innerHTML,
 						user_id: get_param($(".user_jump", $post)[0].getAttribute("href"), "userid"),
 						registered: registered,
+						user_title: user_title
 					}
 				};
 				$lastseen = $(".lastseen", $post);
@@ -631,7 +655,7 @@
 			var nl2a = nodelist_to_array;
 			scope = scope || document;
 			if(!selector) { console.log("Empty selector"); console.trace(); }
-			if(selector.indexOf(" ") >= 0 || selector.indexOf("[") >= 0) return nl2a(scope.querySelectorAll(selector));
+			if(selector.indexOf(" ") >= 0 || selector.indexOf("[") >= 0 || selector.substr(1).indexOf(".") >= 0) return nl2a(scope.querySelectorAll(selector));
 			if(selector.substring(0,1) === "#") {
 				if(scope.getElementById === undefined) return nl2a(scope.querySelectorAll(selector)); //because only document has getElementById but all elements have querySelectorAll (I think)
 				return [scope.getElementById(selector.substring(1))];

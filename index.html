@@ -31,7 +31,7 @@
 				<div class="columnone">
 					<h1><img src="images/logo-blue-small.png" alt="Yarble Madness"></h1>
 					<div class="inner">
-						<p>in this app <b>you <span class="touch"> swipe </span> <span class="notouch"> use the arrow keys</span></b> to move through these 4 screens</p>
+						<p>in this app <b>you swipe <span class="notouch"> or use the arrow keys</span></b> to move through these 4 screens</p>
 						<table border="1" class="device">
 							<tr>
 								<td class="here">User<br><small>you are here</small></td>
@@ -40,8 +40,7 @@
 								<td>Thread</td>
 							</tr>
 						</table>
-						<p>so <span class="touch"> swipe more than about 100 pixels to confirm a valid swipe.</span>
-									  <span class="notouch"> use the arrow keys.</span>
+						<p>so swipe <span class="notouch"> or use the arrow keys.</span>
 							do it you dork</p>
 						<p>go that way &rarr;</p>
 						<p>&larr; don't go that way might be grues</p>
@@ -197,9 +196,14 @@
 				</ul>
 				<h2>{{title}}</h2>
 				{{#posts}}
-					<div class="post" id="post{{id}}">
-						{{{body}}}
-						<span class="user" data-user-id="{{user.user_id}}">by {{user.name}}</span>
+					<div class="post {{two-column-class}}" id="post{{id}}">
+						<div class="body">
+							{{{body}}}
+						</div>
+						<div class="head">
+							<span class="user" data-user-id="{{user.user_id}}"><span class="by-user">by</span> {{user.name}}</span> {{registered}}
+							<div class="user-title">{{{user.user_title}}}</div>
+						</div>
 					</div>
 				{{/posts}}
 				<ul class="pages">

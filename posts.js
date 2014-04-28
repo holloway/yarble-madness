@@ -41,9 +41,14 @@
         posts.page_number_is_bigger_than_1 = (posts.page_number > 1);
         
         posts.pages = [];
-        for(i = 1; i <= posts.last_page_number; i++){
+        for(i = 1; i <= posts.last_page_number; i++){ // i = 1 because page numbers start counting at 1
 			posts.pages.push({forum_id:posts.forum_id, thread_id:posts.thread_id, page_number:i, same_page: !!(posts.page_number === i), same_page_option_selection: !!(posts.page_number === i) ? 'selected="selected"' : ""});
         }
+        if(window.disable_images){
+			for(i = 0; i < posts.posts.length; i++){
+				posts.posts[i].user.user_title = "";
+			}
+		}
         $posts.innerHTML = posts_template(posts);
         //post processing
         $imgs = $("img", $posts);
@@ -91,7 +96,12 @@
 			if($img.classList.contains("width-set")) continue;
 			$img.style.width = "auto";
 			if($img.offsetWidth > 6){ //then it's been loaded...6px because offsetWidth can include borders which means the image could still not be loaded but register a width of greater-than zero. So 6px is just an arbitrary choice bigger than someone might choose for a border (e.g. 3px each horizontal side)
-				$img.style.maxWidth = $img.offsetWidth + "px";
+				if($img.classList.contains("user-title")){
+					var shrink_user_profile_images_by = (window.devicePixelRatio && window.devicePixelRatio > 1) ? window.devicePixelRatio : 2;
+					$img.style.maxWidth = ($img.offsetWidth / shrink_user_profile_images_by) + "px";
+				} else {
+					$img.style.maxWidth = $img.offsetWidth + "px";
+				}
 				$img.classList.add("width-set");
 			}
 			$img.style.width = "";

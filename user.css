@@ -36,6 +36,7 @@
 	padding: 0.5em 0px;
 	border: solid 1px #ddd;
 	border-radius: none;
+	font-size:inherit;
 }
 
 #user #options a,

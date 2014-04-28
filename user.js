@@ -11,12 +11,13 @@
 		user,
 		last_login_attempt_username,
 		CONSTANTS = {
-			user_storage_key: "yarble:user",
-			first_time_key:   "yarble:first-time-user",
+			user_storage_key:   "yarble:user",
+			first_time_key:     "yarble:first-time-user",
 			download_on_mobile: "yarble:download-when-on-3g4g"
 		},
 		disable_images_on_3g4g_button_state = false,
 		$do_mobile_download,
+		connection = navigator.connection || navigator.webkitConnection,
 		$ = yarble.utils.$,
 		init = function(){
 			$user = $("#user")[0];
@@ -37,8 +38,9 @@
 			$do_mobile_download = $("#mobiledownload")[0];
 			$do_mobile_download.addEventListener("click", toggle_mobile_download, true);
 			disable_images_on_3g4g_button_state = window.localStorage.getItem(CONSTANTS.download_on_mobile) ? !!JSON.parse(window.localStorage.getItem(CONSTANTS.download_on_mobile)) : false;
-			
 			update_mobile_download();
+			if(connection) connection.addEventListener('typechange', update_mobile_download); //Note: 'typechange' is a network connection change https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API
+			setTimeout(update_mobile_download, 500);
 		};
 
 	var toggle_mobile_download = function(event){
@@ -50,15 +52,17 @@
 		var yarble = window.yarble || {};
 		window.yarble = yarble;
 		yarble.disable_images = false;
-		if(disable_images_on_3g4g_button_state){
-			if(navigator.connection && navigator.connection.type){ // potentially phonegap app
-				var states = {};
-				alert(navigator.connection.type);
-				alert(Connection);
+		//alert(navigator.connection.type);
+		if(!disable_images_on_3g4g_button_state){
+			if(connection){ // potentially phonegap app
+				var connection_type = connection.type;
+				if(connection_type === undefined && navigator.network && navigator.network.connection){
+					connection_type = navigator.network.connection.type;
+				}
+				yarble.disable_images = (connection_type >= 3); // 0 = unknown but connected. 1,2 = ethernet,wifi. 3,4,5,6 = 2g/3g/4g/cell. 7 = none. so >= 3 seems ok to detect cell connections, or lack of connections 
 			}
 		}
 		window.localStorage.setItem(CONSTANTS.download_on_mobile, disable_images_on_3g4g_button_state);
-		
 		if(disable_images_on_3g4g_button_state){
 			$do_mobile_download.classList.add("on");
 			$do_mobile_download.classList.remove("off");

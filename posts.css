@@ -10,6 +10,10 @@
 	font-size:small;
 }
 
+#posts .post .user-title {
+	font-size: xx-small;
+}
+
 #posts h1 {
 	border-bottom: solid 1px #ccc;
 }
@@ -178,5 +182,38 @@ a.video-player img {
 
 	#posts .posts {
 		padding-top:3em;
+	}
+
+	#posts .post {
+		clear:both;
+		display: -webkit-flex;
+	    -webkit-flex-direction: row-reverse;
+	    display: flex;
+	    flex-direction: row-reverse;
+	}
+
+	#posts .post > .head {
+		flex: 0 0 80px;
+		-webkit-flex: 0 0 90px;
+		overflow:hidden;
+	}
+
+	#posts .post > .body {
+		flex: 1;
+		-webkit-flex: 1;
+		padding-left:10px;
+	}
+
+	#posts .post > .head .by-user {
+		display: none;
+	}
+
+	#posts .post > .head .user {
+		margin-bottom: 10px;
+	}
+
+	#posts .post > .head .user,
+	#posts .post > .head .bbc-center {
+		text-align:center;
 	}
 }

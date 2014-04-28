@@ -9,6 +9,7 @@
         CONSTANTS = {pageflip_hashstate: 'yarble:pageflip:hashstate'},
         pages_hashstate = {},
         index = 0,
+        is_android = navigator.userAgent.match(/Android/i),
         $pages;
 
     var init = function(){
@@ -84,6 +85,10 @@
         if(event.touches.length !== 1) return;
         drag_distance.x = drag_start.x - event.touches[0].clientX;
         drag_distance.y = drag_start.y - event.touches[0].clientY;
+
+        if(is_android){ // http://uihacker.blogspot.tw/2011/01/android-touchmove-event-bug.html
+            event.preventDefault();
+        }
     };
 
     var touch_end = function(event){
@@ -104,11 +109,16 @@
     };
 
     var move_to_page = function(index, hashstate, update_url_hashstate){
+        var page_id = page_id_by_index[index];
         if(update_url_hashstate === undefined) {
             update_url_hashstate = true;
         }
         if(hashstate === undefined) {
-            hashstate = pages_hashstate[page_id_by_index[index]] ? pages_hashstate[page_id_by_index[index]] : page_id_by_index[index];
+            hashstate = pages_hashstate[page_id] ? pages_hashstate[page_id] : page_id_by_index[index];
+            if(hashstate && hashstate.substr(0, page_id.length + 1) !== page_id + "/") {
+                console.log("Resetting pagestate");
+                pages_hashstate[page_id] = page_id;
+            }
         }
         if(!$pages.length) return index;
         index = Math.max(Math.min(index, $pages.length - 1), 0);
@@ -119,7 +129,7 @@
         $pages.slice(index + 1).map(function(element){
             element.className = 'after';
         });
-        if(update_url_hashstate){
+        if(update_url_hashstate && hashstate){
             set_hash_state(hashstate);
         }
         if(hashstate){
