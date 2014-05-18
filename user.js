@@ -30,17 +30,20 @@
 			$logout_button = $("button", $options)[0];
 			user = window.localStorage.getItem(CONSTANTS.user_storage_key);
 			$logout_button.addEventListener("click", logout, true);
-			if(!user) {
-				yarble.utils.event.trigger("yarble:change-page-id", "user");
-			} else {
-				yarble.utils.event.trigger("yarble:change-page-id", "forums");
-			}
+			if(user) window.location.hash = "forums";
 			$do_mobile_download = $("#mobiledownload")[0];
 			$do_mobile_download.addEventListener("click", toggle_mobile_download, true);
 			disable_images_on_3g4g_button_state = window.localStorage.getItem(CONSTANTS.download_on_mobile) ? !!JSON.parse(window.localStorage.getItem(CONSTANTS.download_on_mobile)) : false;
 			update_mobile_download();
 			if(connection) connection.addEventListener('typechange', update_mobile_download); //Note: 'typechange' is a network connection change https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API
 			setTimeout(update_mobile_download, 500);
+			change_user();
+		},
+		change_user = function(){
+			if(!$user) init();
+			user = window.localStorage.getItem(CONSTANTS.user_storage_key);
+			$login.style.display =    user ? "none" : "block";
+			$options.style.display = !user ? "none" : "block";
 		};
 
 	var toggle_mobile_download = function(event){
@@ -52,7 +55,6 @@
 		var yarble = window.yarble || {};
 		window.yarble = yarble;
 		yarble.disable_images = false;
-		//alert(navigator.connection.type);
 		if(!disable_images_on_3g4g_button_state){
 			if(connection){ // potentially phonegap app
 				var connection_type = connection.type;
@@ -71,15 +73,8 @@
 			$do_mobile_download.classList.remove("on");
 		}
 	};
-	
-	document.addEventListener(init_event_id, init);
 
-    window.yarble.utils.event.on("yarble:page-change:user", function(){
-		if(!$user) init();
-		user = window.localStorage.getItem(CONSTANTS.user_storage_key);
-		$login.style.display =    user ? "none" : "block";
-		$options.style.display = !user ? "none" : "block";
-    });
+    window.yarble.utils.event.on("yarble:page-change:user", change_user);
 
     var login = function(){
 		$("button", $login)[0].classList.add("loading");
@@ -95,12 +90,11 @@
 		$("button", $login)[0].classList.remove("loading");
 		if(success) {
 			window.localStorage.setItem(CONSTANTS.user_storage_key, last_login_attempt_username);
-			window.yarble.utils.event.trigger("yarble:page-update:forums", sa.response_parse.forums(this.responseText));
 			if(!window.localStorage.getItem(CONSTANTS.first_time_key)){
 				window.localStorage.setItem(CONSTANTS.first_time_key, false);
-				window.yarble.utils.event.trigger("yarble:change-page-id", "user");
+				change_user();
 			} else {
-				window.yarble.utils.event.trigger("yarble:change-page-id", "forums");
+				window.location.hash = "forums";
 			}
 		} else {
 			console.log("Can't login. If it's the correct username/password then a common error is that the browser has 3rd-party cookies disabled, so when it redirects from account.php to '/'' the cookies set in 'account.php' do not persist to '/' ");
@@ -126,6 +120,8 @@
 			alert("Unable to logout. I don't know why. Weird.");
 		}
 	};
+
+	document.addEventListener(init_event_id, init);
 
 }());
 

@@ -6,6 +6,7 @@
 	window.yarble = window.yarble || {};
 
 	window.yarble.utils = {
+        is_touch_device: 'ontouchstart' in document.documentElement,
         event: {
             bindings: {},
             on: function(name, callback){

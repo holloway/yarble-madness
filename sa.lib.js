@@ -152,9 +152,8 @@
 			var args = arguments;
 			if(this.readyState !== 4) return;
 			if(this.status !== 200 && this.status !== 302) {
-				console.log("sa.js: Error response", this, this.responseText);
-				if(this.status !== 0) alert(this.status);
-				return;
+				//console.log("sa.js: Error response", this, this.responseText);
+				if(this.status === 0) return;
 			}
 			response_filters.scrape_useful_stuff(this.responseText);
 			return fn.apply(this, args);
@@ -167,7 +166,7 @@
 				var $div = document.createElement("div"),
 					success;
 				
-				success = this.responseText.match(/Log Out/g);
+				success = !!this.responseText.match(/Log Out/g);
 				return fn.apply(this, [success]);
 			};
 		},
@@ -190,7 +189,7 @@
 					success = false,
 					innerHTML;
 
-				$div.innerHTML = remove_external_resources(this.responseText);
+				$div.innerHTML = response_filters.remove_external_resources(this.responseText);
 				$content = $("#content", $div);
 				if($content.length) {
 					innerHTML = $("#content", $div)[0].innerHTML;
@@ -563,7 +562,6 @@
 				if(user_title.length){
 					user_title = user_title[0].innerHTML.replace(/^<!--/, '').replace(/-->$/, '').replace(/<br>[\s]*?<br class="pb">/, '');
 					user_title = user_title.replace(/<br \/>[\s]*?<br \/>/g, '<br>');
-					console.log("user_title", user_title);
 					user_title = user_title.replace(/<img[^>]*?>/gi, user_title_images);
 				}
 				post = {

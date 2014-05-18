@@ -1,9 +1,9 @@
-#threads {
+#forum {
     background: #eee;
 }
 
-#threads .flex > span.posticon, 
-#threads button {
+#forum .flex > span.posticon, 
+#forum button {
 	font-size:inherit;
     width:100%;
     margin: 0px;
@@ -15,13 +15,13 @@
     border-bottom: solid 1px #aaaaaa;
 }
 
-#threads .flex > span.posticon {
+#forum .flex > span.posticon {
 	border: none;
     border-bottom: solid 1px #aaaaaa;
     background: #dddddd;
 }
 
-#threads button {
+#forum button {
 	border-top: none;
     border-left: none;
     border-right: solid 1px #aaaaaa;
@@ -29,17 +29,17 @@
     background: #eeeeee;
 }
 
-#threads button.type_announcement {
+#forum button.type_announcement {
     background: yellow;
     font-weight:bold;
 }
 
-#threads button .user {
+#forum button .user {
     color: #666;
     font-size: smaller;
 }
 
-#threads .flex {
+#forum .flex {
 	clear:both;
 	display: -webkit-flex;
     -webkit-flex-direction: row;
@@ -47,30 +47,30 @@
     flex-direction: row;
 }
 
-#threads .flex > span.posticon,
-#threads .flex > button.lastpost,
-#threads .flex > button.newpost {
+#forum .flex > span.posticon,
+#forum .flex > button.lastpost,
+#forum .flex > button.newpost {
  	padding: 0.5em 0px;
     text-align:center;
 	vertical-align:top;
 }
 
-#threads .flex > span.posticon {
+#forum .flex > span.posticon {
 	flex: 0 0 70px;
 	-webkit-flex: 0 0 70px;
 }
 
-#threads .flex > button.lastpost {
+#forum .flex > button.lastpost {
 	flex: 0 0 3em;
 	-webkit-flex: 0 0 3em;
 }
 
-#threads .flex > button.newpost {
+#forum .flex > button.newpost {
 	flex: 0 0 5em;
 	-webkit-flex: 0 0 5em;
 }
 
-#threads .pages {
+#forum .pages {
 	margin: 0px;
 	padding: 0px;
 	height:3em;
@@ -81,7 +81,7 @@
 	border-bottom: solid 1px #999999;
 }
 
-	#threads .pages li {
+	#forum .pages li {
 		float:left;
 		height: 3em;
 		border: solid 1px #ccc;
@@ -89,7 +89,7 @@
 		text-align:center;
 	}
 
-	#threads .pages select {
+	#forum .pages select {
 		font-size:inherit;
 		height: 3em;
 		text-align:center;
@@ -99,18 +99,18 @@
 		font-family: inherit;
 	}
 
-	#threads .pages select option {
+	#forum .pages select option {
 		text-align:center;
 		font-size:inherit;
 		color: inherit;
 		font-family: inherit;
 	}
 
-	#threads .pages li.same_page {
+	#forum .pages li.same_page {
 		background: #ddd;
 	}
 
-	#threads .pages li a {
+	#forum .pages li a {
 		display: inline-block;
 		height: 2em;
 		text-align:center;
@@ -119,26 +119,26 @@
 		color: #333;
 	}
 
-	#threads .pages li.goto-next-page,
-	#threads .pages li.goto-last-page {
+	#forum .pages li.goto-next-page,
+	#forum .pages li.goto-last-page {
 		float:right;
 	}
 
-	#threads .pages li.goto-previous-page,
-	#threads .pages li.goto-first-page {
+	#forum .pages li.goto-previous-page,
+	#forum .pages li.goto-first-page {
 		float:left;
 	}
 
 
 @media (min-width: 700px) {
 
-	#threads .pages.top-pages {
+	#forum .pages.top-pages {
 		position:fixed;
 		top:0px;
 		width:100%;
 	}
 
-	#threads .threads {
+	#forum .threads {
 		padding-top:3em;
 	}
 

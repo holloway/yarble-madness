@@ -1,43 +1,43 @@
-#posts .post {
+#thread .post {
 	padding: 1em;
 	overflow:hidden;
 	border-bottom: solid 1px #ddd;
 }
 
-#posts .post .user {
+#thread .post .user {
 	display: block;
 	text-align:left;
 	font-size:small;
 }
 
-#posts .post .user-title {
+#thread .post .user-title {
 	font-size: xx-small;
 }
 
-#posts h1 {
+#thread h1 {
 	border-bottom: solid 1px #ccc;
 }
 
-#posts h4 {
+#thread h4 {
 	padding: 0px;
 	margin: 0px 0px 0.5em 0px;
 }
 
-#posts h4,
-#posts h4 a.quote_link {
+#thread h4,
+#thread h4 a.quote_link {
 	text-align:left;
 	color: #000;
 	font-size:small;
 	text-decoration:none;
 }
 
-#posts .editedby {
+#thread .editedby {
 	margin-top:1em;
 	text-align:left;
 	font-size:x-small;
 }
 
-#posts .bbc-block {
+#thread .bbc-block {
 	margin-left: 2em;
 	padding: 1em;
 	background: #eeeeee;
@@ -45,12 +45,12 @@
 	margin-bottom: 1em;
 }
 
-#posts .bbc-block blockquote {
+#thread .bbc-block blockquote {
 	margin: 0px;
 	padding: 0px;
 }
 
-#posts .bbc-spoiler {
+#thread .bbc-spoiler {
 	border: solid 1px red;
 	color: transparent;
 	display: inline-block;
@@ -58,25 +58,25 @@
 	min-width: 230px;
 	min-height: 50px;
 }
-	#posts .bbc-spoiler * {
+	#thread .bbc-spoiler * {
 		display: none;
 	}
 
-	#posts .bbc-spoiler.on {
+	#thread .bbc-spoiler.on {
 		background: none;
 		color: black;
 	}
 
-	#posts .bbc-spoiler.on * {
+	#thread .bbc-spoiler.on * {
 		display: inline-block;
 	}
 
-	#posts .bbc-spoiler img,
-	#posts .bbc-spoiler button {
+	#thread .bbc-spoiler img,
+	#thread .bbc-spoiler button {
 		border: solid 1px red;
 	}
 
-#posts .video-player {
+#thread .video-player {
 	display: inline-block;
 	text-align:center;
 	background-position: center center;
@@ -84,16 +84,16 @@
 	background-color: #000;
 }
 
-#posts .video-player img {
+#thread .video-player img {
 	width: 100%;
 	max-width:480px;
 }
 
-#posts img.timg {
+#thread img.timg {
 	width: 120px;
 }
 
-#posts img.img {
+#thread img.img {
 	width: 100%;
 }
 
@@ -106,13 +106,13 @@ a.video-player img {
 	border: none;
 }
 
-#posts h2 {
+#thread h2 {
 	padding: 0.3em 5px 0.4em 5px;
 	margin: 0px;
 	border-bottom: solid 1px #999999;
 }
 
-#posts .pages {
+#thread .pages {
 	margin: 0px;
 	padding: 0px;
 	height:3em;
@@ -123,7 +123,7 @@ a.video-player img {
 	border-bottom: solid 1px #999999;
 }
 
-	#posts .pages li {
+	#thread .pages li {
 		float:left;
 		height: 3em;
 		border: solid 1px #ccc;
@@ -131,7 +131,7 @@ a.video-player img {
 		text-align:center;
 	}
 
-	#posts .pages select {
+	#thread .pages select {
 		font-size:inherit;
 		height: 3em;
 		text-align:center;
@@ -141,18 +141,18 @@ a.video-player img {
 		font-family: inherit;
 	}
 
-	#posts .pages select option {
+	#thread .pages select option {
 		text-align:center;
 		font-size:inherit;
 		color: inherit;
 		font-family: inherit;
 	}
 
-	#posts .pages li.same_page {
+	#thread .pages li.same_page {
 		background: #ddd;
 	}
 
-	#posts .pages li a {
+	#thread .pages li a {
 		display: inline-block;
 		height: 2em;
 		text-align:center;
@@ -161,30 +161,30 @@ a.video-player img {
 		color: #333;
 	}
 
-	#posts .pages li.goto-next-page,
-	#posts .pages li.goto-last-page {
+	#thread .pages li.goto-next-page,
+	#thread .pages li.goto-last-page {
 		float:right;
 	}
 
-	#posts .pages li.goto-previous-page,
-	#posts .pages li.goto-first-page {
+	#thread .pages li.goto-previous-page,
+	#thread .pages li.goto-first-page {
 		float:left;
 	}
 
 
 @media (min-width: 700px) {
 
-	#posts .pages.top-pages {
+	#thread .pages.top-pages {
 		position:fixed;
 		top:0px;
 		width:100%;
 	}
 
-	#posts .posts {
+	#thread .posts {
 		padding-top:3em;
 	}
 
-	#posts .post {
+	#thread .post {
 		clear:both;
 		display: -webkit-flex;
 	    -webkit-flex-direction: row-reverse;
@@ -192,28 +192,28 @@ a.video-player img {
 	    flex-direction: row-reverse;
 	}
 
-	#posts .post > .head {
+	#thread .post > .head {
 		flex: 0 0 80px;
 		-webkit-flex: 0 0 90px;
 		overflow:hidden;
 	}
 
-	#posts .post > .body {
+	#thread .post > .body {
 		flex: 1;
 		-webkit-flex: 1;
 		padding-left:10px;
 	}
 
-	#posts .post > .head .by-user {
+	#thread .post > .head .by-user {
 		display: none;
 	}
 
-	#posts .post > .head .user {
+	#thread .post > .head .user {
 		margin-bottom: 10px;
 	}
 
-	#posts .post > .head .user,
-	#posts .post > .head .bbc-center {
+	#thread .post > .head .user,
+	#thread .post > .head .bbc-center {
 		text-align:center;
 	}
 }

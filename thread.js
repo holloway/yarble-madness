@@ -5,7 +5,7 @@
             posts_cache_key: "yarble:page:posts:html"
         },
         $ = yarble.utils.$,
-        $posts,
+        $thread,
         $title,
         current,
         posts_template,
@@ -49,19 +49,17 @@
 				posts.posts[i].user.user_title = "";
 			}
 		}
-        $posts.innerHTML = posts_template(posts);
+        $thread.innerHTML = posts_template(posts);
         //post processing
-        $imgs = $("img", $posts);
+        $imgs = $("img", $thread);
         resize_images_if_necessary($imgs);
 		for(i = 0; i < $imgs.length; i++){
 			$imgs[i].addEventListener("load", resize_image_if_necessary);
 		}
-		var hashstate = window.get_hash_state();
-        if(hashstate && hashstate.length === 5) { //then there's a postid in the url that we should scroll to
-			scroll_to_post(hashstate[4]);
-        } else {
-			window.scrollTo(0, 0); // any change should scroll to top
-        }
+		//var hashstate = window.get_hash_state();
+        //if(hashstate && hashstate.length === 5) { //then there's a postid in the url that we should scroll to
+		//	scroll_to_post(hashstate[4]);
+        //}
         adjust_page_selection_width();
     };
 
@@ -71,7 +69,7 @@
     };
 
     var scroll_to_post = function(post_id) { // assumed to be in the current page
-		var $post = $("#post" + post_id, $posts);
+		var $post = $("#post" + post_id, $thread);
 		if($post.length === 1) {
 			var from_top = window.scrollY + parseInt($post[0].getBoundingClientRect().top, 10);
 			if(!isNaN(from_top)) {
@@ -84,13 +82,12 @@
 		}
 	};
 
-	window.yarble.utils.event.on("yarble:page-update:posts", posts_response);
-
 	var resize_images_if_necessary = function($imgs){
+		if(!current) return;
 		if(current.last_resize + (allow_resize_after_seconds * 1000) > Date.now()) return;
 		var	$img,
 			screen_width = window.innerWidth - screen_width_buffer_pixels;
-		if(!$imgs) $imgs = $("img", $posts);
+		if(!$imgs) $imgs = $("img", $thread);
 		for(var i = 0; i < $imgs.length; i++){
 			$img = $imgs[i];
 			if($img.classList.contains("width-set")) continue;
@@ -134,7 +131,7 @@
 		} else if(event.target.nodeName.toLowerCase() === "a" && event.target.classList.contains("quote_link")){
 			var href = event.target.getAttribute("href");
 			var post_id = yarble.utils.get_param(href, "postid");
-			var $post = $("#post" + post_id, $posts);
+			var $post = $("#post" + post_id, $thread);
 			if($post.length === 1) {
 				scroll_to_post(post_id);
 			} else {
@@ -148,7 +145,7 @@
 		if(current.forum_id === forum_id && current.thread_id === thread_id && current.page_number === page_number) {
 			scroll_to_post(post_id);
 		} else {
-			window.set_hash_state("posts/" + forum_id + "/" + thread_id + "/" + page_number + "/" + post_id);
+			window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + page_number + "/" + post_id;
 		}
 	};
 
@@ -181,17 +178,17 @@
 	};
 
 	var select_change = function(event){
-		window.set_hash_state(event.target.value);
+		window.location.hash = event.target.value;
 	};
 
 	var init = function(){
 		window.addEventListener("resize", resize_images_if_necessary);
 		window.addEventListener("orientationchange", resize_images_if_necessary);
 		window.addEventListener("hashchange", hash_change, false);
-		$posts = $("#posts")[0];
+		$thread = $("#thread")[0];
 		$title = $("title")[0];
-        $posts.addEventListener("click", click_button, false);
-        $posts.addEventListener("change", select_change, false);
+        $thread.addEventListener("click", click_button, false);
+        $thread.addEventListener("change", select_change, false);
         rebind_posts();
 	};
 
@@ -199,23 +196,23 @@
    
     var adjust_page_selection_width = function(event){
 		var i;
-		var $top_pages = $(".pages", $posts)[0]; //because there are two in a page, one at the top, one at the bottom
+		var $top_pages = $(".pages", $thread)[0]; //because there are two in a page, one at the top, one at the bottom
 		var remaining_width = $top_pages.offsetWidth;
 		var $not_selects = $(".not-select", $top_pages);
 		for(i = 0; i < $not_selects.length; i++){
 			remaining_width -= $not_selects[i].offsetWidth;
 		}
 		remaining_width -= 4;
-		var $selects = $(".pages select", $posts);
+		var $selects = $(".pages select", $thread);
 		for(i = 0; i < $selects.length; i++){
 			$selects[i].style.width = remaining_width + "px";
 		}
     };
 
     var hash_change = function(){
-        var hashstate = window.get_hash_state();
+        var hashstate = window.location.hash.replace(/^#/, '').split("/");
         if(hashstate.length < 2) return;
-        if(hashstate[0] !== "posts") return;
+        if(hashstate[0] !== "thread") return;
         var hashstate_forum_id = parseInt(hashstate[1], 10),
 			hashstate_thread_id = hashstate[2],
             hashstate_page_number = 1;

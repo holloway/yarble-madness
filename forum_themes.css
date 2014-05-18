@@ -15,52 +15,52 @@
 /* DOWN IN THE 219 yoSPOs */
 
 .forum_219 a,
-#posts .forum_219 h4,
-#posts .forum_219 h4 .quote_link {
+#thread .forum_219 h4,
+#thread .forum_219 h4 .quote_link {
     color: #cfc;
 }
 
-#threads .forum_219 button.type_announcement {
+#forum .forum_219 button.type_announcement {
     background: #363;
     color: #cfc;
 }
 
-#threads .forum_219 button.type_announcement .user {
+#forum .forum_219 button.type_announcement .user {
     color: #9c9;
 }
 
-#posts .forum_219 .pages li.same_page,
-#threads .forum_219 .pages li.same_page {
+#thread .forum_219 .pages li.same_page,
+#forum .forum_219 .pages li.same_page {
     background: #696;
 }
 
-#posts .forum_219 .bbc-spoiler.on {
+#thread .forum_219 .bbc-spoiler.on {
     color: #cfc;
 }
 
-#posts .forum_219 h2 {
+#thread .forum_219 h2 {
     border-bottom: solid 1px #cfc;
     padding-bottom: 0.5em;
 }
 
-#threads .forum_219 .pages,
-#threads .forum_219 .pages a,
-#threads .forum_219 .pages select,
-#threads .forum_219 .pages select option,
-#posts .forum_219 .pages,
-#posts .forum_219 .pages a,
-#posts .forum_219 .pages select,
-#posts .forum_219 .pages select option  {
+#forum .forum_219 .pages,
+#forum .forum_219 .pages a,
+#forum .forum_219 .pages select,
+#forum .forum_219 .pages select option,
+#thread .forum_219 .pages,
+#thread .forum_219 .pages a,
+#thread .forum_219 .pages select,
+#thread .forum_219 .pages select option  {
     color: #cfc;
     background: #030;
 }
 
-#threads .forum_219 .flex span.posticon,
+#forum .forum_219 .flex span.posticon,
 #forums button.forum_219,
-#threads .forum_219,
-#threads .forum_219 button,
-#posts .forum_219,
-#posts .forum_219 button {
+#forum .forum_219,
+#forum .forum_219 button,
+#thread .forum_219,
+#thread .forum_219 button {
     background: black;
     color: #9f9;
     border-color: #696;
@@ -68,11 +68,11 @@
 
 
 
-#threads .forum_219 button .user {
+#forum .forum_219 button .user {
     color: #393;
 }
 
-#posts .forum_219 .post,
+#thread .forum_219 .post,
 .forum_219 .post {
     border-bottom: solid 1px green;
 }
@@ -81,7 +81,7 @@
     background: #010;
 }
 
-#posts .forum_219 .bbc-block,
+#thread .forum_219 .bbc-block,
 .forum_219 .bbc-block {
     border: solid 1px green;
     background: #121;
@@ -109,7 +109,7 @@
     
 }
 
-#posts .forum_268 .bbc-block,
+#thread .forum_268 .bbc-block,
 .forum_268 .bbc-block {
     background: #dde;
     border: solid 1px #bbe;
@@ -119,11 +119,11 @@
     color: #606;
 }
 
-#posts .forum_268 .post {
+#thread .forum_268 .post {
     border-bottom: solid 1px #99c;
 }
 
-#posts .forum_268 .post:nth-child(2) {
+#thread .forum_268 .post:nth-child(2) {
     padding-top:150px;
 }
 

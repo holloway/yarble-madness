@@ -5,7 +5,7 @@
             threads_cache_key: "yarble:page:threads:html"
         },
         $ = yarble.utils.$,
-        $threads,
+        $forum,
         current,
         threads,
         threads_template,
@@ -47,9 +47,8 @@
             threads_template_string = $("#threads-template")[0].innerHTML;
             threads_template = Handlebars.compile(threads_template_string);
         }
-        $threads.innerHTML = threads_template(threads);
+        $forum.innerHTML = threads_template(threads);
         adjust_page_selection_width();
-        window.scrollTo(0, 0); // any change should scrollTo
     };
 
     var threads_response = function(threads){
@@ -62,13 +61,12 @@
     };
 
     var init = function(event){
-        window.yarble.utils.event.on("yarble:page-update:threads", threads_response);
         window.addEventListener("resize", adjust_page_selection_width);
         window.addEventListener("orientationchange", adjust_page_selection_width);
         window.addEventListener("hashchange", hash_change, false);
-        $threads = $("#threads")[0];
-        $threads.addEventListener("click", click_button, false);
-        $threads.addEventListener("change", select_change, false);
+        $forum = $("#forum")[0];
+        $forum.addEventListener("click", click_button, false);
+        $forum.addEventListener("change", select_change, false);
         rebind_threads();
     };
 
@@ -82,7 +80,7 @@
 
         if(target.classList.contains("firstpost")){
             thread_id = target.getAttribute("data-thread-id");
-            sa.posts(current.forum_id, thread_id, 1, true, window.yarble.disable_images, posts_response);
+            window.location.hash = "thread/" + current.forum_id + "/" + thread_id + "/1";
         } else if(target.classList.contains("newpost")) {
             thread_id = target.getAttribute("data-thread-id");
             sa.newpost(thread_id, newpost_response);
@@ -93,22 +91,19 @@
     };
 
     var posts_response = function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
-        window.yarble.utils.event.trigger("yarble:page-update:posts", response, forum_id, thread_id, page_number, used_local_smilies, disabled_images);
-        window.yarble.utils.event.trigger("yarble:change-page-id", "posts/" + forum_id + "/" + thread_id + "/" + page_number);
+        
     };
 
     var lastpost_response = function(forum_id, thread_id, last_page_number){
-        //TODO: replace this with a preload approach like posts_response
-        window.set_hash_state("posts/" + forum_id + "/" + thread_id + "/" + last_page_number);
+        window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + last_page_number;
     };
 
     var newpost_response = function(forum_id, thread_id, new_page_number){
-        //TODO: replace this with a preload approach like posts_response
         window.set_hash_state("posts/" + forum_id + "/" + thread_id + "/" + new_page_number);
     };
 
     var hash_change = function(){
-        var hashstate = window.get_hash_state();
+        var hashstate = window.location.hash.replace(/^#/, '').split("/");
         if(hashstate.length < 2) return;
         if(hashstate[0] !== "threads") return;
         var hashstate_forum_id = hashstate[1],
@@ -123,19 +118,18 @@
 
     var adjust_page_selection_width = function(event){
         var i;
-        var $top_pages = $(".pages", $threads)[0]; //because there are two in a page, one at the top, one at the bottom
+        var $top_pages = $(".pages", $forum)[0]; //because there are two in a page, one at the top, one at the bottom
+        if(!$top_pages) return;
         var remaining_width = $top_pages.offsetWidth;
         var $not_selects = $(".not-select", $top_pages);
         for(i = 0; i < $not_selects.length; i++){
             remaining_width -= $not_selects[i].offsetWidth;
         }
         remaining_width -= 4;
-        var $selects = $(".pages select", $threads);
+        var $selects = $(".pages select", $forum);
         for(i = 0; i < $selects.length; i++){
             $selects[i].style.width = remaining_width + "px";
         }
-    };
-
-    
+    };    
 
 }());
