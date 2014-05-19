@@ -2,58 +2,59 @@
 	"use strict";
 
     var CONSTANTS = {
-            threads_cache_key: "yarble:page:threads:html"
+            forum_cache_key: "yarble:page:forum:html"
         },
         $ = yarble.utils.$,
         $forum,
         current,
-        threads,
-        threads_template,
+        forum,
+        forum_template,
         allow_reloads_after_seconds = 10;
 
-    var rebind_threads = function(threads){
-        var threads_template_string,
+    var rebind_forum = function(forum){
+        var forum_template_string,
             thread,
             i;
 
-        if(threads === undefined) {
-            threads = JSON.parse(localStorage.getItem(CONSTANTS.threads_cache_key));
+        if(forum === undefined) {
+            forum = JSON.parse(localStorage.getItem(CONSTANTS.forum_cache_key));
         } else {
-            threads = JSON.parse(JSON.stringify(threads)); // we'll clone it http://stackoverflow.com/a/5344074 so that our modifications (such as copying into .column1 and .column2) don't accidentally leak back to the localStorage copy or any other version
+            forum = JSON.parse(JSON.stringify(forum)); // we'll clone it http://stackoverflow.com/a/5344074 so that our modifications (such as copying into .column1 and .column2) don't accidentally leak back to the localStorage copy or any other version
         }
-        if(!threads) return;
+        if(!forum) return;
         current = {};
-        current.forum_id = threads.forum_id;
-        current.page_number = threads.page_number;
+        current.forum_id = parseInt(forum.forum_id, 10);
+        current.page_number = forum.page_number;
         current.when = Date.now();
-        threads.pages = [];
-        for(i = 1; i <= threads.last_page_number; i++){ //starting at 1 because page counts start from 1 (obv)
-            threads.pages.push({forum_id:threads.forum_id, page_number:i, same_page: !!(threads.page_number === i), same_page_option_selection: !!(threads.page_number === i) ? 'selected="selected"' : ""});
+        forum.pages = [];
+        for(i = 1; i <= forum.last_page_number; i++){ //starting at 1 because page counts start from 1 (obv)
+            forum.pages.push({forum_id:forum.forum_id, page_number:i, same_page: !!(forum.page_number === i), same_page_option_selection: !!(forum.page_number === i) ? 'selected="selected"' : ""});
         }
-        for(i = 0; i < threads.threads.length; i++){
-            thread = threads.threads[i];
+        for(i = 0; i < forum.forum.length; i++){
+            thread = forum.forum[i];
             if(thread.posticon && posticons_cache[thread.posticon]) {
                 thread.has_posticon_url = true;
                 thread.posticon_url = "images/posticons/" + posticons_cache[thread.posticon].filename;
             }
         }
-        threads.previous_page_number = threads.page_number - 1;
-        threads.next_page_number = threads.page_number + 1;
-        threads.last_page_number = threads.last_page_number;
-        if(threads.previous_page_number < 1) threads.previous_page_number = 1;
-        if(threads.next_page_number > threads.last_page_number) threads.next_page_number = threads.last_page_number;
+        forum.previous_page_number = forum.page_number - 1;
+        forum.next_page_number = forum.page_number + 1;
+        forum.last_page_number = forum.last_page_number;
+        if(forum.previous_page_number < 1) forum.previous_page_number = 1;
+        if(forum.next_page_number > forum.last_page_number) forum.next_page_number = forum.last_page_number;
 
-        if(!threads_template){
-            threads_template_string = $("#threads-template")[0].innerHTML;
-            threads_template = Handlebars.compile(threads_template_string);
+        if(!forum_template){
+            forum_template_string = $("#forum-template")[0].innerHTML;
+            forum_template = Handlebars.compile(forum_template_string);
         }
-        $forum.innerHTML = threads_template(threads);
+        $forum.innerHTML = forum_template(forum);
         adjust_page_selection_width();
     };
 
-    var threads_response = function(threads){
-        rebind_threads(threads);
-        localStorage.setItem(CONSTANTS.threads_cache_key, JSON.stringify(threads));
+    var forum_response = function(forum){
+        loading_off();
+        rebind_forum(forum);
+        localStorage.setItem(CONSTANTS.forum_cache_key, JSON.stringify(forum));
     };
 
     var select_change = function(event){
@@ -67,7 +68,7 @@
         $forum = $("#forum")[0];
         $forum.addEventListener("click", click_button, false);
         $forum.addEventListener("change", select_change, false);
-        rebind_threads();
+        rebind_forum();
     };
 
     document.addEventListener(init_event_id, init);
@@ -77,7 +78,7 @@
             thread_id;
         if(target.nodeName.toLowerCase() !== "button") target = target.parentNode;
         if(target.nodeName.toLowerCase() !== "button") return;
-
+        
         if(target.classList.contains("firstpost")){
             thread_id = target.getAttribute("data-thread-id");
             window.location.hash = "thread/" + current.forum_id + "/" + thread_id + "/1";
@@ -87,11 +88,13 @@
         } else if(target.classList.contains("lastpost")) {
             thread_id = target.getAttribute("data-thread-id");
             sa.lastpost(thread_id, lastpost_response);
+        } else if(target.classList.contains("type_announcement")) {
+            sa.announcement(forum_id, announce_response);
         }
     };
 
-    var posts_response = function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
-        
+    var announce_response = function(forum_id){
+        window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + last_page_number;
     };
 
     var lastpost_response = function(forum_id, thread_id, last_page_number){
@@ -99,20 +102,24 @@
     };
 
     var newpost_response = function(forum_id, thread_id, new_page_number){
-        window.set_hash_state("posts/" + forum_id + "/" + thread_id + "/" + new_page_number);
+        window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + new_page_number;
     };
 
     var hash_change = function(){
         var hashstate = window.location.hash.replace(/^#/, '').split("/");
         if(hashstate.length < 2) return;
-        if(hashstate[0] !== "threads") return;
-        var hashstate_forum_id = hashstate[1],
+        if(hashstate[0] !== "forum") return;
+        var hashstate_forum_id = parseInt(hashstate[1], 10),
             hashstate_page_number = 1;
         if(hashstate.length > 2) {
-            hashstate_page_number = hashstate[2];
+            hashstate_page_number = parseInt(hashstate[2], 10);
         }
         if(!current || current.forum_id !== hashstate_forum_id || current.page_number !== hashstate_page_number || current.when > Date.now() - (allow_reloads_after_seconds * 1000)) {
-            sa.threads(hashstate_forum_id, hashstate_page_number, threads_response);
+            loading_on();
+            if(current && (current.forum_id !== hashstate_forum_id || current.page_number !== hashstate_page_number)){
+                $forum.innerHTML = forum_template({forum_id: hashstate_forum_id});
+            }
+            sa.forum(hashstate_forum_id, hashstate_page_number, forum_response);
         }
     };
 
@@ -130,6 +137,6 @@
         for(i = 0; i < $selects.length; i++){
             $selects[i].style.width = remaining_width + "px";
         }
-    };    
+    };
 
 }());

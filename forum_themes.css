@@ -1,7 +1,8 @@
 
 
-
+#forum .forum_26,
 .forum_26,
+#forum .forum_26 button,
 .forum_26 button {
     background: #fcf;
     color: #808;
@@ -66,8 +67,6 @@
     border-color: #696;
 }
 
-
-
 #forum .forum_219 button .user {
     color: #393;
 }
@@ -101,13 +100,20 @@
     text-shadow: 0px 0px 5px #fff, 0px 0px 5px #ccf, 0px 0px 5px #ccf;
 }
 
+#forum .forum_268,
 .forum_268,
-.forum_268 button {
+.forum_268 button,
+#forum .forum_268 button {
     background-color: #ccf;
     color: #003;
     border-color: #77c;
-    
 }
+
+#forum .forum_268 .flex > span.posticon {
+    background-color: #bbe;
+    border-color: #77c;
+}
+
 
 #thread .forum_268 .bbc-block,
 .forum_268 .bbc-block {

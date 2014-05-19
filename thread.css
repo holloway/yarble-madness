@@ -93,10 +93,9 @@
 	width: 120px;
 }
 
-#thread img.img {
+#thread img.width-set {
 	width: 100%;
 }
-
 
 a img {
 	border: solid 1px blue;

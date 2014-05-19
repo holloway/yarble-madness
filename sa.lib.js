@@ -23,12 +23,12 @@
 				response_filters.logout(callback)
 			);
 		},
-		threads: function(forum_id, page_number, callback){
+		forum: function(forum_id, page_number, callback){
 			if(page_number === undefined) page_number = 1;
 			return request.get(
 				http_base + 'forumdisplay.php',
 				{forumid: forum_id, pagenumber: page_number},
-				response_filters.threads(callback, forum_id, page_number)
+				response_filters.forum(callback, forum_id, page_number)
 			);
 		},
 		announcement: function(forum_id, callback){
@@ -39,14 +39,14 @@
 				response_filters.announcement(callback, forum_id)
 			);
 		},
-		posts: function(forum_id, thread_id, page_number, use_local_smilies, disable_images, callback){
+		thread: function(forum_id, thread_id, page_number, use_local_smilies, disable_images, callback){
 			if(page_number === undefined) page_number = 1;
 			if(use_local_smilies === undefined) use_local_smilies = true;
 			if(disable_images === undefined) disable_images = false; // NOTE: disable_images also applies to youtube/vimeo/etc videos
 			return request.get(
 				http_base + 'showthread.php',
 				{threadid: thread_id, pagenumber: page_number},
-				response_filters.posts(callback, forum_id, thread_id, page_number, use_local_smilies, disable_images)
+				response_filters.thread(callback, forum_id, thread_id, page_number, use_local_smilies, disable_images)
 			);
 		},
 		gotopost: function(post_id, callback){
@@ -170,15 +170,15 @@
 				return fn.apply(this, [success]);
 			};
 		},
-		threads: function(fn, forum_id, page_number){
+		forum: function(fn, forum_id, page_number){
 			return function(){
-				var response = sa.response_parse.threads(this.responseText);
+				var response = sa.response_parse.forum(this.responseText);
 				return fn.apply(this, [response, forum_id, page_number]);
 			};
 		},
-		posts: function(fn, forum_id, thread_id, page_number, use_local_smilies, disable_images){
+		thread: function(fn, forum_id, thread_id, page_number, use_local_smilies, disable_images){
 			return function(){
-				var response = sa.response_parse.posts(this.responseText, use_local_smilies, disable_images);
+				var response = sa.response_parse.thread(this.responseText, use_local_smilies, disable_images);
 				return fn.apply(this, [response, forum_id, thread_id, page_number, use_local_smilies, disable_images]);
 			};
 		},
@@ -304,7 +304,7 @@
 			}
 			return forums;
 		},
-		threads: function(html_string){
+		forum: function(html_string){
 			var $div = document.createElement("div"),
 				$table,
 				$rows,
@@ -316,7 +316,7 @@
 				thread,
 				thread_id,
 				user_id,
-				response = {threads: [], error: false},
+				response = {forum: [], error: false},
 				forum_id,
 				$new_body,
 				$page_widget,
@@ -373,15 +373,15 @@
 					}
 				}
 				if(thread.type){
-					response.threads.push(thread);
+					response.forum.push(thread);
 				}
 			}
 			return response;
 		},
-		posts: function(html_string, use_local_smilies, disable_images){
+		thread: function(html_string, use_local_smilies, disable_images){
 			var $div = document.createElement("div"),
-				$posts_container,
-				$posts,
+				$thread_container,
+				$thread,
 				$post,
 				$image,
 				$new_body,
@@ -392,7 +392,7 @@
 				$page_change_widget,
 				$page_widget,
 				$lastseen,
-				response = {posts:[]},
+				response = {thread:[]},
 				i,
 				post,
 				user_title_images = function(img_html_string){
@@ -513,9 +513,9 @@
 				return '<a class="video-player" target="_blank" href="http://vimeo.com/' + video_id + '"><img src="images/video.png" class="video_play_button"></a>';
 			});
 
-			$div.innerHTML = html_string; // we can't run yarble.utils.remove_external_resources on this because we actually want the external resources (posts containing images, for example), and at least this will start the browser downloading them
+			$div.innerHTML = html_string; // we can't run yarble.utils.remove_external_resources on this because we actually want the external resources (thread containing images, for example), and at least this will start the browser downloading them
 			$new_body = $("new-body", $div)[0];
-			response.forum_id = $new_body.getAttribute("data-forum");
+			response.forum_id = parseInt($new_body.getAttribute("data-forum"), 10);
 			response.thread_id = $new_body.getAttribute("data-thread");
 			$page_change_widget = $("div.pages option[selected=selected]", $div);
 			if($page_change_widget.length > 0) {
@@ -530,9 +530,9 @@
 			} else {
 				response.last_page_number = 1;
 			}
-			$posts_container = $("#thread", $div)[0];
+			$thread_container = $("#thread", $div)[0];
 
-			$posts = $("table", $posts_container);
+			$thread = $("table", $thread_container);
 
 			$title = $("#content .breadcrumbs .bclast", $div);
 
@@ -540,8 +540,8 @@
 				response.title = $title[0].innerText;
 			}
 
-			for(i = 0; i < $posts.length; i++){
-				$post = $posts[i];
+			for(i = 0; i < $thread.length; i++){
+				$post = $thread[i];
 				if(! $(".postbody", $post)[0]){
 					console.log("no body?", $post.innerHTML, $post.parentNode);
 				}
@@ -579,7 +579,7 @@
 				if($lastseen) {
 					response.lastseen = parseInt($(".count b", $lastseen[0]), 10);
 				}
-				response.posts.push(post);
+				response.thread.push(post);
 			}
 			return response;
 		},

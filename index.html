@@ -13,6 +13,7 @@
 	<link type="text/css" rel="stylesheet" href="thread.css">
 </head>
 <body>
+	<div id="loading"></div>
 	<section id="user">
 		<div id="login">
 			<h1><img src="images/logo-blue-small.png" alt="Yarble Madness"></h1>
@@ -22,7 +23,6 @@
 				<input type="password" name="password" placeholder="password">
 				<button>login <img src="images/loader.gif" class="loading" alt="Please wait, loading..."></button>
 				<p class="smallprint">an unofficial client for forums.SomethingAwful.com</p>
-				
 			</form>
 		</div>
 		<div id="options">
@@ -101,26 +101,28 @@
 			</div>
 		</script>
 	</section>
+
 	<section id="forum">
 		nothing is here yet go back and pick a forum
 		<p>seriously fuck off mate STRAYA &larr;
-		<script id="threads-template" type="text/x-handlebars-template">
+
+		<script id="forum-template" type="text/x-handlebars-template">
 			{{^error}}
-				<div class="threads forum_{{forum_id}}">
+				<div class="forum forum_{{forum_id}}">
 					<ul class="pages top-pages">
-						<li class="goto-first-page not-select"><a href="#threads/{{../forum_id}}/1">&laquo;1</a></li>
-						<li class="goto-previous-page not-select"><a href="#threads/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
-						<li class="goto-last-page not-select"><a href="#threads/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
-						<li class="goto-next-page not-select"><a href="#threads/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
+						<li class="goto-first-page not-select"><a href="#forum/{{../forum_id}}/1">&laquo;1</a></li>
+						<li class="goto-previous-page not-select"><a href="#forum/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+						<li class="goto-last-page not-select"><a href="#forum/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
+						<li class="goto-next-page not-select"><a href="#forum/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
 						<li>
 							<select>
 								{{#pages}}
-									<option value="#threads/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
+									<option value="#forum/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
 								{{/pages}}
 							</select>
 						</li>
 					</ul>
-					{{#threads}}
+					{{#forum}}
 						{{#announcement}}
 							<button data-forum-id="{{forum_id}}" class="thread type_{{type}}">
 								{{title}}
@@ -148,16 +150,16 @@
 								</button>
 							</div>
 						{{/announcement}}
-					{{/threads}}
+					{{/forum}}
 					<ul class="pages">
-						<li class="goto-first-page not-select"><a href="#threads/{{../forum_id}}/1">&laquo;1</a></li>
-						<li class="goto-previous-page not-select"><a href="#threads/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
-						<li class="goto-last-page not-select"><a href="#threads/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
-						<li class="goto-next-page not-select"><a href="#threads/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
+						<li class="goto-first-page not-select"><a href="#forum/{{../forum_id}}/1">&laquo;1</a></li>
+						<li class="goto-previous-page not-select"><a href="#forum/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
+						<li class="goto-last-page not-select"><a href="#forum/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
+						<li class="goto-next-page not-select"><a href="#forum/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
 						<li>
 							<select>
 								{{#pages}}
-									<option value="#threads/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
+									<option value="#forum/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
 								{{/pages}}
 							</select>
 						</li>
@@ -165,7 +167,7 @@
 				</div>
 			{{/error}}
 			{{#error}}
-				<div class="threads">
+				<div class="forum">
 					error: {{../error_message}}
 				</div>
 			{{/error}}
@@ -174,8 +176,8 @@
 	<section id="thread">
 		you shouldn't be here yet. go back &larr; and pick a forum and thread.
 		<p>seriously fuck off the langoliers will be here soon
-		<script id="posts-template" type="text/x-handlebars-template">
-			<div class="posts forum_{{forum_id}}">
+		<script id="thread-template" type="text/x-handlebars-template">
+			<div class="thread forum_{{forum_id}}">
 				<ul class="pages top-pages">
 					<li class="goto-first-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/1">&laquo;1</a></li>
 					<li class="goto-previous-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
@@ -190,7 +192,7 @@
 					</li>
 				</ul>
 				<h2>{{title}}</h2>
-				{{#posts}}
+				{{#thread}}
 					<div class="post {{two-column-class}}" id="post{{id}}">
 						<div class="body">
 							{{{body}}}
@@ -200,7 +202,7 @@
 							<div class="user-title">{{{user.user_title}}}</div>
 						</div>
 					</div>
-				{{/posts}}
+				{{/thread}}
 				<ul class="pages">
 					<li class="goto-first-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/1">&laquo;1</a></li>
 					<li class="goto-previous-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
@@ -259,8 +261,6 @@
 	</script>
 	<script src="lib/swiper-do-swipe/swiper-do-swipe.js"></script>
 	<script src="lib/swiper-do-swipe/swiper-do-swipe-perspective.js"></script>
-	<script src="lib/grapnel.min.js"></script>
-	<script src="lib/fastclick.js"></script>
 	<script src="lib/handlebars.js"></script>
 	<script src="lib/classlist.js"></script>
 	<script src="smilies-cache.js"></script>
