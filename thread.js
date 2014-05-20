@@ -110,15 +110,75 @@
 		resize_images_if_necessary([event.target]);
 	};
 
+	var quote_post_response = function(quote_text, forum_id, thread_id, post_id){
+		loading_off();
+		window.$post.show("comment", "thread:" + thread_id, quote_text, function(forum_id, thread_id){
+			return function(text_content){
+				if(text_content.length === 0) return;
+				sa.submitpost(forum_id, thread_id, text_content, successful_post);
+			};
+		}(forum_id, thread_id));
+	};
+
+	var successful_post = function(forum_id, thread_id){
+		sa.lastpost(thread_id, lastpost_response);
+	};
+
+	var lastpost_response = function(forum_id, thread_id, last_page_number){
+        window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + last_page_number;
+    };
+
+    var edit_post_response = function(text_content, forum_id, thread_id, post_id){
+		loading_off();
+		window.$post.show("edit-comment", undefined, text_content, function(forum_id, thread_id, post_id){
+			return function(text_content){
+				if(text_content.length === 0) return;
+				console.log("TRYING TO UPDATE CONTENT", text_content, post_id);
+				sa.updatepost(forum_id, thread_id, post_id, text_content, successful_edit);
+			};
+		}(forum_id, thread_id, post_id));
+	};
+
+	var successful_edit = function(forum_id, thread_id, post_id){
+		sa.gotopost(post_id, editpost_response);
+	};
+
+	var editpost_response = function(forum_id, thread_id, post_id, page_number){
+		window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + page_number + "/" + post_id;
+	};
+
 	var click_button = function(event){
 		if(!event.target) return;
-		if(event.target.nodeName.toLowerCase() === "button" && event.target.classList.contains("disabled-image")){
+		var forum_id,
+			thread_id,
+			post_id;
+
+		var node_name = event.target.nodeName.toLowerCase();
+		if(node_name === "button" && event.target.classList.contains("disabled-image")){
 			replace_all_occurences_of_image($("." + event.target.getAttribute("data-image-id")));
 			event.preventDefault();
-		} else if(event.target.nodeName.toLowerCase() === "button" && event.target.classList.contains("disabled-video")){
+		} else if(node_name === "button" && event.target.classList.contains("disabled-video")){
 			replace_all_occurences_of_video($("." + event.target.getAttribute("data-video-id")));
 			event.preventDefault();
-		} else if(event.target.nodeName.toLowerCase() === "img"){
+		} else if(node_name === "button" && event.target.classList.contains("quote")){
+			forum_id = event.target.getAttribute("data-forum-id");
+			thread_id = event.target.getAttribute("data-thread-id");
+			post_id = event.target.getAttribute("data-post-id");
+			if(forum_id && post_id && thread_id){
+				loading_on();
+				return sa.quotepost(forum_id, thread_id, post_id, quote_post_response);
+			}
+			alert("Internal error: Unable to quote post without data-thread-id and data-post-id attributes");
+		} else if(node_name === "button" && event.target.classList.contains("edit")){
+			forum_id = event.target.getAttribute("data-forum-id");
+			thread_id = event.target.getAttribute("data-thread-id");
+			post_id = event.target.getAttribute("data-post-id");
+			if(forum_id && post_id && thread_id){
+				loading_on();
+				return sa.editposttext(forum_id, thread_id, post_id, edit_post_response);
+			}
+			alert("Internal error: Unable to quote post without data-thread-id and data-post-id attributes");
+		} else if(node_name === "img"){
 			if(event.target.classList.contains("timg")){
 				event.target.classList.remove("timg");
 				event.target.classList.add("img");
@@ -129,9 +189,9 @@
 		} else if(event.target.classList.contains("bbc-spoiler") && !event.target.classList.contains("on")){
 			event.target.classList.add("on");
 			resize_images_if_necessary($("img", event.target));
-		} else if(event.target.nodeName.toLowerCase() === "a" && event.target.classList.contains("quote_link")){
+		} else if(node_name === "a" && event.target.classList.contains("quote_link")){
 			var href = event.target.getAttribute("href");
-			var post_id = yarble.utils.get_param(href, "postid");
+			post_id = yarble.utils.get_param(href, "postid");
 			var $post = $("#post" + post_id, $thread);
 			if($post.length === 1) {
 				scroll_to_post(post_id);
@@ -225,7 +285,6 @@
 			if(current && (current.forum_id !== hashstate_forum_id || current.thread_id !== hashstate_thread_id || current.page_number !== hashstate_page_number)) {
 				$thread.innerHTML = thread_template({forum_id: hashstate_forum_id});
 			}
-
             sa.thread(hashstate_forum_id, hashstate_thread_id, hashstate_page_number, true, window.yarble.disable_images, thread_response);
         }
     };

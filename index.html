@@ -173,6 +173,7 @@
 			{{/error}}
 		</script>
 	</section>
+
 	<section id="thread">
 		you shouldn't be here yet. go back &larr; and pick a forum and thread.
 		<p>seriously fuck off the langoliers will be here soon
@@ -199,6 +200,12 @@
 						</div>
 						<div class="head">
 							<span class="user" data-user-id="{{user.user_id}}"><span class="by-user">by</span> {{user.name}}</span> {{registered}}
+							<div class="buttons">
+								{{#editable}}
+									<button class="edit" data-post-id="{{../id}}" data-thread-id="{{../../thread_id}}" data-forum-id="{{../../forum_id}}">Edit</button>
+								{{/editable}}
+								<button class="quote" data-post-id="{{id}}" data-thread-id="{{../thread_id}}" data-forum-id="{{../forum_id}}">Quote</button>
+							</div>
 							<div class="user-title">{{{user.user_title}}}</div>
 						</div>
 					</div>
@@ -219,6 +226,13 @@
 			</div>
 		</script>
 	</section>
+
+	<div id="post">
+		<button class="close">&times;</button>
+		<button class="clear">clear</button>
+		<textarea></textarea>
+		<button class="submit">Post</button>
+	</div>
 
 	<header>
 		<table class="tile tile2">
@@ -267,7 +281,7 @@
 	<script src="posticons-cache.js"></script>
 	<script src="utils.js"></script>
 	<script src="header.js"></script>
-	<script src="sa.lib.js"></script>
+	<script src="lib/sa/sa.lib.js"></script>
 	<script src="user.js"></script>
 	<script src="forums.js"></script>
 	<script src="forum.js"></script>

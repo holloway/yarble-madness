@@ -89,6 +89,65 @@ html.touch .notouch {
 	opacity: 1;
 }
 
+#post {
+	z-index:5;
+	display:none;
+	position: fixed;
+	left:5%;
+	top:5%;
+	box-shadow: 0px 0px 20px #000;
+	width: 90%;
+	height: 90%;
+	background: #eeeeee;
+	border-radius: 2px;
+}
+
+	#post .close {
+		float:right;
+		font-size:x-large;
+		padding:0px 5px;
+		border-radius:2px;
+		border-width: 0px;
+		margin:0px;
+	}
+
+	#post .clear {
+		float:right;
+		font-size:x-large;
+		padding:0px 5px;
+		margin:0px;
+		margin-right:1em;
+		border-radius:2px;
+		border-width: 0px;
+	}
+
+	#post textarea {
+		font-family: sans-serif;
+		width:100%;
+		padding:5px;
+		border: none;
+		resize: none;
+		margin:0px;
+		-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+	}
+
+	#post .submit {
+		margin:0px;
+		width:100%;
+		text-align:center;
+		border-radius:2px;
+		border-width: 0px;
+		font-size:x-large;
+		font-weight:bold;
+		padding-top: 0.2em;
+		padding-bottom: 0.2em;
+	}
+
+section {
+	background: white;
+	color: black;
+}
+
 @media (min-width: 700px) {
 
 	.twocolumns .columnone {
