@@ -30,7 +30,7 @@
 				<div class="columnone">
 					<h1><img src="images/logo-blue-small.png" alt="Yarble Madness"></h1>
 					<div class="inner">
-						<p>in this app <b>you swipe <span class="notouch"> or use the arrow keys</span></b> to move through these 4 screens</p>
+						<p>in this app <b>you swipe</b> to move through these 4 screens</p>
 						<table border="1" class="device">
 							<tr>
 								<td class="here">User<br><small>you are here</small></td>
@@ -39,8 +39,7 @@
 								<td>Thread</td>
 							</tr>
 						</table>
-						<p>so swipe <span class="notouch"> or use the arrow keys.</span>
-							do it you dork</p>
+						<p>so swipe do it you dork</p>
 						<p>go that way &rarr;</p>
 						<p>&larr; don't go that way might be grues</p>
 					</div>
@@ -122,6 +121,7 @@
 							</select>
 						</li>
 					</ul>
+					<button class="post-thread" data-forum-id="{{forum_id}}">Post Thread</button>
 					{{#forum}}
 						{{#announcement}}
 							<button data-forum-id="{{forum_id}}" class="thread type_{{type}}">
@@ -151,6 +151,7 @@
 							</div>
 						{{/announcement}}
 					{{/forum}}
+					<button class="post-thread" data-forum-id="{{forum_id}}">Post Thread</button>
 					<ul class="pages">
 						<li class="goto-first-page not-select"><a href="#forum/{{../forum_id}}/1">&laquo;1</a></li>
 						<li class="goto-previous-page not-select"><a href="#forum/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>

@@ -49,6 +49,13 @@
 				thread.thread[i].user.user_title = "";
 			}
 		}
+		if(window.cloud2butt){
+			for(i = 0; i < thread.thread.length; i++){
+				thread.thread[i].body = thread.thread[i].body.replace(/>[\s\S]*?</g, function(match){
+					return match.replace(/cloud/g, 'butt');
+				});
+			}
+		}
         $thread.innerHTML = thread_template(thread);
         //post processing
         $imgs = $("img", $thread);
@@ -133,7 +140,6 @@
 		window.$post.show("edit-comment", undefined, text_content, function(forum_id, thread_id, post_id){
 			return function(text_content){
 				if(text_content.length === 0) return;
-				console.log("TRYING TO UPDATE CONTENT", text_content, post_id);
 				sa.updatepost(forum_id, thread_id, post_id, text_content, successful_edit);
 			};
 		}(forum_id, thread_id, post_id));

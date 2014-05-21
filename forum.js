@@ -36,6 +36,11 @@
                 thread.has_posticon_url = true;
                 thread.posticon_url = "images/posticons/" + posticons_cache[thread.posticon].filename;
             }
+            if(window.cloud2butt){
+                thread.title = thread.title.replace(/>[\s\S]*?</g, function(match){
+                    return match.replace(/cloud/g, 'butt');
+                });
+            }
         }
         forum.previous_page_number = forum.page_number - 1;
         forum.next_page_number = forum.page_number + 1;
@@ -73,6 +78,20 @@
 
     document.addEventListener(init_event_id, init);
 
+    var new_thread_response = function(post_icons, forum_id){
+        console.log(post_icons);
+
+        /*
+        window.$post.show("new-thread", undefined, text_content, function(forum_id, thread_id, post_id){
+            return function(text_content){
+                if(text_content.length === 0) return;
+                console.log("TRYING TO POST THREAD", text_content, post_id);
+                sa.updatepost(forum_id, thread_id, post_id, text_content, successful_edit);
+            };
+        }(forum_id, thread_id, post_id));
+*/
+    };
+
     var click_button = function(event){
         var target = event.target,
             thread_id;
@@ -88,6 +107,12 @@
         } else if(target.classList.contains("lastpost")) {
             thread_id = target.getAttribute("data-thread-id");
             sa.lastpost(thread_id, lastpost_response);
+        } else if(event.target.classList.contains("post-thread")){
+            var forum_id = event.target.getAttribute("data-forum-id");
+            if(forum_id){
+                return sa.newthreadposticon(forum_id, new_thread_response);
+            }
+            alert("Internal error: Unable to make new thread without data-forum-id");
         } else if(target.classList.contains("type_announcement")) {
             sa.announcement(forum_id, announce_response);
         }

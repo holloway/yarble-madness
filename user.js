@@ -13,10 +13,12 @@
 		CONSTANTS = {
 			user_storage_key:   "yarble:user",
 			first_time_key:     "yarble:first-time-user",
-			download_on_mobile: "yarble:download-when-on-3g4g"
+			download_on_mobile: "yarble:download-when-on-3g4g",
+			cloud2butt:         "yarble:cloud2butt"
 		},
 		disable_images_on_3g4g_button_state = false,
 		$do_mobile_download,
+		$cloud2butt,
 		connection = navigator.connection || navigator.webkitConnection,
 		$ = yarble.utils.$,
 		init = function(){
@@ -33,6 +35,14 @@
 			if(user) window.location.hash = "forums";
 			$do_mobile_download = $("#mobiledownload")[0];
 			$do_mobile_download.addEventListener("click", toggle_mobile_download, true);
+			$cloud2butt = $("#cloud2butt")[0];
+			$cloud2butt.addEventListener("click", toggle_cloud2butt, true);
+			var cloud2butt_setting = window.localStorage.getItem(CONSTANTS.cloud2butt);
+			if(cloud2butt_setting === "true"){
+				$cloud2butt.classList.remove("off");
+				$cloud2butt.classList.add("on");
+				window.cloud2butt = true;
+			}
 			disable_images_on_3g4g_button_state = window.localStorage.getItem(CONSTANTS.download_on_mobile) ? !!JSON.parse(window.localStorage.getItem(CONSTANTS.download_on_mobile)) : false;
 			update_mobile_download();
 			if(connection) connection.addEventListener('typechange', update_mobile_download); //Note: 'typechange' is a network connection change https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API
@@ -40,7 +50,6 @@
 			change_user();
 		},
 		change_user = function(){
-			if(!$user) init();
 			user = window.localStorage.getItem(CONSTANTS.user_storage_key);
 			$login.style.display =    user ? "none" : "block";
 			$options.style.display = !user ? "none" : "block";
@@ -52,16 +61,14 @@
 	};
 
 	var update_mobile_download = function(){
-		var yarble = window.yarble || {};
-		window.yarble = yarble;
-		yarble.disable_images = false;
+		window.disable_images = false;
 		if(!disable_images_on_3g4g_button_state){
 			if(connection){ // potentially phonegap app
 				var connection_type = connection.type;
 				if(connection_type === undefined && navigator.network && navigator.network.connection){
 					connection_type = navigator.network.connection.type;
 				}
-				yarble.disable_images = (connection_type >= 3); // 0 = unknown but connected. 1,2 = ethernet,wifi. 3,4,5,6 = 2g/3g/4g/cell. 7 = none. so >= 3 seems ok to detect cell connections, or lack of connections 
+				window.disable_images = (connection_type >= 3); // 0 = unknown but connected. 1,2 = ethernet,wifi. 3,4,5,6 = 2g/3g/4g/cell. 7 = none. so >= 3 seems ok to detect cell connections, or lack of connections 
 			}
 		}
 		window.localStorage.setItem(CONSTANTS.download_on_mobile, disable_images_on_3g4g_button_state);
@@ -71,6 +78,20 @@
 		} else {
 			$do_mobile_download.classList.add("off");
 			$do_mobile_download.classList.remove("on");
+		}
+	};
+
+	var toggle_cloud2butt = function(){
+		if($cloud2butt.classList.contains("on")){
+			$cloud2butt.classList.remove("on");
+			$cloud2butt.classList.add("off");
+			window.localStorage.setItem(CONSTANTS.cloud2butt, false);
+			window.cloud2butt = false;
+		} else {
+			$cloud2butt.classList.remove("off");
+			$cloud2butt.classList.add("on");
+			window.localStorage.setItem(CONSTANTS.cloud2butt, true);
+			window.cloud2butt = true;
 		}
 	};
 
@@ -90,9 +111,9 @@
 		$("button", $login)[0].classList.remove("loading");
 		if(success) {
 			window.localStorage.setItem(CONSTANTS.user_storage_key, last_login_attempt_username);
+			change_user();
 			if(!window.localStorage.getItem(CONSTANTS.first_time_key)){
 				window.localStorage.setItem(CONSTANTS.first_time_key, false);
-				change_user();
 			} else {
 				window.location.hash = "forums";
 			}
@@ -105,8 +126,10 @@
 	};
 
 	var logout = function(){
-		window.localStorage.removeItem(CONSTANTS.user_storage_key);
-		sa.logout(logout_response);
+		if(confirm("Really logout?")){
+			window.localStorage.removeItem(CONSTANTS.user_storage_key);
+			sa.logout(logout_response);
+		}
 	};
 
 	var logout_response = function(success){

@@ -29,6 +29,15 @@
     background: #eeeeee;
 }
 
+#forum .post-thread {
+	text-align: center;
+	font-weight:bold;
+	clear:both;
+	display:block;
+	margin: 0px auto;
+	width:80%;
+}
+
 #forum button.type_announcement {
     background: yellow;
     font-weight:bold;
