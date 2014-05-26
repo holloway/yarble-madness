@@ -6,14 +6,16 @@
         },
         $ = yarble.utils.$,
         $thread,
-        $title,
+        $poll,
         current,
         thread_template,
+        poll_vote_template,
+        poll_results_template,
         screen_width_buffer_pixels = 50,
         allow_reloads_after_seconds = 10,
         allow_resize_after_seconds = 1;
 
-	var rebind_thread = function(thread){
+	var rebind_thread = function(thread, highlight_post_id){
         var thread_template_string,
 			i,
 			$imgs;
@@ -24,12 +26,12 @@
 			thread = JSON.parse(JSON.stringify(thread)); // we'll clone it http://stackoverflow.com/a/5344074 so that our modifications (such as copying into .column1 and .column2) don't accidentally leak back to the localStorage copy or any other version
         }
         if(!thread) return;
-        $title.innerText = thread.title;
         current = {};
         current.forum_id = parseInt(thread.forum_id, 10);
         current.thread_id = thread.thread_id;
         current.page_number = thread.page_number;
         current.when = Date.now();
+        current.poll = thread.poll;
         if(!thread_template){
             thread_template_string = $("#thread-template")[0].innerHTML;
             thread_template = Handlebars.compile(thread_template_string);
@@ -44,18 +46,19 @@
         for(i = 1; i <= thread.last_page_number; i++){ // i = 1 because page numbers start counting at 1
 			thread.pages.push({forum_id:thread.forum_id, thread_id:thread.thread_id, page_number:i, same_page: !!(thread.page_number === i), same_page_option_selection: !!(thread.page_number === i) ? 'selected="selected"' : ""});
         }
-        if(window.disable_images){
-			for(i = 0; i < thread.thread.length; i++){
+        for(i = 0; i < thread.thread.length; i++){
+			if(window.disable_images){
 				thread.thread[i].user.user_title = "";
 			}
-		}
-		if(window.cloud2butt){
-			for(i = 0; i < thread.thread.length; i++){
+			if(window.cloud2butt){
 				thread.thread[i].body = thread.thread[i].body.replace(/>[\s\S]*?</g, function(match){
 					return match.replace(/cloud/g, 'butt');
 				});
 			}
-		}
+			if(highlight_post_id && highlight_post_id === thread.thread[i].id){
+				thread.thread[i].highlight_post_class = "highlight_post";
+			}
+        }
         $thread.innerHTML = thread_template(thread);
         //post processing
         $imgs = $("img", $thread);
@@ -63,11 +66,58 @@
 		for(i = 0; i < $imgs.length; i++){
 			$imgs[i].addEventListener("load", resize_image_if_necessary);
 		}
-		//var hashstate = window.get_hash_state();
-        //if(hashstate && hashstate.length === 5) { //then there's a postid in the url that we should scroll to
-		//	scroll_to_post(hashstate[4]);
-        //}
         adjust_page_selection_width();
+    };
+
+    var rebind_poll = function(){
+		if(!poll_vote_template){
+			poll_vote_template = Handlebars.compile($("#poll-vote-template")[0].innerHTML);
+			poll_results_template = Handlebars.compile($("#poll-results-template")[0].innerHTML);
+		}
+		if(!current.poll) return false;
+		if(!$poll) {
+			$poll = $("#poll")[0];
+		}
+
+		$poll.innerHTML = poll_vote_template(current.poll);
+    };
+
+    var poll_submit = function(){
+		if(!event.target) return;
+		var poll_response = function(poll_id){
+			sa.pollresults(poll_id, poll_results_callback);
+		};
+		var node_name = event.target.nodeName.toLowerCase();
+		if(node_name === "button" && event.target.classList.contains("submit")){
+			var inputs = $("input", $poll),
+				poll_id,
+				poll_options = [];
+
+			for(var i = 0; i < inputs.length; i++){
+				if(inputs[i].getAttribute("id") === "poll_id"){
+					poll_id = inputs[i].getAttribute("value");
+				} else if(inputs[i].checked) {
+					poll_options.push(inputs[i].getAttribute("name"));
+				}
+			}
+			loading_on();
+			sa.submitpoll(poll_id, poll_options, poll_response);
+		} else if(node_name === "button" && event.target.classList.contains("close")){
+			$poll.style.display = "none";
+		}
+    };
+
+    var poll_results_callback = function(poll_id, results){
+		if(!poll_vote_template){
+			poll_vote_template = Handlebars.compile($("#poll-vote-template")[0].innerHTML);
+			poll_results_template = Handlebars.compile($("#poll-results-template")[0].innerHTML);
+		}
+		if(!$poll) {
+			$poll = $("#poll")[0];
+		}
+		$poll.innerHTML = poll_results_template(results);
+		$poll.style.display = "block";
+		loading_off();
     };
 
     var thread_response = function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
@@ -76,17 +126,32 @@
         localStorage.setItem(CONSTANTS.thread_cache_key, JSON.stringify(response));
     };
 
+    var thread_response_at_post_id = function(post_id){
+		return function(response, forum_id, thread_id, page_number, used_local_smilies, disabled_images){
+			loading_off();
+			rebind_thread(response, post_id);
+			scroll_to_post(post_id);
+			localStorage.setItem(CONSTANTS.thread_cache_key, JSON.stringify(response));
+		};
+    };
+
     var scroll_to_post = function(post_id) { // assumed to be in the current page
 		var $post = $("#post" + post_id, $thread);
 		if($post.length === 1) {
-			var from_top = window.scrollY + parseInt($post[0].getBoundingClientRect().top, 10);
+			var from_top = parseInt($post[0].getBoundingClientRect().top, 10);
+			if(!window.swiper){
+				return setTimeout(function(post_id){
+					return function(){
+						scroll_to_post(post_id);
+					};
+				}(post_id), 100);
+			} // keep trying until window.swiper is there
+			var scroll_y = window.swiper.get_scroll_y();
 			if(!isNaN(from_top)) {
-				window.scrollTo(0, from_top);
-			} else {
-				window.scrollTo(0, 0);
+				swiper.scroll_to_y(from_top + scroll_y);
 			}
 		} else {
-			window.scrollTo(0, 0);
+			console.log("internal error: unable to scroll to post id #" + post_id + ".");
 		}
 	};
 
@@ -184,6 +249,13 @@
 				return sa.editposttext(forum_id, thread_id, post_id, edit_post_response);
 			}
 			alert("Internal error: Unable to quote post without data-thread-id and data-post-id attributes");
+		} else if(node_name === "button" && event.target.classList.contains("poll-available")){
+			rebind_poll();
+			$poll.style.display = "block";
+		} else if(node_name === "button" && event.target.classList.contains("poll-result")){
+			loading_on();
+			var poll_id = event.target.getAttribute("data-poll-id");
+			sa.pollresults(poll_id, poll_results_callback);
 		} else if(node_name === "img"){
 			if(event.target.classList.contains("timg")){
 				event.target.classList.remove("timg");
@@ -205,6 +277,7 @@
 				sa.gotopost(post_id, gotopost_response);
 			}
 			event.preventDefault();
+			event.stopPropagation();
 		}
 	};
 
@@ -245,18 +318,30 @@
 	};
 
 	var select_change = function(event){
-		window.location.hash = event.target.value;
+		if(!event.target) return;
+		var target = get_target(event.target),
+			nodeName = target.nodeName.toLowerCase();
+
+		if(nodeName === "select"){
+			window.location.hash = target.value;
+		}
 	};
+
+	var get_target = function(target){
+        if (target.nodeType === Node.TEXT_NODE) return target.parentNode;
+        return target;
+    };
 
 	var init = function(){
 		window.addEventListener("resize", resize_images_if_necessary);
 		window.addEventListener("orientationchange", resize_images_if_necessary);
 		window.addEventListener("hashchange", hash_change, false);
 		$thread = $("#thread")[0];
-		$title = $("title")[0];
         $thread.addEventListener("click", click_button, false);
         $thread.addEventListener("change", select_change, false);
         rebind_thread();
+        $poll = $("#poll")[0];
+        $poll.addEventListener("click", poll_submit, false);
 	};
 
     document.addEventListener(init_event_id, init);
@@ -276,22 +361,42 @@
 		}
     };
 
+    var announce_response = function(response){
+		$thread.innerHTML = thread_template(response);
+    };
+
     var hash_change = function(){
         var hashstate = window.location.hash.replace(/^#/, '').split("/");
         if(hashstate.length < 2) return;
         if(hashstate[0] !== "thread") return;
-        var hashstate_forum_id = parseInt(hashstate[1], 10),
-			hashstate_thread_id = hashstate[2],
-            hashstate_page_number = 1;
+        var hashstate_forum_id,
+			hashstate_thread_id,
+            hashstate_page_number = 1,
+            hashstate_post_id;
+
+        if(hashstate[1] === "announcement"){
+			hashstate_forum_id = parseInt(hashstate[2], 10);
+			sa.announcement(hashstate_forum_id, true, window.disable_images, announce_response);
+			return;
+        }
+        hashstate_forum_id = parseInt(hashstate[1], 10);
+		hashstate_thread_id = hashstate[2];
         if(hashstate.length > 3) {
             hashstate_page_number = parseInt(hashstate[3], 10);
+        }
+        if(hashstate.length > 4) {
+            hashstate_post_id = parseInt(hashstate[4], 10);
         }
         if(!current || current.forum_id !== hashstate_forum_id || current.thread_id !== hashstate_thread_id || current.page_number !== hashstate_page_number || current.when > Date.now() - (allow_reloads_after_seconds * 1000)) {
 			loading_on();
 			if(current && (current.forum_id !== hashstate_forum_id || current.thread_id !== hashstate_thread_id || current.page_number !== hashstate_page_number)) {
 				$thread.innerHTML = thread_template({forum_id: hashstate_forum_id});
 			}
-            sa.thread(hashstate_forum_id, hashstate_thread_id, hashstate_page_number, true, window.yarble.disable_images, thread_response);
+			if(hashstate_post_id){
+				sa.thread(hashstate_forum_id, hashstate_thread_id, hashstate_page_number, true, window.disable_images, thread_response_at_post_id(hashstate_post_id));
+			} else {
+				sa.thread(hashstate_forum_id, hashstate_thread_id, hashstate_page_number, true, window.disable_images, thread_response);
+			}
         }
     };
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Yarble Madness</title>
+	<title>Yarble (Madness)</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<link type="text/css" rel="stylesheet" href="screen.css">
 	<link type="text/css" rel="stylesheet" href="lib/swiper-do-swipe/swiper-do-swipe.css">
@@ -194,8 +194,14 @@
 					</li>
 				</ul>
 				<h2>{{title}}</h2>
+				{{#poll}}
+					<button class="poll-available">Poll</button>
+				{{/poll}}
+				{{#poll-result}}
+					<button class="poll-result" data-poll-id="{{../poll-result}}">Poll Results</button>
+				{{/poll-result}}
 				{{#thread}}
-					<div class="post {{two-column-class}}" id="post{{id}}">
+					<div class="post {{highlight_post_class}}" id="post{{id}}">
 						<div class="body">
 							{{{body}}}
 						</div>
@@ -228,11 +234,35 @@
 		</script>
 	</section>
 
-	<div id="post">
+	<div id="post" class="dialog">
 		<button class="close">&times;</button>
 		<button class="clear">clear</button>
 		<textarea></textarea>
 		<button class="submit">Post</button>
+	</div>
+
+	<div id="poll" class="dialog">
+		<script id="poll-vote-template" type="text/x-handlebars-template">
+			<button class="close">&times;</button>
+			<h3>Poll: {{question}}</h3>
+			<input type="hidden" id="poll_id" value="{{id}}">
+			<ul class="scrollable">
+				{{#options}}
+					<li> <label><input type="{{../type}}" name="{{id}}" value="yes" class="poll-option"> {{{text}}}</label> </li>
+				{{/options}}
+			</ul>
+			<button class="submit">Vote</button>
+		</script>
+
+		<script id="poll-results-template" type="text/x-handlebars-template">
+			<button class="close">&times;</button>
+			<h3>Poll Results: {{question}}</h3>
+			<ul class="scrollable">
+				{{#options}}
+					<li>{{percentage}}% - {{{text}}}</li>
+				{{/options}}
+			</ul>
+		</script>
 	</div>
 
 	<header>

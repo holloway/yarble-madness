@@ -89,7 +89,7 @@ html.touch .notouch {
 	opacity: 1;
 }
 
-#post {
+.dialog {
 	z-index:5;
 	display:none;
 	position: fixed;
@@ -102,7 +102,7 @@ html.touch .notouch {
 	border-radius: 2px;
 }
 
-	#post .close {
+	.dialog .close {
 		float:right;
 		font-size:x-large;
 		padding:0px 5px;
@@ -111,7 +111,7 @@ html.touch .notouch {
 		margin:0px;
 	}
 
-	#post .clear {
+	.dialog .clear {
 		float:right;
 		font-size:x-large;
 		padding:0px 5px;
@@ -121,7 +121,7 @@ html.touch .notouch {
 		border-width: 0px;
 	}
 
-	#post textarea {
+	.dialog textarea {
 		font-family: sans-serif;
 		width:100%;
 		padding:5px;
@@ -131,7 +131,7 @@ html.touch .notouch {
 		-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 	}
 
-	#post .submit {
+	.dialog .submit {
 		margin:0px;
 		width:100%;
 		text-align:center;
@@ -141,6 +141,28 @@ html.touch .notouch {
 		font-weight:bold;
 		padding-top: 0.2em;
 		padding-bottom: 0.2em;
+	}
+
+	.dialog .scrollable {
+		height:70%;
+		-webkit-overflow-scrolling: touch;
+	}
+
+#poll ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+	#poll ul li {
+		margin: 0.8em 1em;
+	}
+
+	#poll ul li label {
+		display:block;
+		border-radius: 1px;
+		background: #dddddd;
+		padding:1em;
 	}
 
 section {

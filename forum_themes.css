@@ -44,6 +44,10 @@
     padding-bottom: 0.5em;
 }
 
+#thread .forum_219 .post > .head {
+    border-color: #000000;
+}
+
 #forum .forum_219 .pages,
 #forum .forum_219 .pages a,
 #forum .forum_219 .pages select,

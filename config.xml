@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "com.phonegap.example"
+        id          = "nz.co.holloway.sa"
         versionCode = "666" 
         version     = "6.6.6" >
 
-    <name>Yarble Madness</name>
+    <name>Yarble</name>
 
     <description>
         An unofficial client for forums.SomethingAwful.com 

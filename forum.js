@@ -80,21 +80,19 @@
 
     var new_thread_response = function(post_icons, forum_id){
         console.log(post_icons);
-
-        /*
-        window.$post.show("new-thread", undefined, text_content, function(forum_id, thread_id, post_id){
+        window.$post.show("new-thread", undefined, text_content, post_icons, function(forum_id, thread_id, post_id){
             return function(text_content){
                 if(text_content.length === 0) return;
                 console.log("TRYING TO POST THREAD", text_content, post_id);
                 sa.updatepost(forum_id, thread_id, post_id, text_content, successful_edit);
             };
         }(forum_id, thread_id, post_id));
-*/
     };
 
     var click_button = function(event){
         var target = event.target,
-            thread_id;
+            thread_id,
+            forum_id;
         if(target.nodeName.toLowerCase() !== "button") target = target.parentNode;
         if(target.nodeName.toLowerCase() !== "button") return;
         
@@ -102,24 +100,23 @@
             thread_id = target.getAttribute("data-thread-id");
             window.location.hash = "thread/" + current.forum_id + "/" + thread_id + "/1";
         } else if(target.classList.contains("newpost")) {
+            loading_on();
             thread_id = target.getAttribute("data-thread-id");
             sa.newpost(thread_id, newpost_response);
         } else if(target.classList.contains("lastpost")) {
+            loading_on();
             thread_id = target.getAttribute("data-thread-id");
             sa.lastpost(thread_id, lastpost_response);
-        } else if(event.target.classList.contains("post-thread")){
-            var forum_id = event.target.getAttribute("data-forum-id");
+        } else if(target.classList.contains("post-thread")){
+            forum_id = target.getAttribute("data-forum-id");
             if(forum_id){
                 return sa.newthreadposticon(forum_id, new_thread_response);
             }
             alert("Internal error: Unable to make new thread without data-forum-id");
         } else if(target.classList.contains("type_announcement")) {
-            sa.announcement(forum_id, announce_response);
+            forum_id = target.getAttribute("data-forum-id");
+            window.location.hash = "thread/announcement/" + forum_id;
         }
-    };
-
-    var announce_response = function(forum_id){
-        window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + last_page_number;
     };
 
     var lastpost_response = function(forum_id, thread_id, last_page_number){

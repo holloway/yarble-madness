@@ -16,7 +16,7 @@
 			$pages = $("section");
 			$loading = $("#loading")[0];
 			if(css.transition_end) $loading.addEventListener(css.transition_end, loading_transition_end, false);
-			var swiper = swiper_do_swipe($pages, swiper_do_swipe_effects.flat);
+			window.swiper = swiper_do_swipe($pages, swiper_do_swipe_effects.flat);
 			init_hashstate(swiper);
 			init_post();
 			var $forms = $("form");

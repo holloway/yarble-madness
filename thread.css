@@ -96,12 +96,13 @@
 	max-width:480px;
 }
 
-#thread img.timg {
-	width: 120px;
-}
-
 #thread img.width-set {
 	width: 100%;
+}
+
+#thread img.timg,
+#thread img.width-set.timg {
+	width: 120px;
 }
 
 a img {
@@ -113,9 +114,18 @@ a.video-player img {
 }
 
 #thread h2 {
-	padding: 0.3em 5px 0.4em 5px;
+	padding: 50px 5px 0.4em 5px;
 	margin: 0px;
 	border-bottom: solid 1px #999999;
+}
+
+#thread button.poll-result, 
+#thread button.poll-available {
+	width:100%;
+	text-align:center;
+	font-weight:bold;
+	padding: 0.5em 0px 0.5em 0px;
+	font-size:x-large;
 }
 
 #thread .pages {
@@ -177,6 +187,34 @@ a.video-player img {
 		float:left;
 	}
 
+#thread .post.highlight_post {
+	box-shadow: 0px 0px 30px yellow;
+	border: solid 2px yellow;
+}
+
+#thread .poll-option {
+	width:20px;
+	height:20px;
+}
+
+#thread form.poll {
+
+}
+
+#thread form.poll ul {
+	list-style:none;
+	margin:0px 2em;
+	padding:0px;
+}
+
+	#thread form.poll li {
+		margin:0px 2em;
+		padding:0px;
+	}
+
+	#thread form.poll label {
+		display:block;
+	}
 
 @media (min-width: 700px) {
 
@@ -202,11 +240,12 @@ a.video-player img {
 		flex: 0 0 80px;
 		-webkit-flex: 0 0 90px;
 		overflow:hidden;
+		border-right: solid 1px #eee;
 	}
 
 	#thread .post > .body {
-		flex: 1;
-		-webkit-flex: 1;
+		flex: 1 0;
+		-webkit-flex: 1 0;
 		padding-left:10px;
 	}
 
