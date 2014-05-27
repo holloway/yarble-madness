@@ -105,7 +105,7 @@ html.touch .notouch {
 	.dialog .close {
 		float:right;
 		font-size:x-large;
-		padding:0px 5px;
+		padding:0.2em 1em;
 		border-radius:2px;
 		border-width: 0px;
 		margin:0px;
@@ -146,6 +146,8 @@ html.touch .notouch {
 	.dialog .scrollable {
 		height:70%;
 		-webkit-overflow-scrolling: touch;
+		overflow-y: scroll;
+		box-shadow: inset 0px 2px 5px rgba(0,0,0,0.2);
 	}
 
 #poll ul {

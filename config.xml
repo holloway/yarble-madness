@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-    <widget xmlns   = "http://www.w3.org/ns/widgets"
-        xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "nz.co.holloway.sa"
-        versionCode = "666" 
-        version     = "6.6.6" >
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "nz.co.holloway.sa"
+    versionCode = "666" 
+    version     = "6.6.6" >
 
     <name>Yarble</name>
 
-    <description>
-        An unofficial client for forums.SomethingAwful.com 
-    </description>
+    <description>An unofficial client for forums.SomethingAwful.com</description>
 
     <author href="https://holloway.co.nz" email="saforums@holloway.co.nz">
         Matthew Holloway (author of app, not the forums, obv)
@@ -19,8 +17,9 @@
     <gap:platform name="android" />
     <gap:platform name="winphone" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <gap:plugin name="org.apache.cordova.network-information" version="0.2.7" />
 
-    <access origin="*"/>
+    <access origin="*"/> 
 
 </widget>

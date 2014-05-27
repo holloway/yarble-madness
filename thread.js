@@ -74,12 +74,38 @@
 			poll_vote_template = Handlebars.compile($("#poll-vote-template")[0].innerHTML);
 			poll_results_template = Handlebars.compile($("#poll-results-template")[0].innerHTML);
 		}
+		var $scrollable,
+			$close,
+			$submit;
 		if(!current.poll) return false;
 		if(!$poll) {
 			$poll = $("#poll")[0];
 		}
-
 		$poll.innerHTML = poll_vote_template(current.poll);
+		update_poll_height();
+    };
+
+    var update_poll_height = function(){
+		if(!$poll) return;
+		$poll = $("#poll")[0];
+		var display_before = $poll.style.display;
+		if(!display_before) {
+			display_before = window.getComputedStyle($poll).display;
+		}
+		var $scrollable = $(".scrollable", $poll)[0];
+		if(!$scrollable) return;
+		$poll.style.display = "block";
+		var $close = $(".close", $poll)[0];
+		var $submit = $(".submit", $poll)[0];
+		var height = $poll.offsetHeight;
+		if($close) {
+			height -= $close.offsetHeight;
+		}
+		if($submit){
+			height -= $submit.offsetHeight;
+		}
+		$scrollable.style.height = height + "px";
+		$poll.style.display = display_before;
     };
 
     var poll_submit = function(){
@@ -117,6 +143,7 @@
 		}
 		$poll.innerHTML = poll_results_template(results);
 		$poll.style.display = "block";
+		update_poll_height();
 		loading_off();
     };
 
@@ -146,6 +173,9 @@
 					};
 				}(post_id), 100);
 			} // keep trying until window.swiper is there
+			if(!window.swiper.get_scroll_y){
+				console.log("scroll y", window.swiper)
+			}
 			var scroll_y = window.swiper.get_scroll_y();
 			if(!isNaN(from_top)) {
 				swiper.scroll_to_y(from_top + scroll_y);
@@ -335,6 +365,8 @@
 	var init = function(){
 		window.addEventListener("resize", resize_images_if_necessary);
 		window.addEventListener("orientationchange", resize_images_if_necessary);
+		window.addEventListener("resize", update_poll_height);
+		window.addEventListener("orientationchange", update_poll_height);
 		window.addEventListener("hashchange", hash_change, false);
 		$thread = $("#thread")[0];
         $thread.addEventListener("click", click_button, false);

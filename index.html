@@ -246,22 +246,30 @@
 			<button class="close">&times;</button>
 			<h3>Poll: {{question}}</h3>
 			<input type="hidden" id="poll_id" value="{{id}}">
-			<ul class="scrollable">
-				{{#options}}
-					<li> <label><input type="{{../type}}" name="{{id}}" value="yes" class="poll-option"> {{{text}}}</label> </li>
-				{{/options}}
-			</ul>
+			<div class="scrollable">
+				<ul>
+					{{#options}}
+						<li> <label><input type="{{../type}}" name="{{id}}" value="yes" class="poll-option"> {{{text}}}</label> </li>
+					{{/options}}
+				</ul>
+			</div>
 			<button class="submit">Vote</button>
 		</script>
 
 		<script id="poll-results-template" type="text/x-handlebars-template">
 			<button class="close">&times;</button>
 			<h3>Poll Results: {{question}}</h3>
-			<ul class="scrollable">
-				{{#options}}
-					<li>{{percentage}}% - {{{text}}}</li>
-				{{/options}}
-			</ul>
+			<div class="scrollable">
+				<table>
+					{{#options}}
+						<tr>
+							<td>{{count}} vote(s)</td>
+							<td>({{percentage}}%): </td>
+							<td><b>{{{text}}}</b></td>
+						<tr>
+					{{/options}}
+				</table>
+			</div>
 		</script>
 	</div>
 
