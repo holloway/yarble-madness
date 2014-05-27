@@ -173,9 +173,6 @@
 					};
 				}(post_id), 100);
 			} // keep trying until window.swiper is there
-			if(!window.swiper.get_scroll_y){
-				console.log("scroll y", window.swiper)
-			}
 			var scroll_y = window.swiper.get_scroll_y();
 			if(!isNaN(from_top)) {
 				swiper.scroll_to_y(from_top + scroll_y);
@@ -297,17 +294,19 @@
 		} else if(event.target.classList.contains("bbc-spoiler") && !event.target.classList.contains("on")){
 			event.target.classList.add("on");
 			resize_images_if_necessary($("img", event.target));
-		} else if(node_name === "a" && event.target.classList.contains("quote_link")){
-			var href = event.target.getAttribute("href");
-			post_id = yarble.utils.get_param(href, "postid");
-			var $post = $("#post" + post_id, $thread);
-			if($post.length === 1) {
-				scroll_to_post(post_id);
-			} else {
-				sa.gotopost(post_id, gotopost_response);
-			}
+		} else if(node_name === "a"){
 			event.preventDefault();
 			event.stopPropagation();
+			if(event.target.classList.contains("quote_link")){
+				var href = event.target.getAttribute("href");
+				post_id = yarble.utils.get_param(href, "postid");
+				var $post = $("#post" + post_id, $thread);
+				if($post.length === 1) {
+					scroll_to_post(post_id);
+				} else {
+					sa.gotopost(post_id, gotopost_response);
+				}
+			}
 		}
 	};
 
