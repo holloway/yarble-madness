@@ -17,7 +17,6 @@
     <gap:platform name="android" />
     <gap:platform name="winphone" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <gap:plugin name="org.apache.cordova.network-information" version="0.2.7" />
 
     <access origin="*"/> 
