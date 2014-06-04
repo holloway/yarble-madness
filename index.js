@@ -49,14 +49,14 @@
 						text = "Post Comment";
 						break;
 					case "thread":
-						text = "Post Thread(!)";
+						text = "Post Thread";
 						break;
 					default:
 						alert("Internal error: Unknown mode " + mode);
 				}
 				window.$post.$submit.innerHTML = text;
 			};
-			window.$post.show = function(mode, quote_text_group_id, quote_text, submit_callback){
+			window.$post.show = function(mode, quote_text_group_id, quote_text, post_icons, submit_callback){
 				if(mode) {
 					window.$post._set_mode(mode);
 					if(quote_text_group_id && quote_text) { // quote_text_group_id is typically a thread_id... when quote_text_group_id is the same as previous we append quote_text, otherwise we overwrite
@@ -72,6 +72,17 @@
 				if(submit_callback){
 					window.$post.$submit.after_submit_callback = submit_callback;
 				}
+				if(post_icons){
+					if(!window.$post.$post_icons) {
+						window.$post.$post_icons = $("#post_icons");
+					}
+					//window.$post.$post_icons.innerHTML = "";
+					var post_icon;
+					for(var i = 0; i < post_icons; i++){
+
+					}
+					//window.$post.$post_icons.appendChild()
+				}
 				window.$post.style.display = "block";
 				window.$post.$textarea.style.height = (window.$post.offsetHeight - window.$post.$textarea.height_to_subtract) + "px";
 			};
@@ -82,7 +93,12 @@
 			window.$post.$submit.after_submit = function(event){
 				event.preventDefault();
 				if(window.$post.$submit.after_submit_callback) {
+					if(window.$post.$submit.last_submit_at && window.$post.$submit.last_submit_at > (new Date()).getTime() - 2000){ //don't allow repeated submissions within 2 seconds
+						console.log("Preventing duplicate submission with within 2 seconds.");
+						return;
+					}
 					window.$post.hide();
+					window.$post.$submit.last_submit_at = (new Date()).getTime();
 					window.$post.$submit.after_submit_callback(window.$post.$textarea.value);
 					return;
 				}

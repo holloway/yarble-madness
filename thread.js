@@ -211,7 +211,7 @@
 
 	var quote_post_response = function(quote_text, forum_id, thread_id, post_id){
 		loading_off();
-		window.$post.show("comment", "thread:" + thread_id, quote_text, function(forum_id, thread_id){
+		window.$post.show("comment", "thread:" + thread_id, quote_text, undefined, function(forum_id, thread_id){
 			return function(text_content){
 				if(text_content.length === 0) return;
 				sa.submitpost(forum_id, thread_id, text_content, successful_post);
@@ -223,13 +223,13 @@
 		sa.lastpost(thread_id, lastpost_response);
 	};
 
-	var lastpost_response = function(forum_id, thread_id, last_page_number){
-        window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + last_page_number;
+	var lastpost_response = function(forum_id, thread_id, last_page_number, last_post_id){
+        window.location.hash = "thread/" + forum_id + "/" + thread_id + "/" + last_page_number + "/" + last_post_id;
     };
 
     var edit_post_response = function(text_content, forum_id, thread_id, post_id){
 		loading_off();
-		window.$post.show("edit-comment", undefined, text_content, function(forum_id, thread_id, post_id){
+		window.$post.show("edit-comment", undefined, text_content, undefined, function(forum_id, thread_id, post_id){
 			return function(text_content){
 				if(text_content.length === 0) return;
 				sa.updatepost(forum_id, thread_id, post_id, text_content, successful_edit);
@@ -396,7 +396,7 @@
 		$thread.innerHTML = thread_template(response);
     };
 
-    var hash_change = function(){
+    var hash_change = function(event){
         var hashstate = window.location.hash.replace(/^#/, '').split("/");
         if(hashstate.length < 2) return;
         if(hashstate[0] !== "thread") return;

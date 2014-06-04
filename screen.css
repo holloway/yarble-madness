@@ -150,6 +150,10 @@ html.touch .notouch {
 		box-shadow: inset 0px 2px 5px rgba(0,0,0,0.2);
 	}
 
+	.dialog select {
+		-webkit-appearance: none;
+	}
+
 #poll ul {
 	margin: 0px;
 	padding: 0px;
