@@ -190,7 +190,7 @@
 		if(!$imgs) $imgs = $("img", $thread);
 		for(var i = 0; i < $imgs.length; i++){
 			$img = $imgs[i];
-			if($img.classList.contains("width-set")) continue;
+			if($img.classList.contains("width-set") || $img.classList.contains("timg")) continue;
 			$img.style.width = "auto";
 			if($img.offsetWidth > 6){ //then it's been loaded...6px because offsetWidth can include borders which means the image could still not be loaded but register a width of greater-than zero. So 6px is just an arbitrary choice bigger than someone might choose for a border (e.g. 3px each horizontal side)
 				if($img.classList.contains("user-title")){
@@ -295,6 +295,7 @@
 			event.target.classList.add("on");
 			resize_images_if_necessary($("img", event.target));
 		} else if(node_name === "a"){
+			if(event.target.classList.contains("nav")) return;
 			event.preventDefault();
 			event.stopPropagation();
 			if(event.target.classList.contains("quote_link")){

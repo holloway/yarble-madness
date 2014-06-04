@@ -79,6 +79,7 @@
     document.addEventListener(init_event_id, init);
 
     var new_thread_response = function(post_icons, forum_id){
+        loading_off();
         console.log(post_icons);
         window.$post.show("thread", undefined, "", post_icons, function(forum_id){
             return function(text_content){
@@ -108,6 +109,7 @@
             thread_id = target.getAttribute("data-thread-id");
             sa.lastpost(thread_id, lastpost_response);
         } else if(target.classList.contains("post-thread")){
+            loading_on();
             forum_id = target.getAttribute("data-forum-id");
             if(forum_id){
                 return sa.newthreadposticon(forum_id, new_thread_response);
