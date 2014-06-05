@@ -13,7 +13,9 @@
 	<link type="text/css" rel="stylesheet" href="thread.css">
 </head>
 <body>
+
 	<div id="loading"></div>
+
 	<section id="user">
 		<div id="login">
 			<h1><img src="images/logo-blue-small.png" alt="Yarble Madness"></h1>
@@ -107,6 +109,16 @@
 
 		<script id="forum-template" type="text/x-handlebars-template">
 			{{^error}}
+				{{#if subforums}}
+					<div class="subforums">
+						Subforums: 
+						<ul>
+							{{#subforums}}
+								<li><a href="#forum/{{forum_id}}/1" class="nav">{{title}} <span class="subtitle">{{subtitle}}</span></a></li>
+							{{/subforums}}
+						</ul>
+					</div>
+				{{/if}}
 				<div class="forum forum_{{forum_id}}">
 					<ul class="pages top-pages">
 						<li class="goto-first-page not-select"><a href="#forum/{{../forum_id}}/1">&laquo;1</a></li>
@@ -115,9 +127,11 @@
 						<li class="goto-next-page not-select"><a href="#forum/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
 						<li>
 							<select>
+								<optgroup label="{{title}}">
 								{{#pages}}
 									<option value="#forum/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
 								{{/pages}}
+								</optgroup>
 							</select>
 						</li>
 					</ul>
@@ -159,9 +173,11 @@
 						<li class="goto-next-page not-select"><a href="#forum/{{forum_id}}/{{next_page_number}}">{{next_page_number}}&rsaquo;</a></li>
 						<li>
 							<select>
+								<optgroup label="{{title}}">
 								{{#pages}}
 									<option value="#forum/{{forum_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
 								{{/pages}}
+								</optgroup>
 							</select>
 						</li>
 					</ul>
@@ -187,9 +203,11 @@
 					<li class="goto-next-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{next_page_number}}" class="nav">{{next_page_number}}&rsaquo;</a></li>
 					<li>
 						<select>
+							<optgroup label="{{title}}">
 							{{#pages}}
 								<option value="#thread/{{forum_id}}/{{thread_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
 							{{/pages}}
+							</optgroup>
 						</select>
 					</li>
 				</ul>
@@ -224,9 +242,11 @@
 					<li class="goto-next-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{next_page_number}}" class="nav">{{next_page_number}}&rsaquo;</a></li>
 					<li>
 						<select>
+							<optgroup label="{{title}}">
 							{{#pages}}
 								<option value="#thread/{{forum_id}}/{{thread_id}}/{{page_number}}" {{{same_page_option_selection}}}>{{page_number}}</option>
 							{{/pages}}
+							</optgroup>
 						</select>
 					</li>
 				</ul>
@@ -237,13 +257,9 @@
 	<div id="post" class="dialog">
 		<button class="close">&times;</button>
 		<button class="clear">clear</button>
-		<select id="post_icons">
-			<option style="background-image:url('images/loader.gif')">...</option>
-			<option style="background-image:url('images/loader.gif')">...</option>
-			<option style="background-image:url('images/loader.gif')">...</option>
-			<option style="background-image:url('images/loader.gif')">...</option>
-			<option style="background-image:url('images/loader.gif')">...</option>
-		</select>
+		<button class="post_icon">Choose a post icon</button>
+		<div id="post_icons"></div>
+		<input class="subject" placeholder="Title">
 		<textarea></textarea>
 		<button class="submit">Post</button>
 	</div>
@@ -262,7 +278,6 @@
 			</div>
 			<button class="submit">Vote</button>
 		</script>
-
 		<script id="poll-results-template" type="text/x-handlebars-template">
 			<button class="close">&times;</button>
 			<h3>Poll Results: {{question}}</h3>
@@ -313,6 +328,7 @@
 		<div class="yarble-logo"></div>
 	</header>
 
+	<script src="cordova.js"></script>
 	<script type="text/javascript">
 		var init_event_id = "deviceready"
 		if(!window.PhoneGap && !window.cordova && !window.Cordova){

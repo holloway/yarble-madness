@@ -93,11 +93,11 @@ html.touch .notouch {
 	z-index:5;
 	display:none;
 	position: fixed;
-	left:5%;
-	top:5%;
+	left:2%;
+	top:2%;
 	box-shadow: 0px 0px 20px #000;
-	width: 90%;
-	height: 90%;
+	width: 96%;
+	height: 96%;
 	background: #eeeeee;
 	border-radius: 2px;
 }
@@ -119,6 +119,38 @@ html.touch .notouch {
 		margin-right:1em;
 		border-radius:2px;
 		border-width: 0px;
+	}
+
+	.dialog .subject {
+		border: none;
+		border-bottom: solid 1px #bbbbbb;
+		padding: 0.5em 0px;
+		font-size:x-large;
+		width:100%;
+		text-indent:1em;
+	}
+
+	.dialog .post_icon {
+		border: none;
+		font-size:x-large;
+	}
+
+	.dialog .post_icon.has_icon {
+		padding-left:70px;
+		background-repeat:no-repeat;
+		background-position: 3px 5px;
+	}
+
+	.dialog #post_icons {
+		line-height: 13px;
+		height: 70%;
+		overflow:auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.dialog #post_icons img {
+		border: solid 3px #ccc	;
+		margin: 5px 5px;
 	}
 
 	.dialog textarea {

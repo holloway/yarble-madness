@@ -137,6 +137,36 @@
 		float:left;
 	}
 
+#forum .subforums {
+	color: #aaa;
+	font-weight: bold;
+	background: #333;
+	padding-bottom: 0.2em;
+	padding-left: 1em;
+}
+
+#forum .subforums ul,
+#forum .subforums li {
+	display: inline;
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+#forum .subforums a {
+	color: #eee;
+	text-decoration:none;
+	display: inline-block;
+	padding: 0.5em;
+	font-weight: bold;
+}
+
+#forum .subforums a .subtitle {
+	color: #aaa;
+	clear:left;
+	font-weight: normal;
+	font-size:smaller;
+}
 
 @media (min-width: 700px) {
 
@@ -148,6 +178,14 @@
 
 	#forum .forum {
 		padding-top:3em;
+	}
+
+	#forum .subforums {
+		padding-top: 3em;
+	}
+
+	#forum .subforums + .forum {
+		padding-top: 0px;
 	}
 
 }

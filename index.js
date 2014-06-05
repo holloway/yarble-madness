@@ -44,18 +44,41 @@
 				switch(mode){
 					case "edit-comment":
 						text = "Update Comment";
+						window.$post.$subject.style.display = "none";
 						break;
 					case "comment":
 						text = "Post Comment";
+						window.$post.$subject.style.display = "none";
 						break;
 					case "thread":
 						text = "Post Thread";
+						window.$post.$subject.style.display = "block";
 						break;
 					default:
 						alert("Internal error: Unknown mode " + mode);
 				}
 				window.$post.$submit.innerHTML = text;
 			};
+			
+			window.$post.$subject = $(".subject", window.$post)[0];
+			window.$post.$post_icons = $("#post_icons", window.$post)[0];
+			window.$post.$post_icon_button = $(".post_icon", window.$post)[0];
+			window.$post.$post_icon_button.addEventListener("click", function(){
+				if(window.$post.$post_icons.style.display === "none"){
+					window.$post.$post_icons.style.display = "";
+				} else {
+					window.$post.$post_icons.style.display = "none";
+				}
+			});
+			window.$post.$post_icons.addEventListener("click", function(event){
+				var target = event.target,
+					id;
+				if(target.nodeName.toLowerCase() !== "img") return;
+				window.$post.$post_icon_button.style.backgroundImage = "url('" + target.getAttribute("src") +"')";
+				window.$post.$post_icon_button.setAttribute("data-id", target.getAttribute("data-id") );
+				window.$post.$post_icon_button.classList.add("has_icon");
+				window.$post.$post_icons.style.display = "none";
+			});
 			window.$post.show = function(mode, quote_text_group_id, quote_text, post_icons, submit_callback){
 				if(mode) {
 					window.$post._set_mode(mode);
@@ -73,18 +96,25 @@
 					window.$post.$submit.after_submit_callback = submit_callback;
 				}
 				if(post_icons){
-					if(!window.$post.$post_icons) {
-						window.$post.$post_icons = $("#post_icons");
+					window.$post.$post_icons.style.display = "none";
+					window.$post.$post_icons.innerHTML = "";
+					var post_icon,
+						$img;
+					for(var i = 0; i < post_icons.length; i++){
+						post_icon = post_icons[i];
+						if(post_icon.filename){
+							$img = document.createElement("img");
+							$img.setAttribute("src", "images/posticons/" + post_icon.filename);
+							if(post_icon.text){
+								$img.setAttribute("title", post_icon.text);
+							}
+							$img.setAttribute("data-id", post_icon.id)
+							window.$post.$post_icons.appendChild($img);
+						}
 					}
-					//window.$post.$post_icons.innerHTML = "";
-					var post_icon;
-					for(var i = 0; i < post_icons; i++){
-
-					}
-					//window.$post.$post_icons.appendChild()
 				}
 				window.$post.style.display = "block";
-				window.$post.$textarea.style.height = (window.$post.offsetHeight - window.$post.$textarea.height_to_subtract) + "px";
+				window.$post.$textarea.style.height = (window.$post.offsetHeight - window.$post.$textarea.height_to_subtract - window.$post.$subject.offsetHeight) + "px";
 			};
 			window.$post.hide = function(){
 				window.$post.style.display = "none";
@@ -99,7 +129,11 @@
 					}
 					window.$post.hide();
 					window.$post.$submit.last_submit_at = (new Date()).getTime();
-					window.$post.$submit.after_submit_callback(window.$post.$textarea.value);
+					window.$post.$submit.after_submit_callback(
+						window.$post.$textarea.value,
+						window.$post.$subject.value,
+						window.$post.$post_icon_button.getAttribute("data-id")
+					);
 					return;
 				}
 				alert("Internal error: No callback registered to $window.post.show()");

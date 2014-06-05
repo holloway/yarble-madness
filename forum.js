@@ -80,15 +80,18 @@
 
     var new_thread_response = function(post_icons, forum_id){
         loading_off();
-        console.log(post_icons);
         window.$post.show("thread", undefined, "", post_icons, function(forum_id){
-            return function(text_content){
-                if(text_content.length === 0) return;
+            return function(text_content, subject, post_icon_id){
+                if(subject.length === 0 || text_content.length === 0) return alert("No subject or post");
                 console.log("TRYING TO POST THREAD", text_content, post_id);
-                sa.updatepost(forum_id, thread_id, post_id, text_content, successful_edit);
+                sa.submithread(forum_id, subject, text_content, post_icon_id, submitted_thread_response);
             };
         }(forum_id));
     };
+
+    var submitted_thread_response = function(){
+        
+    }
 
     var click_button = function(event){
         var target = event.target,
