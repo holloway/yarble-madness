@@ -108,7 +108,7 @@
 							if(post_icon.text){
 								$img.setAttribute("title", post_icon.text);
 							}
-							$img.setAttribute("data-id", post_icon.id)
+							$img.setAttribute("data-id", post_icon.id);
 							window.$post.$post_icons.appendChild($img);
 						}
 					}
