@@ -90,8 +90,8 @@
     };
 
     var submitted_thread_response = function(){
-        
-    }
+        window.$post.hide();
+    };
 
     var click_button = function(event){
         var target = event.target,
