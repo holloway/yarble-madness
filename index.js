@@ -26,7 +26,7 @@
 			var detector = document.createElement("detect");
 			detector.style.display = "flex";
 			if(detector.style.display === "flex") {
-				document.body.classList.add("noflexbox");
+				document.body.classList.add("flexbox");
 			} else {
 				document.body.classList.add("noflexbox");
 			}
