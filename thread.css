@@ -228,7 +228,7 @@ a.video-player img {
 		padding-top:3em;
 	}
 
-	#thread .post {
+	body.flexbox #thread .post {
 		clear:both;
 		display: -webkit-flex;
 		display: -webkit-box-flex;
@@ -238,7 +238,7 @@ a.video-player img {
 	    flex-direction: row-reverse;
 	}
 
-	#thread .post > .head {
+	body.flexbox #thread .post > .head {
 		-webkit-box-flex: 0 0 90px;
 		-webkit-flex: 0 0 90px;
 		flex: 0 0 80px;
@@ -246,11 +246,16 @@ a.video-player img {
 		border-right: solid 1px #eee;
 	}
 
-	#thread .post > .body {
+	body.flexbox #thread .post > .body {
 		-webkit-box-flex: 1 0;
 		-webkit-flex: 1 0;
 		flex: 1 0;
 		padding-left:10px;
+	}
+
+	body.noflexbox #thread .post > .head {
+		float:left;
+		border-top: solid 1px #666;
 	}
 
 	#thread .post > .head .by-user {

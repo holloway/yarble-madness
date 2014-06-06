@@ -51,8 +51,7 @@
 		},
 		change_user = function(){
 			user = window.localStorage.getItem(CONSTANTS.user_storage_key);
-			console.log("user", user);
-			$login.style.display =    user ? "none" : "block";
+			$login.style.display =   !!user ? "none" : "block";
 			$options.style.display = !user ? "none" : "block";
 		};
 

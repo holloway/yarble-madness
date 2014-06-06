@@ -23,6 +23,13 @@
 			for(var i = 0; i < $forms.length; i++){	$forms[i].addEventListener("submit", prevent_default); }
 			sa.register_network_failure_callback(network_failure);
 			$("html")[0].classList.add(is_touch_device ? "touch" : "notouch");
+			var detector = document.createElement("detect");
+			detector.style.display = "flex";
+			if(detector.style.display === "flex") {
+				document.body.classList.add("noflexbox");
+			} else {
+				document.body.classList.add("noflexbox");
+			}
 		},
 		init_hashstate = function(swiper){
 			window.addEventListener("beforeunload", beforeunload_hashstate);
@@ -45,14 +52,19 @@
 					case "edit-comment":
 						text = "Update Comment";
 						window.$post.$subject.style.display = "none";
+						window.$post.$post_icons.style.display = "none";
+						window.$post.$post_icon_button.style.display = "none";
 						break;
 					case "comment":
 						text = "Post Comment";
 						window.$post.$subject.style.display = "none";
+						window.$post.$post_icons.style.display = "none";
+						window.$post.$post_icon_button.style.display = "none";
 						break;
 					case "thread":
 						text = "Post Thread";
 						window.$post.$subject.style.display = "block";
+						window.$post.$post_icon_button.style.display = "";
 						break;
 					default:
 						alert("Internal error: Unknown mode " + mode);

@@ -60,7 +60,7 @@
     background: #030;
 }
 
-#forum .forum_219 .flex span.posticon,
+#forum .forum_219 .layout span.posticon,
 #forums button.forum_219,
 #forum .forum_219,
 #forum .forum_219 button,
@@ -113,7 +113,7 @@
     border-color: #77c;
 }
 
-#forum .forum_268 .flex > span.posticon {
+#forum .forum_268 .layout > span.posticon {
     background-color: #bbe;
     border-color: #77c;
 }
