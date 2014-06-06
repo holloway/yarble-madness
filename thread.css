@@ -231,21 +231,25 @@ a.video-player img {
 	#thread .post {
 		clear:both;
 		display: -webkit-flex;
+		display: -webkit-box-flex;
 	    -webkit-flex-direction: row-reverse;
+	    -webkit-box-orient: vertical;
 	    display: flex;
 	    flex-direction: row-reverse;
 	}
 
 	#thread .post > .head {
-		flex: 0 0 80px;
+		-webkit-box-flex: 0 0 90px;
 		-webkit-flex: 0 0 90px;
+		flex: 0 0 80px;
 		overflow:hidden;
 		border-right: solid 1px #eee;
 	}
 
 	#thread .post > .body {
-		flex: 1 0;
+		-webkit-box-flex: 1 0;
 		-webkit-flex: 1 0;
+		flex: 1 0;
 		padding-left:10px;
 	}
 

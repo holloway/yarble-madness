@@ -49,8 +49,10 @@
 
 #forum .flex {
 	clear:both;
+	display: -webkit-box;
 	display: -webkit-flex;
     -webkit-flex-direction: row;
+    -webkit-box-orient: vertical;
     display: flex;
     flex-direction: row;
 }
@@ -64,18 +66,21 @@
 }
 
 #forum .flex > span.posticon {
-	flex: 0 0 70px;
+	-webkit-box-flex: 0 0 70px;
 	-webkit-flex: 0 0 70px;
+	flex: 0 0 70px;
 }
 
 #forum .flex > button.lastpost {
-	flex: 0 0 3em;
+	-webkit-box-flex: 0 0 3em;
 	-webkit-flex: 0 0 3em;
+	flex: 0 0 3em;
 }
 
 #forum .flex > button.newpost {
-	flex: 0 0 5em;
 	-webkit-flex: 0 0 5em;
+	-webkit-box-flex: 0 0 5em;
+	flex: 0 0 5em;
 }
 
 #forum .pages {
