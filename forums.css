@@ -8,6 +8,16 @@
     user-select: none;
 }
 
+#forums .goto-user {
+    border: solid 1px #333333;
+    padding: 0.3em;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 2px;
+    color: black;
+    margin-left: 30px;
+}
+
 #forums .logo {
     text-align:right;
     margin-bottom: -30px;

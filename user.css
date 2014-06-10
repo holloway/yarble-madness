@@ -17,6 +17,18 @@
 	padding: 0px 1em 0px 1em;
 }
 
+#user .button {
+	text-decoration:none;
+	float:right;
+	border: solid 1px black;
+	border-radius: 2px;
+	padding: 0.3em;
+	width: auto;
+	font-size:inherit;
+	color: #000;
+	margin-right: 30px;
+}
+
 #user #login input,
 #user #login button {
 	width: 90%;
@@ -38,11 +50,9 @@
 	font-size:inherit;
 }
 
-#user #options a,
 #user #options button {
 	width: 100%;
 }
-
 
 #user input:focus,
 #user button:focus {
@@ -100,10 +110,6 @@
 	text-decoration: none;
 }
 
-#user .twocolumns .columntwo {
-	padding-top:10px;
-	background: #eee;
-}
 
 #user .onoff:after {
 	display: inline-block;
@@ -132,7 +138,7 @@
 	}
 
 	#user .twocolumns .columntwo {
-		padding-top:100px;
+		padding-top:10px;
 		min-height:100%;
 	}
 }

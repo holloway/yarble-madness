@@ -4,7 +4,7 @@
 	<title>Yarble (Madness)</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<link type="text/css" rel="stylesheet" href="screen.css">
-	<link type="text/css" rel="stylesheet" href="lib/swiper-do-swipe/swiper-do-swipe.css">
+	<link type="text/css" rel="stylesheet" href="page_turner.css">
 	<link type="text/css" rel="stylesheet" href="header.css">
 	<link type="text/css" rel="stylesheet" href="user.css">
 	<link type="text/css" rel="stylesheet" href="forums.css">
@@ -30,23 +30,6 @@
 		<div id="options">
 			<div class="twocolumns">
 				<div class="columnone">
-					<h1><img src="images/logo-blue-small.png" alt="Yarble Madness"></h1>
-					<div class="inner">
-						<p>in this app <b>you swipe</b> to move through these 4 screens</p>
-						<table border="1" class="device">
-							<tr>
-								<td class="here">User<br><small>you are here</small></td>
-								<td>Forums</td>
-								<td>Forum</td>
-								<td>Thread</td>
-							</tr>
-						</table>
-						<p>so swipe do it you dork</p>
-						<p>go that way &rarr;</p>
-						<p>&larr; don't go that way might be grues</p>
-					</div>
-				</div>
-				<div class="columntwo">
 					<fieldset>
 						<legend>Options</legend>
 						<button style="margin-bottom:1em">logout</button>
@@ -54,6 +37,11 @@
 						<button class="onoff off" id="cloud2butt">replace "cloud" with "butt"</button>
 						<a href="https://www.youtube.com/watch?v=ancwTUkXyKk" target="_blank">windy city heat</a>
 					</fieldset>
+				</div>
+				<div class="columntwo">
+					<div class="inner">
+						<a href="#forums" class="button">GOTO FORUMS &rarr;</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -65,6 +53,7 @@
 			<div class="twocolumns">
 				<div class="columnone">
 					<p class="logo"><img src="images/logo-very-small.png"></p>
+					<a href="#user" class="goto-user">USER STUFF</a>
 					{{#column1.sections}}
 						<fieldset data-forum-id="{{forum_id}}" class="section">
 							<legend>{{title}} <span class="subtitle">{{subtitle}}</span></legend>
@@ -121,6 +110,7 @@
 				{{/if}}
 				<div class="forum forum_{{forum_id}}">
 					<ul class="pages top-pages">
+						<li class="not-select"><a href="#forums" class="nav">FORUMS</a></li>
 						<li class="goto-first-page not-select"><a href="#forum/{{../forum_id}}/1">&laquo;1</a></li>
 						<li class="goto-previous-page not-select"><a href="#forum/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
 						<li class="goto-last-page not-select"><a href="#forum/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
@@ -167,6 +157,7 @@
 					{{/forum}}
 					<button class="post-thread" data-forum-id="{{forum_id}}">Post Thread</button>
 					<ul class="pages">
+						<li class="not-select"><a href="#forums" class="nav">FORUMS</a></li>
 						<li class="goto-first-page not-select"><a href="#forum/{{../forum_id}}/1">&laquo;1</a></li>
 						<li class="goto-previous-page not-select"><a href="#forum/{{../forum_id}}/{{../previous_page_number}}">&lsaquo;{{previous_page_number}} </a></li>
 						<li class="goto-last-page not-select"><a href="#forum/{{forum_id}}/{{last_page_number}}">{{last_page_number}}&raquo;</a></li>
@@ -197,6 +188,7 @@
 		<script id="thread-template" type="text/x-handlebars-template">
 			<div class="thread forum_{{forum_id}}">
 				<ul class="pages top-pages">
+					<li class="not-select"><a href="#forum/{{forum_id}}" class="nav">FORUM</a></li>
 					<li class="goto-first-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/1" class="nav">&laquo;1</a></li>
 					<li class="goto-previous-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{previous_page_number}}" class="nav">&lsaquo;{{previous_page_number}} </a></li>
 					<li class="goto-last-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{last_page_number}}" class="nav">{{last_page_number}}&raquo;</a></li>
@@ -236,6 +228,7 @@
 					</div>
 				{{/thread}}
 				<ul class="pages">
+					<li class="not-select"><a href="#forum/{{forum_id}}" class="nav">FORUM</a></li>
 					<li class="goto-first-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/1" class="nav">&laquo;1</a></li>
 					<li class="goto-previous-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{previous_page_number}}" class="nav">&lsaquo;{{previous_page_number}} </a></li>
 					<li class="goto-last-page not-select"><a href="#thread/{{forum_id}}/{{thread_id}}/{{last_page_number}}" class="nav">{{last_page_number}}&raquo;</a></li>
@@ -335,14 +328,12 @@
 			init_event_id = "DOMContentLoaded";
 		}
 	</script>
-	<script src="lib/swiper-do-swipe/swiper-do-swipe.js"></script>
-	<script src="lib/swiper-do-swipe/swiper-do-swipe-perspective.js"></script>
 
 	<script src="lib/handlebars.js"></script>
 	<script src="lib/classlist.js"></script>
 	<script src="smilies-cache.js"></script>
 	<script src="posticons-cache.js"></script>
-
+	<script src="page_turner.js"></script>
 	<script src="utils.js"></script>
 
 

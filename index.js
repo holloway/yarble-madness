@@ -15,9 +15,8 @@
 			if(!window.localStorage) return alert("Yarble Madness needs a browser with localStorage");
 			$pages = $("section");
 			$loading = $("#loading")[0];
-			if(css.transition_end) $loading.addEventListener(css.transition_end, loading_transition_end, false);
-			window.swiper = swiper_do_swipe($pages, swiper_do_swipe_effects.flat);
-			init_hashstate(swiper);
+			window.page_turner = page_turner_init($pages);
+			init_hashstate(page_turner);
 			init_post();
 			var $forms = $("form");
 			for(var i = 0; i < $forms.length; i++){	$forms[i].addEventListener("submit", prevent_default); }
@@ -31,7 +30,7 @@
 				document.body.classList.add("noflexbox");
 			}
 		},
-		init_hashstate = function(swiper){
+		init_hashstate = function(page_turner){
 			window.addEventListener("beforeunload", beforeunload_hashstate);
 			var localStorage_hashstate = localStorage.getItem(CONSTANTS.pageflip_hashstate);
 			if(localStorage_hashstate){
@@ -40,8 +39,8 @@
             for(var i = 0; i < $pages.length; i++){
 				page_index_by_id[$pages[i].id] = i;
             }
-            swiper.onchange(swiper_change).oninit(swiper_change);
-            window.addEventListener("hashchange", function(swiper){ return function(){hashstate_change(swiper);};}(swiper), false);
+            page_turner.onchange(page_turner_change).oninit(page_turner_change);
+            window.addEventListener("hashchange", function(page_turner){ return function(){hashstate_change(page_turner);};}(page_turner), false);
 		},
 		init_post = function(){
 			window.$post = $("#post")[0];
@@ -162,7 +161,7 @@
 			window.$post.$textarea.height_to_subtract = window.$post.$close.offsetHeight + window.$post.$submit.offsetHeight;
 			window.$post.style.display = "none";
 		},
-		swiper_change = function(event, $page, index){
+		page_turner_change = function(event, $page, $page_id){
 			var page_id = $page.id,
 				hashstate = page_id;
 			if(pages_hashstate[page_id]) hashstate = pages_hashstate[page_id];

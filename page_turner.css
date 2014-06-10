@@ -1,0 +1,37 @@
+section {
+	display: none;
+	
+	position: absolute;
+	width: 100%;
+	min-height: 600px;
+	
+	-webkit-transform-style: preserve-3d;
+	
+	-webkit-transition: all 800ms cubic-bezier(0.260, 0.860, 0.440, 0.985); 
+	   -moz-transition: all 800ms cubic-bezier(0.260, 0.860, 0.440, 0.985); 
+	     -o-transition: all 800ms cubic-bezier(0.260, 0.860, 0.440, 0.985); 
+	        transition: all 800ms cubic-bezier(0.260, 0.860, 0.440, 0.985);
+}
+
+
+section.past {
+	display: block;
+	opacity: 0;
+	
+	-webkit-transform: 	translate3d(-100%, 0, 0) 
+						rotateY(-90deg) 
+						translate3d(-100%, 0, 0);
+}
+
+section.current {
+	display: block;
+}
+
+section.future {
+	display: block;
+	opacity: 0;
+	
+	-webkit-transform: 	translate3d(100%, 0, 0) 
+						rotateY(90deg) 
+						translate3d(100%, 0, 0);
+}
