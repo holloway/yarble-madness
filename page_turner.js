@@ -28,8 +28,6 @@
 				_this.$pages.map(function($page, i){
                     $page.style.display   = "none";
                     $page.style.minHeight = "100%";
-                    $page.scroll_y = 0;
-                    $page.style.width     = "100%";
                     $page.style.minWidth  = "100%";
                     $page.style.position  = "absolute";
                     

@@ -12,7 +12,8 @@
   src: local('Raleway'), url(lib/railway.woff) format('woff');
 }
 
-html, body {
+html,
+ body {
 	padding: 0px;
 	margin: 0px;
 	min-height: 100%;
@@ -24,10 +25,6 @@ html, body {
 body {
 	background: #fff;
 	color: #333;
-}
-
-body.loading {
-	background: url("loader.gif") no-repeat scroll center center;
 }
 
 h1,h2,h3,h4,h5,h6 {
