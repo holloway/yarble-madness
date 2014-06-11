@@ -16,12 +16,12 @@
 				_this.move_to_page(_this.index);
                 _this.trigger("init");
                 document.addEventListener('keydown', _this.keydown, false);
-                window.hammer_instance = Hammer(document.body);
-				window.hammer_instance.on("swiperight", function() {
-					window.page_turner.move_left();
+                var hammer_instance = Hammer(document);
+				hammer_instance.on("swiperight", function() {
+					_this.move_left();
 				});
-				window.hammer_instance.on("swipeleft", function() {
-					window.page_turner.move_right();
+				hammer_instance.on("swipeleft", function() {
+					_this.move_right();
 				});
 			},
 			init_$pages: function(){
