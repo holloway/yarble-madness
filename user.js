@@ -32,7 +32,6 @@
 			$logout_button = $("button", $options)[0];
 			user = window.localStorage.getItem(CONSTANTS.user_storage_key);
 			$logout_button.addEventListener("click", logout, true);
-			if(user) window.location.hash = "forums";
 			$do_mobile_download = $("#mobiledownload")[0];
 			$do_mobile_download.addEventListener("click", toggle_mobile_download, true);
 			$cloud2butt = $("#cloud2butt")[0];
@@ -48,9 +47,11 @@
 			if(connection) connection.addEventListener('typechange', update_mobile_download); //Note: 'typechange' is a network connection change https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API
 			setTimeout(update_mobile_download, 500);
 			change_user();
+			if(user) window.location.hash = "forums";
 		},
 		change_user = function(){
 			user = window.localStorage.getItem(CONSTANTS.user_storage_key);
+			alert(user);
 			$login.style.display =   !!user ? "none" : "block";
 			$options.style.display = !user ? "none" : "block";
 		};

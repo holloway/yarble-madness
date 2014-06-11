@@ -16,7 +16,11 @@
 				_this.move_to_page(_this.index);
                 _this.trigger("init");
                 document.addEventListener('keydown', _this.keydown, false);
-                var hammer_instance = Hammer(document);
+                var options = {
+					dragLockToAxis: true,
+					dragBlockHorizontal: true
+				};
+                var hammer_instance = Hammer(document, options);
 				hammer_instance.on("swiperight", function() {
 					_this.move_left();
 				});
@@ -30,7 +34,6 @@
                     $page.style.minHeight = "100%";
                     $page.style.minWidth  = "100%";
                     $page.style.position  = "absolute";
-                    
                     if(_this.effect.page_move_end) $page.addEventListener(css.transition_end, _this.effect.page_move_end);
                 });
 			},
