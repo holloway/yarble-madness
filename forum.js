@@ -58,6 +58,7 @@
 
     var forum_response = function(forum){
         loading_off();
+        console.log("Sdfsdf");
         rebind_forum(forum);
         localStorage.setItem(CONSTANTS.forum_cache_key, JSON.stringify(forum));
     };

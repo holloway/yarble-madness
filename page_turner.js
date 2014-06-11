@@ -16,6 +16,13 @@
 				_this.move_to_page(_this.index);
                 _this.trigger("init");
                 document.addEventListener('keydown', _this.keydown, false);
+                window.hammer_instance = Hammer(document.body);
+				window.hammer_instance.on("swiperight", function() {
+					window.page_turner.move_left();
+				});
+				window.hammer_instance.on("swipeleft", function() {
+					window.page_turner.move_right();
+				});
 			},
 			init_$pages: function(){
 				_this.$pages.map(function($page, i){
@@ -64,11 +71,14 @@
                     callback.apply(_this, arguments);
                 }
             },
+            move_left: function(){
+				_this.move_to_page(_this.index - 1);
+            },
+            move_right: function(){
+				_this.move_to_page(_this.index + 1);
+            },
             move_to_page: function(i){
 				var $pages = _this.$pages,
-                    $page_current,
-                    $page_before,
-                    $page_after,
                     index;
 
 				_this.index = Math.max(Math.min(i, $pages.length - 1), 0); // make sure we're not exceeding the range of $pages
@@ -82,6 +92,8 @@
 				$pages.slice(index + 1).map(function($page){
 					$page.setAttribute('class', 'future');
 				});
+
+				_this.trigger("change", $pages[index], index);
             }
 
 		};

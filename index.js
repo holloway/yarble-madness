@@ -189,9 +189,12 @@
 	window.loading_on = function(){
 		$loading.style.display = "block";
 		$loading.classList.add("visible");
+		if(window.loading_timer) clearTimeout(window.loading_timer);
+		window.loading_timer = setTimeout(loading_off, 10000);
 	};
 
 	window.loading_off = function(){
+		if(window.loading_timer) clearTimeout(window.loading_timer);
 		$loading.style.display = "block";
 		$loading.classList.remove("visible");
 	};
